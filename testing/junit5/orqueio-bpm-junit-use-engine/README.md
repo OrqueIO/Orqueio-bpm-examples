@@ -37,5 +37,5 @@ In order to run the test with maven you can use:
 mvn clean test
 ```
 
-[junit5]: https://github.com/orqueio/orqueio-bpm-platform/tree/master/test-utils/junit5-extension
-[assert]: https://github.com/orqueio/orqueio-bpm-platform/tree/master/test-utils/assert
+[junit5]: https://github.com/orqueio/orqueio/tree/master/test-utils/junit5-extension
+[assert]: https://github.com/orqueio/orqueio/tree/master/test-utils/assert

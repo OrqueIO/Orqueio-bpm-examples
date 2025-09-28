@@ -1,9 +1,9 @@
 Orqueio Platform examples
 ====================
 
-> Looking for the "invoice" example contained in the distribution?  You can find it here: https://github.com/orqueio/orqueio-bpm-platform/tree/master/examples/invoice
+> Looking for the "invoice" example contained in the distribution?  You can find it here: https://github.com/orqueio/orqueio/tree/master/examples/invoice
 
-Orqueio Platform examples is a collection of focused usage examples for the [Orqueio Platform](https://github.com/orqueio/orqueio-bpm-platform), intended to get you started quickly. The sources on the master branch work with the current Orqueio release. Follow the links below to browse the examples for the Orqueio version you use:
+Orqueio Platform examples is a collection of focused usage examples for the [Orqueio Platform](https://github.com/orqueio/orqueio), intended to get you started quickly. The sources on the master branch work with the current Orqueio release. Follow the links below to browse the examples for the Orqueio version you use:
 
 ## Overview
 
@@ -176,7 +176,7 @@ Orqueio Platform examples is a collection of focused usage examples for the [Orq
 
 ## Contributing
 
-Have a look at our [contribution guide](https://github.com/orqueio/orqueio-bpm-platform/blob/master/CONTRIBUTING.md) for how to contribute to this repository.
+Have a look at our [contribution guide](https://github.com/orqueio/orqueio/blob/master/CONTRIBUTING.md) for how to contribute to this repository.
 
 ## License
 The source files in this repository are made available under the [Apache License Version 2.0](./LICENSE).

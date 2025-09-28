@@ -121,7 +121,7 @@ public class ProcessInstanceStarterBean {
 }
 ```
 
-As the process engine is not able to guess by itself which JSON data format to use for serializing the variable, we have to tell it that we want to use the format defined in the process application. This is solved here by defining a custom CDI annotation `@InProcessApplicationContext`. A custom CDI interceptor [ProcessApplicationContextInterceptor](src/main/java/io/orqueio/bpm/example/spin/dataformat/servlet/ProcessApplicationContextInterceptor.java) is notified whenever this annotation is present. This interceptor determines the context process application and declares it using the utility class [ProcessApplicationContext](https://github.com/orqueio/orqueio-bpm-platform/blob/master/engine/src/main/java/io/orqueio/bpm/application/ProcessApplicationContext.java):
+As the process engine is not able to guess by itself which JSON data format to use for serializing the variable, we have to tell it that we want to use the format defined in the process application. This is solved here by defining a custom CDI annotation `@InProcessApplicationContext`. A custom CDI interceptor [ProcessApplicationContextInterceptor](src/main/java/io/orqueio/bpm/example/spin/dataformat/servlet/ProcessApplicationContextInterceptor.java) is notified whenever this annotation is present. This interceptor determines the context process application and declares it using the utility class [ProcessApplicationContext](https://github.com/orqueio/orqueio/blob/master/engine/src/main/java/io/orqueio/bpm/application/ProcessApplicationContext.java):
 
 ```java
 @InProcessApplicationContext

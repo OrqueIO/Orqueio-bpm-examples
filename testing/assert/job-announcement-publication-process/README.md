@@ -22,5 +22,5 @@ mvn clean test
 If you want to read more about [Orqueio Platform Assert][assert], go to the [testing user guide](https://docs.orqueio.io/manual/7.23/user-guide/testing/) in the Orqueio docs.
 
 
-[assert]: https://github.com/orqueio/orqueio-bpm-platform/tree/master/test-utils/assert
+[assert]: https://github.com/orqueio/orqueio/tree/master/test-utils/assert
 [1]: src/test/java/io/orqueio/bpm/engine/test/assertions/examples

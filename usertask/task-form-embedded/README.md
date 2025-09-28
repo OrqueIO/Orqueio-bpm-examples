@@ -1,11 +1,11 @@
 # Embedded Task Forms
 
-This quickstart demonstrates how to use the [Embedded Forms][5] feature. Embedded Forms are plain HTML5 documents which can be loaded from your app and rendered embedded inside the camunda Tasklist:
+This quickstart demonstrates how to use the [Embedded Forms][5] feature. Embedded Forms are plain HTML5 documents which can be loaded from your app and rendered embedded inside the orqueio Tasklist:
 
 ![Embedded Forms Screenshot][1]
 
 # Overview
-This example uses Jakarta API. It is compatible with the latest releases of Camunda Tomcat and WildFly distributions.
+This example uses Jakarta API. It is compatible with the latest releases of Orqueio Tomcat and WildFly distributions.
 
 ## Where are embedded taskforms added?
 
@@ -13,15 +13,15 @@ Embedded Forms can be added to the web resources of a web application. As we use
 
 ## How are embedded taskforms referenced?
 
-Embedded Taskforms are referenced using the `camunda:taskKey` property of a BPMN `<startEvent>` or a BPMN `<userTask>`:
+Embedded Taskforms are referenced using the `orqueio:taskKey` property of a BPMN `<startEvent>` or a BPMN `<userTask>`:
 
 ```xml
-<startEvent id="startEvent" camunda:formKey="embedded:app:start-form.html" name="Loan Request Received">
+<startEvent id="startEvent" orqueio:formKey="embedded:app:start-form.html" name="Loan Request Received">
   ...
 </startEvent>
 ```
 
-The attribute can also be set through the properties panel using the camunda Modeler:
+The attribute can also be set through the properties panel using the orqueio Modeler:
 
 ![Embedded Forms Screenshot Modeler][2]
 
@@ -84,11 +84,11 @@ This quickstart demonstrates the use of most of the supported form controls. See
 
 1. Checkout the project with Git
 2. Build the project with maven
-3. Deploy the war file to a Camunda Platform distribution
+3. Deploy the war file to a Orqueio Platform distribution
 4. Go the Tasklist and start a process instance for the process named "Embedded Forms Quickstart"
 
 [1]: docs/screenshot.png
 [2]: docs/screenshot-modeler.png
 [3]: src/main/webapp/start-form.html
 [4]: src/main/webapp
-[5]: https://docs.camunda.org/manual/7.23/user-guide/task-forms/#embedded-task-forms
+[5]: https://docs.orqueio.io/manual/7.23/user-guide/task-forms/#embedded-task-forms

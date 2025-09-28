@@ -1,38 +1,38 @@
-# The Camunda Invoice example in a Spring Boot Web Application
+# The Orqueio Invoice example in a Spring Boot Web Application
 
-The Invoice example is provided in all of the pre-packaged distros that Camunda provides.
-This Camunda example provides the Invoice application inside a Spring Boot application together with all
+The Invoice example is provided in all of the pre-packaged distros that Orqueio provides.
+This Orqueio example provides the Invoice application inside a Spring Boot application together with all
 the necessary adjustments needed to run it out of the box. This includes:
 
-* The Camunda EE Webapps
-* The Camunda Rest API
+* The Orqueio EE Webapps
+* The Orqueio Rest API
 
 You will need:
 
 * credentials to access the enterprise repo in your `settings.xml`
-* a valid camunda-license key file in your classpath in the file `camunda-license.txt`
+* a valid orqueio-license key file in your classpath in the file `orqueio-license.txt`
 
 ## Prerequisites
 * Java 17/21
 
 ## How is it done
 
-1. To embed the Camunda Engine with the Enterprise webapps and Rest API you must add the following maven coordinates 
+1. To embed the Orqueio Engine with the Enterprise webapps and Rest API you must add the following maven coordinates 
 to your `pom.xml`:
 
 ```xml
 ...
   <properties>
-    <camunda.version>7.23.0-ee</camunda.version>
+    <orqueio.version>7.23.0-ee</orqueio.version>
   </properties>
 
   <dependencyManagement>
     <dependencies>
       ...
       <dependency>
-        <groupId>org.camunda.bpm</groupId>
-        <artifactId>camunda-bom</artifactId>
-        <version>${camunda.version}</version>
+        <groupId>io.orqueio.bpm</groupId>
+        <artifactId>orqueio-bom</artifactId>
+        <version>${orqueio.version}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -41,12 +41,12 @@ to your `pom.xml`:
 
   <dependencies>
     <dependency>
-      <groupId>org.camunda.bpm.springboot</groupId>
-      <artifactId>camunda-bpm-spring-boot-starter-webapp-ee</artifactId>
+      <groupId>io.orqueio.bpm.springboot</groupId>
+      <artifactId>orqueio-bpm-spring-boot-starter-webapp</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.camunda.bpm.springboot</groupId>
-      <artifactId>camunda-bpm-spring-boot-starter-rest</artifactId>
+      <groupId>io.orqueio.bpm.springboot</groupId>
+      <artifactId>orqueio-bpm-spring-boot-starter-rest</artifactId>
     </dependency>
     ...
   </dependencies>
@@ -57,9 +57,9 @@ to your `pom.xml`:
 
 ```xml
 <dependency>
-  <groupId>org.camunda.bpm.example</groupId>
-  <artifactId>camunda-example-invoice-jakarta</artifactId>
-  <version>${camunda.version}</version>
+  <groupId>io.orqueio.bpm.example</groupId>
+  <artifactId>orqueio-example-invoice-jakarta</artifactId>
+  <version>${orqueio.version}</version>
   <classifier>classes</classifier>
   <scope>compile</scope>
 </dependency>
@@ -109,16 +109,16 @@ public class Application {
 registered within the process application. Forms HTML needs to be added in the `/resources/static/forms` directory.
 
 5. If you want your Camunda license automatically used on Engine startup, just put the file with the name 
-`camunda-license.txt` on your classpath. 
+`orqueio-license.txt` on your classpath. 
 
 6. Adjust the `src/main/resources/application.yaml` file according to your preferences. The default setup will use an
  embedded H2 instance.
 
-## Run the application and use Camunda Platform
+## Run the application and use Orqueio Platform
 
 You can build the application with `mvn clean install` and then run it with the `java -jar` command.
 You can also execute the application with `mvn spring-boot:run`.
 
-Then you can access the Camunda Webapps in your browser: `http://localhost:8080/` (provide login/password 
+Then you can access the Orqueio Webapps in your browser: `http://localhost:8080/` (provide login/password 
 from `application.yaml`, default: demo/demo). The Rest API can be available through `http://localhost:8080/engine-rest`.
  

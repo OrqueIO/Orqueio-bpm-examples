@@ -17,7 +17,7 @@ BPMN model API, composed of the following elements:
 
 ## Invoice example process
 
-The process we want to create is similar to the invoice process from the [camunda-bpm-platform/examples][1].
+The process we want to create is similar to the invoice process from the [orqueio-bpm-platform/examples][1].
 We aim to file it again with the executable process definition of the depicted invoice process.
 
 ![Invoice Process][3]
@@ -58,8 +58,8 @@ BpmnModelInstance modelInstance = Bpmn.createExecutableProcess()
 ```
 
 From now on we can create user, service or script tasks and parallel or exclusive gateways to
-model the process we want to create. For every task we can set attributes like the `id`, `name`, `camunda:formKey`,
-`camunda:assignee`, `camunda:class`, `camunda:candidateUsers` or `camunda:candidateGroups`.
+model the process we want to create. For every task we can set attributes like the `id`, `name`, `orqueio:formKey`,
+`orqueio:assignee`, `orqueio:class`, `orqueio:candidateUsers` or `orqueio:candidateGroups`.
 
 ```java
 BpmnModelInstance modelInstance = Bpmn.createExecutableProcess()
@@ -67,17 +67,17 @@ BpmnModelInstance modelInstance = Bpmn.createExecutableProcess()
   .[...]
   .userTask()
     .name("Assign Approver")
-    .camundaAssignee("demo")
+    .orqueioAssignee("demo")
   .userTask()
     .id("approveInvoice")
     .name("Approve Invoice")
   .[...]
   .userTask()
     .name("Prepare Bank Transfer")
-    .camundaCandidateGroups("accounting")
+    .orqueioCandidateGroups("accounting")
   .serviceTask()
     .name("Archive Invoice")
-    .camundaClass("org.camunda.bpm.example.invoice.service.ArchiveInvoiceService")
+    .orqueioClass("io.orqueio.bpm.example.invoice.service.ArchiveInvoiceService")
   .[...]
   .done();
 ```
@@ -98,7 +98,7 @@ BpmnModelInstance modelInstance = Bpmn.createExecutableProcess()
   .condition("yes", "${approved}")
   .userTask()
     .name("Prepare Bank Transfer")
-    .camundaCandidateGroups("accounting")
+    .orqueioCandidateGroups("accounting")
   .[...]
   .done();
 ```
@@ -122,17 +122,17 @@ BpmnModelInstance modelInstance = Bpmn.createExecutableProcess()
   .condition("yes", "${approved}")
   .userTask()
     .name("Prepare Bank Transfer")
-    .camundaCandidateGroups("accounting")
+    .orqueioCandidateGroups("accounting")
   .serviceTask()
     .name("Archive Invoice")
-    .camundaClass("org.camunda.bpm.example.invoice.service.ArchiveInvoiceService")
+    .orqueioClass("io.orqueio.bpm.example.invoice.service.ArchiveInvoiceService")
   .endEvent()
     .name("Invoice processed")
   .moveToLastGateway()
   .condition("no", "${!approved}")
   .userTask()
     .name("Review Invoice")
-    .camundaAssignee("demo")
+    .orqueioAssignee("demo")
   .[...]
   .done();
 ```
@@ -149,7 +149,7 @@ BpmnModelInstance modelInstance = Bpmn.createExecutableProcess()
   .userTask()
     .id("approveInvoice")
     .name("Approve Invoice")
-    .camundaAssignee("${approver}")
+    .orqueioAssignee("${approver}")
   .[...]
   .exclusiveGateway()
     .name("Review successful?")
@@ -177,7 +177,7 @@ process model XML, go to the end of the JUnit test [CreateInvoiceProcessTest][4]
 Bpmn.writeModelToStream(System.out, modelInstance);
 ```
 
-[1]: https://github.com/camunda/camunda-bpm-platform/tree/master/examples/invoice
+[1]: https://github.com/orqueio/orqueio/tree/master/examples/invoice
 [3]: invoice.png
-[4]: src/test/java/org/camunda/bpm/quickstart/CreateInvoiceProcessTest.java
-[5]: https://github.com/camunda/camunda-bpm-platform/tree/master/model-api/bpmn-model
+[4]: src/test/java/org/orqueio/bpm/quickstart/CreateInvoiceProcessTest.java
+[5]: https://github.com/orqueio/orqueio/tree/master/model-api/bpmn-model

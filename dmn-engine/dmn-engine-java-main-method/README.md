@@ -1,6 +1,6 @@
-# Camunda Dmn Engine in a Java Main Method
+# Orqueio Dmn Engine in a Java Main Method
 
-This example demonstrates how to use the [Camunda DMN engine] as library
+This example demonstrates how to use the [Orqueio DMN engine] as library
 in a custom application. The DMN Engine is added to the example as a Maven dependency.
 The example contains a Java class with a Main Method in which the DMN Engine is bootstraped and
 used to execute a decision table loaded from the classpath.
@@ -12,7 +12,7 @@ The example uses a decision table from the [DMN tutorial] to decided which dish 
 ![Dish Decision]
 
 You can find the corresponding DMN XML file [dish-decision.dmn11.xml] in the
-resources. To modify it you can use the [Camunda Modeler].
+resources. To modify it you can use the [Orqueio Modeler].
 
 ## Code Walkthrough
 
@@ -24,9 +24,9 @@ Include the DMN engine BOM for dependency management:
 <dependencyManagement>
   <dependencies>
     <dependency>
-      <groupId>org.camunda.bpm.dmn</groupId>
-      <artifactId>camunda-engine-dmn-bom</artifactId>
-      <version>${version.camunda}</version>
+      <groupId>io.orqueio.bpm.dmn</groupId>
+      <artifactId>orqueio-engine-dmn-bom</artifactId>
+      <version>${version.orqueio}</version>
       <type>pom</type>
       <scope>import</scope>
     </dependency>
@@ -38,8 +38,8 @@ Add the DMN engine as a dependency:
 
 ```xml
 <dependency>
-  <groupId>org.camunda.bpm.dmn</groupId>
-  <artifactId>camunda-engine-dmn</artifactId>
+  <groupId>io.orqueio.bpm.dmn</groupId>
+  <artifactId>orqueio-engine-dmn</artifactId>
 </dependency>
 ```
 
@@ -196,11 +196,11 @@ Dish Decision:
 ```
 
 
-[Camunda DMN engine]: https://docs.camunda.org/manual/7.23/user-guide/dmn-engine/
-[DMN tutorial]: https://camunda.com/dmn/
-[Dish Decision]: src/main/resources/org/camunda/bpm/example/dish-decision.png
-[dish-decision.dmn11.xml]: src/main/resources/org/camunda/bpm/example/dish-decision.dmn11.xml
-[Camunda Modeler]: https://camunda.com/products/camunda-bpm/modeler/
-[DishDecider.java]: src/main/java/org/camunda/bpm/example/DishDecider.java
-[User Guide]: https://docs.camunda.org/manual/7.23/user-guide/dmn-engine/testing/
-[DishDecisionTest.java]: src/test/java/org/camunda/bpm/example/DishDecisionTest.java
+[Orqueio DMN engine]: https://docs.orqueio.io/manual/7.23/user-guide/dmn-engine/
+[DMN tutorial]: https://orqueio.com/dmn/
+[Dish Decision]: src/main/resources/io/orqueio/bpm/example/dish-decision.png
+[dish-decision.dmn11.xml]: src/main/resources/io/orqueio/bpm/example/dish-decision.dmn11.xml
+[Orqueio Modeler]: https://orqueio.com/products/orqueio-bpm/modeler/
+[DishDecider.java]: src/main/java/io/orqueio/bpm/example/DishDecider.java
+[User Guide]: https://docs.orqueio.io/manual/7.23/user-guide/dmn-engine/testing/
+[DishDecisionTest.java]: src/test/java/io.orqueio/bpm/example/DishDecisionTest.java

@@ -1,14 +1,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.camunda.bpm.tutorial</groupId>
-  <artifactId>camunda-tutorial-multi-tenancy-schema-isolation</artifactId>
+  <groupId>io.orqueio.bpm.tutorial</groupId>
+  <artifactId>orqueio-tutorial-multi-tenancy-schema-isolation</artifactId>
   <packaging>war</packaging>
-  <name>Camunda Platform - Tutorial - Tenant-Aware Process Application</name>
+  <name>Orqueio Platform - Tutorial - Tenant-Aware Process Application</name>
   <version>0.0.1-SNAPSHOT</version>
 
   <properties>
-    <camunda.version>7.23.0</camunda.version>
+    <orqueio.version>0.25.0-SNAPSHOT</orqueio.version>
     <arquillian.version>1.7.0.Final</arquillian.version>
     <wildfly.container.adapter.version>3.0.1.Final</wildfly.container.adapter.version>
     <version.resteasy>6.2.3.Final</version.resteasy>
@@ -24,9 +24,9 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>org.camunda.bpm</groupId>
-        <artifactId>camunda-bom</artifactId>
-        <version>${camunda.version}</version>
+        <groupId>io.orqueio.bpm</groupId>
+        <artifactId>orqueio-bom</artifactId>
+        <version>${orqueio.version}</version>
         <scope>import</scope>
         <type>pom</type>
       </dependency>
@@ -45,21 +45,21 @@
     
     <!-- process engine, needs to be provided -->
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
-      <artifactId>camunda-engine</artifactId>
+      <groupId>io.orqueio.bpm</groupId>
+      <artifactId>orqueio-engine</artifactId>
       <scope>provided</scope>
     </dependency>
     
     <!-- client for Java EE application server integration, included in WAR as an alternative to write your own ProcessApplication class -->
     <dependency>
-      <groupId>org.camunda.bpm.javaee</groupId>
-      <artifactId>camunda-ejb-client-jakarta</artifactId>
+      <groupId>io.orqueio.bpm.javaee</groupId>
+      <artifactId>orqueio-ejb-client-jakarta</artifactId>
     </dependency>
     
     <!-- CDI integration, needs to be included in WAR, otherwise CDI can not work correctly -->
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
-      <artifactId>camunda-engine-cdi-jakarta</artifactId>
+      <groupId>io.orqueio.bpm</groupId>
+      <artifactId>orqueio-engine-cdi-jakarta</artifactId>
     </dependency>    
     
     <dependency>
@@ -87,16 +87,22 @@
     
     <!-- Required to use Connectors in unit tests -->
     <dependency>
-      <groupId>org.camunda.connect</groupId>
-      <artifactId>camunda-connect-connectors-all</artifactId>
+      <groupId>io.orqueio.connect</groupId>
+      <artifactId>orqueio-connect-connectors-all</artifactId>
       <scope>test</scope>
     </dependency>
     
     <!-- Required to use Spin in unit tests -->
     <dependency>
-      <groupId>org.camunda.spin</groupId>
-      <artifactId>camunda-spin-dataformat-all</artifactId>
+      <groupId>io.orqueio.spin</groupId>
+      <artifactId>orqueio-spin-dataformat-all</artifactId>
        <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>io.orqueio.spin</groupId>
+      <artifactId>orqueio-spin-core</artifactId>
+      <scope>test</scope>
     </dependency>
     
     <!-- Needed for ArquillianTest -->
@@ -144,7 +150,7 @@
       <dependencies>
         <dependency>
           <!-- Needed for ArquillianTest -->
-          <!-- Requires a running WildFly with Camunda Platform -->
+          <!-- Requires a running WildFly with Orqueio Platform -->
           <groupId>org.wildfly.arquillian</groupId>
           <artifactId>wildfly-arquillian-container-remote</artifactId>
           <version>${wildfly.container.adapter.version}</version>
@@ -175,16 +181,15 @@
     </plugins>
   </build>
 
+
   <repositories>
     <repository>
-      <id>camunda-bpm-nexus</id>
-      <name>Camunda Platform Maven Repository</name>
-      <url>https://artifacts.camunda.com/artifactory/public/</url>
-    </repository>
-    <repository>
-      <id>jboss-public-repository</id>
-      <name>JBoss Repository</name>
-      <url>https://repository.jboss.org/nexus/content/groups/public</url>
+      <id>central-portal-snapshots</id>
+      <name>Central Portal Snapshots</name>
+      <url>https://central.sonatype.com/repository/maven-snapshots/</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
     </repository>
   </repositories>
 

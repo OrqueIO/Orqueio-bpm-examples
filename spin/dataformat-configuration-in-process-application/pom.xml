@@ -3,14 +3,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.camunda.bpm.example</groupId>
-  <artifactId>camunda-example-spin-dataformat-configuration-process-application</artifactId>
+  <groupId>io.orqueio.bpm.example</groupId>
+  <artifactId>orqueio-example-spin-dataformat-configuration-process-application</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>war</packaging>
   <name>Spin - Configuring a Data Format Per Process Application</name>
 
   <properties>
-    <version.camunda>7.23.0</version.camunda>
+    <version.orqueio>0.25.0-SNAPSHOT</version.orqueio>
     <version.graal.js>21.3.12</version.graal.js>
     <version.jakarta-api>10.0.0</version.jakarta-api>
     <version.h2>2.1.214</version.h2>
@@ -25,19 +25,19 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>org.camunda.bpm</groupId>
-        <artifactId>camunda-bom</artifactId>
+        <groupId>io.orqueio.bpm</groupId>
+        <artifactId>orqueio-bom</artifactId>
         <scope>import</scope>
         <type>pom</type>
-        <version>${version.camunda}</version>
+        <version>${version.orqueio}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
 
   <dependencies>
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
-      <artifactId>camunda-engine</artifactId>
+      <groupId>io.orqueio.bpm</groupId>
+      <artifactId>orqueio-engine</artifactId>
       <scope>provided</scope>
     </dependency>
 
@@ -101,26 +101,26 @@
       <id>tomcat</id>
       <dependencies>
         <dependency>
-          <groupId>org.camunda.spin</groupId>
-          <artifactId>camunda-spin-dataformat-json-jackson</artifactId>
+          <groupId>io.orqueio.spin</groupId>
+          <artifactId>orqueio-spin-dataformat-json-jackson</artifactId>
           <exclusions>
             <exclusion>
-              <groupId>org.camunda.spin</groupId>
-              <artifactId>camunda-spin-core</artifactId>
+              <groupId>io.orqueio.spin</groupId>
+              <artifactId>orqueio-spin-core</artifactId>
             </exclusion>
             <exclusion>
-              <groupId>org.camunda.commons</groupId>
-              <artifactId>camunda-commons-logging</artifactId>
+              <groupId>io.orqueio.commons</groupId>
+              <artifactId>orqueio-commons-logging</artifactId>
             </exclusion>
             <exclusion>
-              <groupId>org.camunda.commons</groupId>
-              <artifactId>camunda-commons-utils</artifactId>
+              <groupId>io.orqueio.commons</groupId>
+              <artifactId>orqueio-commons-utils</artifactId>
             </exclusion>
           </exclusions>
         </dependency>
         <dependency>
-          <groupId>org.camunda.spin</groupId>
-          <artifactId>camunda-spin-core</artifactId>
+          <groupId>io.orqueio.spin</groupId>
+          <artifactId>orqueio-spin-core</artifactId>
           <scope>provided</scope>
         </dependency>
 
@@ -167,19 +167,19 @@
       </activation>
       <dependencies>
         <dependency>
-          <groupId>org.camunda.spin</groupId>
-          <artifactId>camunda-spin-dataformat-json-jackson</artifactId>
+          <groupId>io.orqueio.spin</groupId>
+          <artifactId>orqueio-spin-dataformat-json-jackson</artifactId>
           <scope>provided</scope>
         </dependency>
         
         <dependency>
-          <groupId>org.camunda.bpm</groupId>
-          <artifactId>camunda-engine-cdi-jakarta</artifactId>
+          <groupId>io.orqueio.bpm</groupId>
+          <artifactId>orqueio-engine-cdi-jakarta</artifactId>
         </dependency>
     
         <dependency>
-          <groupId>org.camunda.bpm.javaee</groupId>
-          <artifactId>camunda-ejb-client-jakarta</artifactId>
+          <groupId>io.orqueio.bpm.javaee</groupId>
+          <artifactId>orqueio-ejb-client-jakarta</artifactId>
         </dependency>
       </dependencies>
       <build>
@@ -206,19 +206,19 @@
       <id>wildfly</id>
       <dependencies>
         <dependency>
-          <groupId>org.camunda.spin</groupId>
-          <artifactId>camunda-spin-dataformat-json-jackson</artifactId>
+          <groupId>io.orqueio.spin</groupId>
+          <artifactId>orqueio-spin-dataformat-json-jackson</artifactId>
           <scope>provided</scope>
         </dependency>
         
         <dependency>
-          <groupId>org.camunda.bpm</groupId>
-          <artifactId>camunda-engine-cdi-jakarta</artifactId>
+          <groupId>io.orqueio.bpm</groupId>
+          <artifactId>orqueio-engine-cdi-jakarta</artifactId>
         </dependency>
     
         <dependency>
-          <groupId>org.camunda.bpm.javaee</groupId>
-          <artifactId>camunda-ejb-client-jakarta</artifactId>
+          <groupId>io.orqueio.bpm.javaee</groupId>
+          <artifactId>orqueio-ejb-client-jakarta</artifactId>
         </dependency>
       </dependencies>
       <build>
@@ -245,9 +245,12 @@
 
   <repositories>
     <repository>
-      <id>camunda-bpm-nexus</id>
-      <name>camunda-bpm-nexus</name>
-      <url>https://artifacts.camunda.com/artifactory/public/</url>
+      <id>central-portal-snapshots</id>
+      <name>Central Portal Snapshots</name>
+      <url>https://central.sonatype.com/repository/maven-snapshots/</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
     </repository>
   </repositories>
 

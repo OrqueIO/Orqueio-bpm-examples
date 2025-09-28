@@ -20,7 +20,7 @@ jobs:
           commit-message: 'chore(pom): Bump all versions in all examples'
           branch: bump-versions
           delete-branch: true
-          title: 'Bump all dependency and Camunda versions'
+          title: 'Bump all dependency and Orqueio versions'
           body: 'Created by Github action'
           base: master
         env:

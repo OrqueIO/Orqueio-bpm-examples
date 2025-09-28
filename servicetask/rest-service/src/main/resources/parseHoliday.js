@@ -19,10 +19,10 @@
 const response = connector.getVariable("response");
 const date = connector.getVariable("date");
 
-// parse response variable with camunda-spin
+// parse response variable with orqueio-spin
 const holidays = S(response);
 
 const query = `$..[?(@.datum=='${date}')]`;
 
-// use camunda-spin jsonPath to test if date is a holiday
+// use orqueio-spin jsonPath to test if date is a holiday
 !holidays.jsonPath(query).elementList().isEmpty();

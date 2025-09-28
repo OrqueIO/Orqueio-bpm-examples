@@ -1,4 +1,4 @@
-camunda.bpm.metrics:
+orqueio.bpm.metrics:
     enabled: false
     db-reporter-activate: false
 

@@ -1,7 +1,7 @@
-# Spring Boot Web application with embedded Camunda engine
+# Spring Boot Web application with embedded Orqueio engine
 
 This example demonstrates how you can build a Spring Boot Web application with the following configured:
-* Embedded Camunda engine accessible via REST
+* Embedded Orqueio engine accessible via REST
 * Process application and one BPMN process deployed
 * Spring Boot Security basic authentication
 
@@ -12,19 +12,19 @@ It also contains a couple of integration tests, showing how this can be tested.
 
 ## How is it done
 
-1. To embed the Camunda Engine accessible via REST API you must add following dependency to your `pom.xml`:
+1. To embed the Orqueio Engine accessible via REST API you must add following dependency to your `pom.xml`:
 
 ```xml
 ...
 <dependency>
-  <groupId>org.camunda.bpm.springboot</groupId>
-  <artifactId>camunda-bpm-spring-boot-starter-rest</artifactId>
-  <version>7.23.0</version>
+  <groupId>io.orqueio.bpm.springboot</groupId>
+  <artifactId>orqueio-bpm-spring-boot-starter-rest</artifactId>
+  <version>0.25.0-SNAPSHOT</version>
 </dependency>
 ...
 ```
 
-2. With Spring Boot you usually create an "application" class annotated with `@SpringBootApplication`. In order to have the Camunda process application
+2. With Spring Boot you usually create an "application" class annotated with `@SpringBootApplication`. In order to have the Orqueio process application
 registered, you can simply add an annotation `@EnableProcessApplication` to the same class and also include `processes.xml` file to your `META-INF` folder:
 
 ```java
@@ -41,8 +41,8 @@ public class RestApplication {
 
 3. You can also put BPMN, CMMN and DMN files in your classpath, they will be automatically deployed and registered within a process application.
 
->Note: Basic authentication is configured on Spring Boot level, this is NOT a Camunda Engine authentication. Check [this docs](https://docs.camunda.org/manual/7.23/reference/rest/overview/authentication/) 
-to configure Basic Authentication for Camunda Engine REST API.
+>Note: Basic authentication is configured on Spring Boot level, this is NOT a Orqueio Engine authentication. Check [this docs](https://docs.orqueio.io/manual/7.23/reference/rest/overview/authentication/) 
+to configure Basic Authentication for Orqueio Engine REST API.
  
 ## Run the application and call the REST API
 

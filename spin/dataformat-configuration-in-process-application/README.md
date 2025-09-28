@@ -1,11 +1,11 @@
 # Process-Application-Level Spin Data Format Configuration
 
-This example describes how to configure a data format provided by Camunda Spin *on process application level*.
+This example describes how to configure a data format provided by Orqueio Spin *on process application level*.
 It showcases the configuration of the Jackson-based JSON data format that Spin provides out-of-the-box. JSON serialization is customized by registering a Jackson module with a custom serializer and deserializer.
 
 Process-application-specific configuration means that configuration code is part of the process application and therefore isolated from other applications. Note that this approach is currently limited to Object variable (de-)serialization. See the example on [global data format configuration](../dataformat-configuration-global) for how to configure a data format such that it applies to all applications using Spin.
 
-In particular, we examine how to customize the serialization of the class [Car](src/main/java/org/camunda/bpm/example/spin/dataformat/configuration/Car.java):
+In particular, we examine how to customize the serialization of the class [Car](src/main/java/io/orqueio/bpm/example/spin/dataformat/configuration/Car.java):
 
 ```java
 public class Car {
@@ -22,7 +22,7 @@ public class Car {
 }
 ```
 
-`Car` references [Money](src/main/java/org/camunda/bpm/example/spin/dataformat/configuration/Money.java):
+`Car` references [Money](src/main/java/io/orqueio/bpm/example/spin/dataformat/configuration/Money.java):
 
 ```java
 public class Money {
@@ -58,7 +58,7 @@ The script task *Extract price* expects a `Car` JSON object in the format of `{"
    * `jboss` - compatible with JBoss EAP 8
    * `wildfly` - compatible with WildFly 33+
 3. Deploy the resulting WAR file to your application server
-4. Perform a HTTP GET request to the url `http://localhost:8080/dataformat-example/start-process` (or `http://localhost:8080/camunda-example-spin-dataformat-configuration-process-application-0.0.1-SNAPSHOT/start-process` if you're using Tomcat) either with a REST client or simply in the address bar of your browser
+4. Perform a HTTP GET request to the url `http://localhost:8080/dataformat-example/start-process` (or `http://localhost:8080/orqueio-example-spin-dataformat-configuration-process-application-0.0.1-SNAPSHOT/start-process` if you're using Tomcat) either with a REST client or simply in the address bar of your browser
 5. Go to Cockpit and verify that the process variable named `car` was serialized correctly
 
 
@@ -68,11 +68,11 @@ When a process application is deployed, a set of process-application-specific Sp
 
 ### Data Format Configuration
 
-Configuring data formats requires to implement the SPI [DataFormatConfigurator](https://github.com/camunda/camunda-spin/blob/master/core/src/main/java/org/camunda/spin/spi/DataFormatConfigurator.java) and declare implementations of it in a file `META-INF/services/org.camunda.spin.spi.DataFormatConfigurator`. Here, the class [JacksonDataFormatConfigurator](src/main/java/org/camunda/bpm/example/spin/dataformat/configuration/JacksonDataFormatConfigurator.java) is such an implementation. It has the following contents:
+Configuring data formats requires to implement the SPI [DataFormatConfigurator](https://github.com/orqueio/orqueio-spin/blob/master/core/src/main/java/io/orqueio/spin/spi/DataFormatConfigurator.java) and declare implementations of it in a file `META-INF/services/io.orqueio.spin.spi.DataFormatConfigurator`. Here, the class [JacksonDataFormatConfigurator](src/main/java/io/orqueio/bpm/example/spin/dataformat/configuration/JacksonDataFormatConfigurator.java) is such an implementation. It has the following contents:
 
 ```java
-import org.camunda.spin.impl.json.jackson.format.JacksonJsonDataFormat;
-import org.camunda.spin.spi.DataFormatConfigurator;
+import io.orqueio.spin.impl.json.jackson.format.JacksonJsonDataFormat;
+import io.orqueio.spin.spi.DataFormatConfigurator;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
@@ -94,11 +94,11 @@ public class JacksonDataFormatConfigurator implements DataFormatConfigurator<Jac
 }
 ```
 
-The method `getDataFormatClass` declares the kind of data formats a configurator is able to configure. The method `configure` is the callback invoked by the Spin runtime after data format instantiation. Here, we register in form of the classes [MoneyJsonSerializer](src/main/java/org/camunda/bpm/example/spin/dataformat/configuration/MoneyJsonSerializer.java) and [MoneyJsonDeserializer](src/main/java/org/camunda/bpm/example/spin/dataformat/configuration/MoneyJsonDeserializer.java) a Jackson serializer and deserializer for the `Money` class. These make sure that a `Car` object is serialized in the way we need it.
+The method `getDataFormatClass` declares the kind of data formats a configurator is able to configure. The method `configure` is the callback invoked by the Spin runtime after data format instantiation. Here, we register in form of the classes [MoneyJsonSerializer](src/main/java/io/orqueio/bpm/example/spin/dataformat/configuration/MoneyJsonSerializer.java) and [MoneyJsonDeserializer](src/main/java/io/orqueio/bpm/example/spin/dataformat/configuration/MoneyJsonDeserializer.java) a Jackson serializer and deserializer for the `Money` class. These make sure that a `Car` object is serialized in the way we need it.
 
 ### Access API from Outside
 
-The CDI bean [ProcessInstanceStarterBean](src/main/java/org/camunda/bpm/example/spin/dataformat/servlet/ProcessInstanceStarterBean.java) has a method that starts a process instance with a serialized `Car` value.
+The CDI bean [ProcessInstanceStarterBean](src/main/java/io/orqueio/bpm/example/spin/dataformat/servlet/ProcessInstanceStarterBean.java) has a method that starts a process instance with a serialized `Car` value.
 
 ```java
 @ApplicationScoped
@@ -121,7 +121,7 @@ public class ProcessInstanceStarterBean {
 }
 ```
 
-As the process engine is not able to guess by itself which JSON data format to use for serializing the variable, we have to tell it that we want to use the format defined in the process application. This is solved here by defining a custom CDI annotation `@InProcessApplicationContext`. A custom CDI interceptor [ProcessApplicationContextInterceptor](src/main/java/org/camunda/bpm/example/spin/dataformat/servlet/ProcessApplicationContextInterceptor.java) is notified whenever this annotation is present. This interceptor determines the context process application and declares it using the utility class [ProcessApplicationContext](https://github.com/camunda/camunda-bpm-platform/blob/master/engine/src/main/java/org/camunda/bpm/application/ProcessApplicationContext.java):
+As the process engine is not able to guess by itself which JSON data format to use for serializing the variable, we have to tell it that we want to use the format defined in the process application. This is solved here by defining a custom CDI annotation `@InProcessApplicationContext`. A custom CDI interceptor [ProcessApplicationContextInterceptor](src/main/java/io/orqueio/bpm/example/spin/dataformat/servlet/ProcessApplicationContextInterceptor.java) is notified whenever this annotation is present. This interceptor determines the context process application and declares it using the utility class [ProcessApplicationContext](https://github.com/orqueio/orqueio-bpm-platform/blob/master/engine/src/main/java/io/orqueio/bpm/application/ProcessApplicationContext.java):
 
 ```java
 @InProcessApplicationContext
@@ -157,7 +157,7 @@ public class ProcessApplicationContextInterceptor {
 
 For this to work on Tomcat (a non-Java-EE server), we have include Weld in the process application. However, note that using CDI is not required for this feature to work. The lowest common denominator is the utility class `ProcessApplicationContext`. It can be used in any context to declare process application context before invoking engine API.
 
-Read the documentation on [Process Application Resource Access](https://docs.camunda.org/manual/7.23/user-guide/process-applications/process-application-resources/) for why it is required to declare process application context.
+Read the documentation on [Process Application Resource Access](https://docs.orqueio.io/manual/7.23/user-guide/process-applications/process-application-resources/) for why it is required to declare process application context.
 
 ### Delegation Code
 

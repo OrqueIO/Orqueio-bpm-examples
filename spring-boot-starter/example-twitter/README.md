@@ -1,10 +1,10 @@
 # Tweet directly from the Tasklist - Spring Boot packaged
 
 This example demonstrates how you can use a BPMN process and the Tweeter API to build a simple Twitter client. 
-It uses `camunda-bpm-spring-boot-starter-webapp` and thus embed Tomcat as a web container.
+It uses `orqueio-bpm-spring-boot-starter-webapp` and thus embed Tomcat as a web container.
 
 The example contains:
-- a process application with one process deployed on the Camunda engine
+- a process application with one process deployed on the Orqueio engine
 - custom forms to create and review the Tweet
 - creates on startup an admin user "demo" (password: demo)
 
@@ -15,19 +15,19 @@ It also demonstrates the usage of the `application.yaml` configuration file.
 
 ## How is it done
 
-1. To embed the Camunda Engine you must add following dependency to your `pom.xml`:
+1. To embed the Orqueio Engine you must add following dependency to your `pom.xml`:
    
 ```xml
 ...
 <dependency>
- <groupId>org.camunda.bpm.springboot</groupId>
- <artifactId>camunda-bpm-spring-boot-starter-webapp</artifactId>
- <version>7.23.0</version>
+ <groupId>io.orqueio.bpm.springboot</groupId>
+ <artifactId>orqueio-bpm-spring-boot-starter-webapp</artifactId>
+ <version>0.25.0-SNAPSHOT</version>
 </dependency>
 ...
 ```
 
-2. With Spring Boot you usually create an "application" class annotated with `@SpringBootApplication`. In order to have a Camunda process application
+2. With Spring Boot you usually create an "application" class annotated with `@SpringBootApplication`. In order to have a Orqueio process application
 registered, you can simply add the annotation `@EnableProcessApplication` to the same class and also include the `processes.xml` file in your `META-INF` folder:
 
 ```java
@@ -43,7 +43,7 @@ public class TwitterServletProcessApplication {
 
 3. You can also put BPMN, CMMN and DMN files in your classpath, they will be automatically deployed and registered within the process application.
 
-4. You can configure your Spring Boot application using `application.yaml` file. All possible Camunda-specific configuration parameters are listed [here](https://docs.camunda.org/manual/7.23/user-guide/spring-boot-integration/configuration/)
+4. You can configure your Spring Boot application using `application.yaml` file. All possible Orqueio-specific configuration parameters are listed [here](https://docs.orqueio.io/manual/7.23/user-guide/spring-boot-integration/configuration/)
 
 5. This example provides two implementations for posting a Tweet:
 * `TweetContentOfflineDelegate` (default) - will just print the tweet content on console
@@ -54,7 +54,7 @@ the BPMN diagram via "Delegate expression" in a service task:
 
 ```xml
 ...
-<serviceTask id="service_task_publish_on_twitter" name="Publish on Twitter" camunda:delegateExpression="#{tweetAdapter}">
+<serviceTask id="service_task_publish_on_twitter" name="Publish on Twitter" orqueio:delegateExpression="#{tweetAdapter}">
   ...
 </serviceTask>
 ...

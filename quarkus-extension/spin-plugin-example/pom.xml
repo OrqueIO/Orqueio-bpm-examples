@@ -4,12 +4,12 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.camunda.bpm.quarkus.example</groupId>
-  <artifactId>camunda-bpm-quarkus-example-spin-plugin</artifactId>
+  <groupId>io.orqueio.bpm.quarkus.example</groupId>
+  <artifactId>orqueio-bpm-quarkus-example-spin-plugin</artifactId>
   <version>1.0.0-SNAPSHOT</version>
 
   <properties>
-    <camunda.version>7.23.0</camunda.version>
+    <orqueio.version>0.25.0-SNAPSHOT</orqueio.version>
     <quarkus.version>3.20.0</quarkus.version>
     <compiler-plugin.version>3.14.0</compiler-plugin.version>
 
@@ -30,9 +30,9 @@
       </dependency>
 
       <dependency>
-        <groupId>org.camunda.bpm</groupId>
-        <artifactId>camunda-bom</artifactId>
-        <version>${camunda.version}</version>
+        <groupId>io.orqueio.bpm</groupId>
+        <artifactId>orqueio-bom</artifactId>
+        <version>${orqueio.version}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -41,21 +41,21 @@
 
   <dependencies>
 
-    <!-- CAMUNDA -->
+    <!-- ORQUEIO -->
 
     <dependency>
-      <groupId>org.camunda.bpm.quarkus</groupId>
-      <artifactId>camunda-bpm-quarkus-engine</artifactId>
+      <groupId>io.orqueio.bpm.quarkus</groupId>
+      <artifactId>orqueio-bpm-quarkus-engine</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
-      <artifactId>camunda-engine-plugin-spin</artifactId>
+      <groupId>io.orqueio.bpm</groupId>
+      <artifactId>orqueio-engine-plugin-spin</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.spin</groupId>
-      <artifactId>camunda-spin-dataformat-json-jackson</artifactId>
+      <groupId>io.orqueio.spin</groupId>
+      <artifactId>orqueio-spin-dataformat-json-jackson</artifactId>
     </dependency>
 
     <!-- QUARKUS -->
@@ -107,4 +107,14 @@
       </plugin>
     </plugins>
   </build>
+  <repositories>
+    <repository>
+      <id>central-portal-snapshots</id>
+      <name>Central Portal Snapshots</name>
+      <url>https://central.sonatype.com/repository/maven-snapshots/</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
 </project>

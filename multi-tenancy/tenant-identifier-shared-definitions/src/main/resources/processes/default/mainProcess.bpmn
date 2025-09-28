@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn">
-  <bpmn:process id="mainProcess" name="Main Process" isExecutable="true" camunda:historyTimeToLive="P180D">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:orqueio="http://orqueio.io/schema/1.0/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn">
+  <bpmn:process id="mainProcess" name="Main Process" isExecutable="true" orqueio:historyTimeToLive="P180D">
     <bpmn:documentation><![CDATA[calling the sub-process
 ]]></bpmn:documentation>
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>SequenceFlow_0lfx3lj</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:callActivity id="CallActivity_0ahffuc" name="subprocess" calledElement="subProcess" camunda:calledElementTenantId="${ calledElementTenantIdProvider.resolveTenantId(execution) }">
+    <bpmn:callActivity id="CallActivity_0ahffuc" name="subprocess" calledElement="subProcess" orqueio:calledElementTenantId="${ calledElementTenantIdProvider.resolveTenantId(execution) }">
       <bpmn:incoming>SequenceFlow_0lfx3lj</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0bp97y0</bpmn:outgoing>
     </bpmn:callActivity>

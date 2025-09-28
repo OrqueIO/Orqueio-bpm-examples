@@ -1,0 +1,45 @@
+# Orqueio Platform Assert Example for JUnit 5
+
+This project contains simple examples of how to write a unit test for Orqueio Platform using the [JUnit 5 extension][junit5] and [Orqueio Platform Assert][assert].
+
+The project contains the following files:
+
+```
+src/
+├── main
+│   ├── java
+│   └── resources
+└── test
+    ├── java
+    │   └── org
+    │       └── orqueio
+    │           └── bpm
+    │               └── unittest                                               (1)
+    │                   ├── ProcessEngineExtensionExtendWithTest.java
+    │                   └── ProcessEngineExtensionRegisterExtensionTest.java
+    └── resources
+        ├── orqueio.cfg.xml                                                    (2)
+        └── testProcess.bpmn                                                   (3)
+```
+Explanation:
+
+* (1) A folder containing two java class. Each class contains a JUnit Test. They use the `ProcessEngineExtension` for bootstrapping the process engine. Each test demonstrates one way to set up the `ProcessEngineExtension`. Both tests also use [orqueio-bpm-assert][assert] to make your test life easier.
+* (2) Configuration file for the process engine.
+* (3) An example BPMN process.
+
+## Prerequisites
+* Java 17/21
+
+## Running the test with maven
+
+In order to run the testsuite with maven you can use:
+
+```
+mvn clean test
+```
+
+## Further reading
+If you want to read more about [Orqueio Platform Assert][assert] or the [Orqueio JUnit 5 extension], go to the [testing user guide](https://docs.orqueio.io/manual/7.23/user-guide/testing/) in the Orqueio docs.
+
+[junit5]: https://github.com/orqueio/orqueio/tree/master/test-utils/junit5-extension
+[assert]: https://github.com/orqueio/orqueio/tree/master/test-utils/assert

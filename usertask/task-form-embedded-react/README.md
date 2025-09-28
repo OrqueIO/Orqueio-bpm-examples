@@ -2,12 +2,12 @@
 React is a popular library to build user interfaces. If you want to use react to build custom Tasklist forms, you can use this example as a starting point. We adapted the [React Multiple Inputs Example](https://reactjs.org/docs/forms.html#handling-multiple-inputs) and integrated it into a process.
 
 ## Overview
-This example uses Jakarta API. It is compatible with the latest releases of Camunda Tomcat and WildFly distributions.
+This example uses Jakarta API. It is compatible with the latest releases of Orqueio Tomcat and WildFly distributions.
 This example works with Chrome and Firefox.
 
 ### How can I add React to my Tasklist?
-  1. Add [loadReact.js](config/react/loadReact.js) to `app/tasklist/scripts/react` of the Camunda Tasklist webapp (e.g., for Tomcat, it will be `/webapps/camunda/app/tasklist/scripts/react`). This will load React and ReactDOM from a CDN and add it to the global scope. If you want to use other versions of React, adjust the import paths accordingly.
-  2. Add the loader as a custom script in `app/tasklist/scripts/config.js` of the Camunda Tasklist webapp (e.g., for Tomcat, it will be `/webapps/camunda/app/tasklist/scripts/config.js`).
+  1. Add [loadReact.js](config/react/loadReact.js) to `app/tasklist/scripts/react` of the Orqueio Tasklist webapp (e.g., for Tomcat, it will be `/webapps/orqueio/app/tasklist/scripts/react`). This will load React and ReactDOM from a CDN and add it to the global scope. If you want to use other versions of React, adjust the import paths accordingly.
+  2. Add the loader as a custom script in `app/tasklist/scripts/config.js` of the Orqueio Tasklist webapp (e.g., for Tomcat, it will be `/webapps/orqueio/app/tasklist/scripts/config.js`).
   ```javascript
     customScripts: [
       'scripts/react/loadReact.js'
@@ -16,7 +16,7 @@ This example works with Chrome and Firefox.
 That's it, you can now use react in your custom forms.
 
 ### How can I get access to process variables?
-All process variables will be managed with the `camForm.variableManager`. You need to load existing and create new variables. How this is done is described in detail in the [Embedded Forms Reference](https://docs.camunda.org/manual/7.23/reference/embedded-forms/javascript/lifecycle/).
+All process variables will be managed with the `camForm.variableManager`. You need to load existing and create new variables. How this is done is described in detail in the [Embedded Forms Reference](https://docs.orqueio.io/manual/7.23/reference/embedded-forms/javascript/lifecycle/).
 
 Keep in mind that you also have to update the variables this way if they change. You can do this in the `componentDidUpdate()` method of you form component. 
 
@@ -34,6 +34,6 @@ Yes you can. Just use any JSX preprocessor as you would with any other React pro
 ## How to use this example
 1. Checkout the project with Git
 2. Build the project with maven
-3. Deploy the WAR file to the Camunda Workflow Engine
-4. Add React to Camunda Tasklist as described above
-5. Open Camunda Tasklist and start a process instance for the process named "React Example"
+3. Deploy the WAR file to the Orqueio Workflow Engine
+4. Add React to Orqueio Tasklist as described above
+5. Open Orqueio Tasklist and start a process instance for the process named "React Example"

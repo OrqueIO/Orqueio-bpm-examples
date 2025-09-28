@@ -1,0 +1,112 @@
+/*
+ * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * under one or more contributor license agreements. See the NOTICE file
+ * distributed with this work for additional information regarding copyright
+ * ownership. Camunda licenses this file to you under the Apache License,
+ * Version 2.0; you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.orqueio.bpm.quickstart;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import io.orqueio.bpm.engine.task.TaskQuery;
+import io.orqueio.bpm.engine.test.ProcessEngineRule;
+import io.orqueio.bpm.example.invoice.service.ArchiveInvoiceService;
+import io.orqueio.bpm.model.bpmn.Bpmn;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.bpm.model.bpmn.GatewayDirection;
+import org.junit.Rule;
+import org.junit.Test;
+
+/**
+ * @author Sebastian Menski
+ */
+public class CreateInvoiceProcessTest {
+
+  @Rule
+  public ProcessEngineRule processEngine = new ProcessEngineRule();
+
+  @Test
+  public void testCreateInvoiceProcess() throws Exception {
+    BpmnModelInstance modelInstance = Bpmn.createExecutableProcess("invoice")
+        .orqueioHistoryTimeToLive(180)
+      .name("BPMN API Invoice Process")
+      .startEvent()
+        .name("Invoice received")
+      .userTask()
+        .name("Assign Approver")
+        .orqueioAssignee("demo")
+      .userTask()
+        .id("approveInvoice")
+        .name("Approve Invoice")
+      .exclusiveGateway()
+        .name("Invoice approved?")
+        .gatewayDirection(GatewayDirection.Diverging)
+      .condition("yes", "${approved}")
+      .userTask()
+        .name("Prepare Bank Transfer")
+        .orqueioFormKey("embedded:app:forms/prepare-bank-transfer.html")
+        .orqueioCandidateGroups("accounting")
+      .serviceTask()
+        .name("Archive Invoice")
+        .orqueioClass("io.orqueio.bpm.example.invoice.service.ArchiveInvoiceService")
+      .endEvent()
+        .name("Invoice processed")
+      .moveToLastGateway()
+      .condition("no", "${!approved}")
+      .userTask()
+        .name("Review Invoice")
+        .orqueioAssignee("demo")
+      .exclusiveGateway()
+        .name("Review successful?")
+        .gatewayDirection(GatewayDirection.Diverging)
+      .condition("no", "${!clarified}")
+      .endEvent()
+        .name("Invoice not processed")
+      .moveToLastGateway()
+      .condition("yes", "${clarified}")
+      .connectTo("approveInvoice")
+      .done();
+
+      // deploy process model
+      processEngine.getRepositoryService().createDeployment().addModelInstance("invoice.bpmn", modelInstance).deploy();
+
+      // start process model
+      processEngine.getRuntimeService().startProcessInstanceByKey("invoice");
+
+      TaskQuery taskQuery = processEngine.getTaskService().createTaskQuery();
+      // check and complete task "Assign Approver"
+      org.junit.Assert.assertEquals(1, taskQuery.count());
+      processEngine.getTaskService().complete(taskQuery.singleResult().getId());
+
+      // check and complete task "Approve Invoice"
+      Map<String, Object> variables = new HashMap<>();
+      variables.put("approved", true);
+
+      org.junit.Assert.assertEquals(1, taskQuery.count());
+      processEngine.getTaskService().complete(taskQuery.singleResult().getId(), variables);
+
+      // check and complete task "Prepare Bank Transfer"
+      org.junit.Assert.assertEquals(1, taskQuery.count());
+      processEngine.getTaskService().complete(taskQuery.singleResult().getId());
+
+      // check if Delegate was executed
+      org.junit.Assert.assertEquals(true, ArchiveInvoiceService.wasExecuted);
+
+      // check if process instance is ended
+      org.junit.Assert.assertEquals(0, processEngine.getRuntimeService().createProcessInstanceQuery().count());
+
+       // show the BPMN 2.0 process model XML on the console log
+//      Bpmn.writeModelToStream(System.out, modelInstance);
+  }
+}

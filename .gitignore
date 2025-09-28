@@ -16,6 +16,6 @@ dependency-reduced-pom.xml
 *.iml
 *.sublime-project
 *.sublime-workspace
-camunda-h2-default/
-camunda-h2-dbs/
+orqueio-h2-default/
+orqueio-h2-dbs/
 

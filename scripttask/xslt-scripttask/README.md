@@ -1,9 +1,9 @@
 # Script Task which uses XSLT
 
 > Note: This example works also only with the XSLT scriptengine extension which is part of the
-> Camunda Platform **enterprise edition**.
+> Orqueio Platform **enterprise edition**.
 
-This quickstart demonstrates how to use the XSLT script engine extension to transform data in Camunda Platform.
+This quickstart demonstrates how to use the XSLT script engine extension to transform data in Orqueio Platform.
 The example is *classless*, relying entirely on scripting and expression language.
 
 The example includes a BPMN 2.0 process which invokes a simple script task which transforms the input data
@@ -30,9 +30,9 @@ The execution listener attached to the start event references a groovy script.
 ```xml
 <bpmn2:startEvent id="StartEvent_1" name="give input">
   <bpmn2:extensionElements>
-    <camunda:executionListener event="end">
-      <camunda:script scriptFormat="groovy" resource="org/camunda/bpm/example/xsltexample/readXmlFile.groovy" />
-    </camunda:executionListener>
+    <orqueio:executionListener event="end">
+      <orqueio:script scriptFormat="groovy" resource="io/orqueio/bpm/example/xsltexample/readXmlFile.groovy" />
+    </orqueio:executionListener>
   </bpmn2:extensionElements>
 </bpmn2:startEvent>
 ```
@@ -40,9 +40,9 @@ The execution listener attached to the start event references a groovy script.
 This groovy script loads the [example XML file][4] and saves it in the process variable `customers`.
 
 ```groovy
-import org.camunda.commons.utils.IoUtil
+import io.orqueio.commons.utils.IoUtil
 
-xmlData = IoUtil.fileAsString('org/camunda/bpm/example/xsltexample/example.xml')
+xmlData = IoUtil.fileAsString('io/orqueio/bpm/example/xsltexample/example.xml')
 execution.setVariable('customers', xmlData)
 
 println 'Input XML:'
@@ -53,11 +53,11 @@ The following script task uses the [xsl stylesheet][3] to transform the XML save
 and saves the result in the `xmlOutput` process variable.
 
 ```xml
-<bpmn2:scriptTask id="ScriptTask_1" name="convert input" scriptFormat="xslt" camunda:resource="org/camunda/bpm/example/xsltexample/example.xsl" camunda:resultVariable="xmlOutput">
+<bpmn2:scriptTask id="ScriptTask_1" name="convert input" scriptFormat="xslt" orqueio:resource="io/orqueio/bpm/example/xsltexample/example.xsl" orqueio:resultVariable="xmlOutput">
   <bpmn2:extensionElements>
-    <camunda:inputOutput>
-      <camunda:inputParameter name="camunda_source">${customers}</camunda:inputParameter>
-    </camunda:inputOutput>
+    <orqueio:inputOutput>
+      <orqueio:inputParameter name="camunda_source">${customers}</orqueio:inputParameter>
+    </orqueio:inputOutput>
   </bpmn2:extensionElements>
 </bpmn2:scriptTask>
 ```
@@ -67,9 +67,9 @@ Before the process ends the execution listener of the end event again executes a
 ```xml
 <bpmn2:endEvent id="EndEvent_1" name="show output">
   <bpmn2:extensionElements>
-    <camunda:executionListener event="start">
-      <camunda:script scriptFormat="groovy" resource="org/camunda/bpm/example/xsltexample/printResult.groovy" />
-    </camunda:executionListener>
+    <orqueio:executionListener event="start">
+      <orqueio:script scriptFormat="groovy" resource="io/orqueio/bpm/example/xsltexample/printResult.groovy" />
+    </orqueio:executionListener>
   </bpmn2:extensionElements>
 </bpmn2:endEvent>
 ```
@@ -88,8 +88,8 @@ println execution.getVariable('xmlOutput')
 
 [1]: src/main/resources/xslt-example.png
 [2]: src/main/resources/xslt-example.bpmn
-[3]: src/main/resources/org/camunda/bpm/example/xsltexample/example.xsl
-[4]: src/main/resources/org/camunda/bpm/example/xsltexample/example.xml
+[3]: src/main/resources/io/orqueio/bpm/example/xsltexample/example.xsl
+[4]: src/main/resources/io/orqueio/bpm/example/xsltexample/example.xml
 [5]: src/test/resources/expected_result.xml
-[6]: src/test/java/org/camunda/bpm/example/xsltexample/XsltExampleTest.java
+[6]: src/test/java/io/orqueio/bpm/example/xsltexample/XsltExampleTest.java
 

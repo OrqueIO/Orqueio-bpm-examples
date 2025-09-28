@@ -1,12 +1,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.camunda.bpm.assert</groupId>
-  <artifactId>camunda-bpm-assert-examples</artifactId>
+  <groupId>io.orqueio.bpm.assert</groupId>
+  <artifactId>orqueio-bpm-assert-examples</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <properties>
-    <version.camunda>7.23.0</version.camunda>
+    <version.orqueio>0.25.0-SNAPSHOT</version.orqueio>
     <version.assertj>3.26.3</version.assertj>
     <version.junit>4.13.2</version.junit>
     <version.h2>2.3.232</version.h2>
@@ -19,15 +19,15 @@
     <version.plugin.maven-compiler>3.11.0</version.plugin.maven-compiler>
   </properties>
 
-  <name>Camunda Platform Assert Test</name>
-  <description>A minimal project to run Camunda Platform Assert tests</description>
+  <name>Orqueio Platform Assert Test</name>
+  <description>A minimal project to run Orqueio Platform Assert tests</description>
 
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>org.camunda.bpm</groupId>
-        <artifactId>camunda-bom</artifactId>
-        <version>${version.camunda}</version>
+        <groupId>io.orqueio.bpm</groupId>
+        <artifactId>orqueio-bom</artifactId>
+        <version>${version.orqueio}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -36,13 +36,13 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
-      <artifactId>camunda-engine</artifactId>
+      <groupId>io.orqueio.bpm</groupId>
+      <artifactId>orqueio-engine</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
-      <artifactId>camunda-bpm-assert</artifactId>
+      <groupId>io.orqueio.bpm</groupId>
+      <artifactId>orqueio-bpm-assert</artifactId>
     </dependency>
 
     <dependency>
@@ -90,5 +90,14 @@
       </plugin>
     </plugins>
   </build>
-
+  <repositories>
+    <repository>
+      <id>central-portal-snapshots</id>
+      <name>Central Portal Snapshots</name>
+      <url>https://central.sonatype.com/repository/maven-snapshots/</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
 </project>

@@ -1,14 +1,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.camunda.bpm.example</groupId>
-  <artifactId>camunda-example-multi-tenancy-tenant-identifier-shared</artifactId>
-  <name>Camunda Platform - Example - Multi Tenancy - Tenant Identifier - Shared</name>
+  <groupId>io.orqueio.bpm.example</groupId>
+  <artifactId>orqueio-example-multi-tenancy-tenant-identifier-shared</artifactId>
+  <name>Orqueio Platform - Example - Multi Tenancy - Tenant Identifier - Shared</name>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>war</packaging>
 
   <properties>
-    <version.camunda>7.23.0</version.camunda>
+    <version.orqueio>0.25.0-SNAPSHOT</version.orqueio>
     <version.servlet>6.1.0</version.servlet>
     <maven.compiler.release>17</maven.compiler.release>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -20,9 +20,9 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>org.camunda.bpm</groupId>
-        <artifactId>camunda-bom</artifactId>
-        <version>${version.camunda}</version>
+        <groupId>io.orqueio.bpm</groupId>
+        <artifactId>orqueio-bom</artifactId>
+        <version>${version.orqueio}</version>
         <scope>import</scope>
         <type>pom</type>
       </dependency>
@@ -31,14 +31,14 @@
   
   <dependencies>
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
-      <artifactId>camunda-engine</artifactId>
+      <groupId>io.orqueio.bpm</groupId>
+      <artifactId>orqueio-engine</artifactId>
       <scope>provided</scope>
     </dependency>
     
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
-      <artifactId>camunda-engine-cdi-jakarta</artifactId>
+      <groupId>io.orqueio.bpm</groupId>
+      <artifactId>orqueio-engine-cdi-jakarta</artifactId>
     </dependency>
 
     <dependency>
@@ -66,9 +66,12 @@
 
   <repositories>
     <repository>
-      <id>camunda-bpm-nexus</id>
-      <name>camunda-bpm-nexus</name>
-      <url>https://artifacts.camunda.com/artifactory/public/</url>
+      <id>central-portal-snapshots</id>
+      <name>Central Portal Snapshots</name>
+      <url>https://central.sonatype.com/repository/maven-snapshots/</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
     </repository>
   </repositories>
 

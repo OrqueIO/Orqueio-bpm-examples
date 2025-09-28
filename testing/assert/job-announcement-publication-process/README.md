@@ -1,6 +1,6 @@
-# Executing Camunda Platform Assert tests
+# Executing Orqueio Platform Assert tests
 
-This project demonstrates how to setup a minimal project to run Camunda Platform Assert tests
+This project demonstrates how to setup a minimal project to run Orqueio Platform Assert tests
 
 ## Prerequisites
 * Java 17/21
@@ -19,8 +19,8 @@ mvn clean test
 ```
 
 ## Further reading
-If you want to read more about [Camunda Platform Assert][assert], go to the [testing user guide](https://docs.camunda.org/manual/7.23/user-guide/testing/) in the Camunda docs.
+If you want to read more about [Orqueio Platform Assert][assert], go to the [testing user guide](https://docs.orqueio.io/manual/7.23/user-guide/testing/) in the Orqueio docs.
 
 
-[assert]: https://github.com/camunda/camunda-bpm-platform/tree/master/test-utils/assert
-[1]: src/test/java/org/camunda/bpm/engine/test/assertions/examples
+[assert]: https://github.com/orqueio/orqueio-bpm-platform/tree/master/test-utils/assert
+[1]: src/test/java/io/orqueio/bpm/engine/test/assertions/examples

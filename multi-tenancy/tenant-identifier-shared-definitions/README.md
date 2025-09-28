@@ -15,7 +15,7 @@ The example contains two shared process definitions (main proces and sub-process
 
 ## How it works
 
-Please refer to the [User Guide](http://docs.camunda.org/manual/7.23/user-guide/process-engine/multi-tenancy/) for details about multi-tenancy.
+Please refer to the [User Guide](http://docs.orqueio.io/manual/7.23/user-guide/process-engine/multi-tenancy/) for details about multi-tenancy.
 
 ### Provide Tenant Ids for Instances of Shared Process Definitions
 
@@ -69,7 +69,7 @@ Now, set the custom `TenantIdProvider` on the `ProcessEngineConfiguration`.
 
 ```xml
 <bean id="processEngineConfiguration" 
-  class="org.camunda.bpm.engine.impl.cfg.StandaloneInMemProcessEngineConfiguration">
+  class="io.orqueio.bpm.engine.impl.cfg.StandaloneInMemProcessEngineConfiguration">
     
   <!-- set the custom tenant id provider -->
   <property name="tenantIdProvider" ref="tenantIdProvider" />
@@ -77,7 +77,7 @@ Now, set the custom `TenantIdProvider` on the `ProcessEngineConfiguration`.
 </bean>
 
 <!-- provides the tenant id of process instances --> 
-<bean id="tenantIdProvider" class="org.camunda.bpm.tutorial.multitenancy.CustomTenantIdProvider" />
+<bean id="tenantIdProvider" class="io.orqueio.bpm.tutorial.multitenancy.CustomTenantIdProvider" />
 ```
 
 That's it!
@@ -118,12 +118,12 @@ In this example, one tenant (tenant 2) should have a different sub-process:
 
 The sub-process has the same process definition key like the default one and is deployed for the specific tenant.
 
-In order to use the tenant specific sub-process, the tenant id of the called element has to be set on the call activity using the `camunda:calledElementTenantId` attribute.
+In order to use the tenant specific sub-process, the tenant id of the called element has to be set on the call activity using the `orqueio:calledElementTenantId` attribute.
 
 ```xml
 <bpmn:callActivity id="CallActivity_0ahffuc" name="subprocess" 
   calledElement="subProcess" 
-  camunda:calledElementTenantId="${ calledElementTenantIdProvider.resolveTenantId(execution) }">
+  orqueio:calledElementTenantId="${ calledElementTenantIdProvider.resolveTenantId(execution) }">
   <!-- ... --->    
 </bpmn:callActivity>
 ```

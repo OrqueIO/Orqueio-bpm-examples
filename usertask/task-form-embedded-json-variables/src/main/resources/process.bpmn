@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" id="sid-0b0aaa25-3baf-4875-9d7a-0907d599a9ef" targetNamespace="http://camunda.org/examples" exporter="Camunda Modeler" exporterVersion="4.7.0" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd">
-  <process id="customerDataProcess" name="Customer Data Process" isExecutable="true" camunda:historyTimeToLive="P180D">
-    <startEvent id="StartEvent_1" name="Customer entered" camunda:formKey="embedded:app:forms/start-form.html">
+<definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:orqueio="http://orqueio.io/schema/1.0/bpmn" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" id="sid-0b0aaa25-3baf-4875-9d7a-0907d599a9ef" targetNamespace="http://orqueio.io/examples" exporter="Orqueio Modeler" exporterVersion="4.7.0" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd">
+  <process id="customerDataProcess" name="Customer Data Process" isExecutable="true" orqueio:historyTimeToLive="P180D">
+    <startEvent id="StartEvent_1" name="Customer entered" orqueio:formKey="embedded:app:forms/start-form.html">
       <outgoing>SequenceFlow_1</outgoing>
     </startEvent>
     <sequenceFlow id="SequenceFlow_1" name="" sourceRef="StartEvent_1" targetRef="UserTask_1" />
-    <userTask id="UserTask_1" name="Approve customer" camunda:formKey="embedded:app:forms/task-form.html" camunda:assignee="demo">
+    <userTask id="UserTask_1" name="Approve customer" orqueio:formKey="embedded:app:forms/task-form.html" orqueio:assignee="demo">
       <incoming>SequenceFlow_1</incoming>
       <outgoing>SequenceFlow_3</outgoing>
     </userTask>
@@ -21,11 +21,11 @@
     <sequenceFlow id="SequenceFlow_5" name="&#60; 21" sourceRef="ExclusiveGateway_1" targetRef="UserTask_3">
       <conditionExpression xsi:type="tFormalExpression">${customer.prop("age").numberValue() &lt; 21}</conditionExpression>
     </sequenceFlow>
-    <userTask id="UserTask_3" name="Under 21" camunda:formKey="embedded:app:forms/inspect-form.html" camunda:assignee="demo">
+    <userTask id="UserTask_3" name="Under 21" orqueio:formKey="embedded:app:forms/inspect-form.html" orqueio:assignee="demo">
       <incoming>SequenceFlow_5</incoming>
       <outgoing>SequenceFlow_7</outgoing>
     </userTask>
-    <userTask id="UserTask_2" name="Over 21" camunda:formKey="embedded:app:forms/inspect-form.html" camunda:assignee="demo">
+    <userTask id="UserTask_2" name="Over 21" orqueio:formKey="embedded:app:forms/inspect-form.html" orqueio:assignee="demo">
       <incoming>SequenceFlow_4</incoming>
       <outgoing>SequenceFlow_6</outgoing>
     </userTask>
@@ -38,7 +38,7 @@
     </endEvent>
     <sequenceFlow id="SequenceFlow_7" name="" sourceRef="UserTask_3" targetRef="EndEvent_3" />
     <sequenceFlow id="SequenceFlow_0liqq7y" sourceRef="Task_0n2pfas" targetRef="ExclusiveGateway_1" />
-    <serviceTask id="Task_0n2pfas" name="Validate customer" camunda:class="org.camunda.bpm.example.JsonJavaDelegate">
+    <serviceTask id="Task_0n2pfas" name="Validate customer" orqueio:class="io.orqueio.bpm.example.JsonJavaDelegate">
       <incoming>SequenceFlow_3</incoming>
       <outgoing>SequenceFlow_0liqq7y</outgoing>
     </serviceTask>

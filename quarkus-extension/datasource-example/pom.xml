@@ -4,12 +4,12 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.camunda.bpm.quarkus.example</groupId>
-  <artifactId>camunda-bpm-quarkus-example-datasource</artifactId>
+  <groupId>io.orqueio.bpm.quarkus.example</groupId>
+  <artifactId>orqueio-bpm-quarkus-example-datasource</artifactId>
   <version>1.0.0-SNAPSHOT</version>
 
   <properties>
-    <version.camunda>7.23.0</version.camunda>
+    <version.orqueio>0.25.0-SNAPSHOT</version.orqueio>
     <version.quarkus>3.20.0</version.quarkus>
     <version.assertj>3.27.3</version.assertj>
     <compiler-plugin.version>3.14.0</compiler-plugin.version>
@@ -35,12 +35,12 @@
 
   <dependencies>
 
-    <!-- CAMUNDA -->
+    <!-- ORQUEIO -->
 
     <dependency>
-      <groupId>org.camunda.bpm.quarkus</groupId>
-      <artifactId>camunda-bpm-quarkus-engine</artifactId>
-      <version>${version.camunda}</version>
+      <groupId>io.orqueio.bpm.quarkus</groupId>
+      <artifactId>orqueio-bpm-quarkus-engine</artifactId>
+      <version>${version.orqueio}</version>
     </dependency>
 
     <!-- QUARKUS -->
@@ -138,4 +138,14 @@
       </plugin>
     </plugins>
   </build>
+  <repositories>
+    <repository>
+      <id>central-portal-snapshots</id>
+      <name>Central Portal Snapshots</name>
+      <url>https://central.sonatype.com/repository/maven-snapshots/</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
 </project>

@@ -4,14 +4,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.camunda.bpm.example</groupId>
+  <groupId>io.orqueio.bpm.example</groupId>
   <artifactId>loan-granting-spring-boot-webapp</artifactId>
   <version>0.0.1-SNAPSHOT</version>
 
   <packaging>jar</packaging>
 
   <properties>
-    <camunda.platform.version>7.23.0</camunda.platform.version>
+    <orqueio.platform.version>0.25.0-SNAPSHOT</orqueio.platform.version>
     <spring.boot.version>3.4.4</spring.boot.version>
     <!-- maven -->
     <maven.compiler.release>17</maven.compiler.release>
@@ -24,9 +24,9 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>org.camunda.bpm</groupId>
-        <artifactId>camunda-bom</artifactId>
-        <version>${camunda.platform.version}</version>
+        <groupId>io.orqueio.bpm</groupId>
+        <artifactId>orqueio-bom</artifactId>
+        <version>${orqueio.platform.version}</version>
         <scope>import</scope>
         <type>pom</type>
       </dependency>
@@ -43,28 +43,37 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.camunda.bpm.springboot</groupId>
-      <artifactId>camunda-bpm-spring-boot-starter-external-task-client</artifactId>
+      <groupId>io.orqueio.bpm.springboot</groupId>
+      <artifactId>orqueio-bpm-spring-boot-starter-external-task-client</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm.springboot</groupId>
-      <artifactId>camunda-bpm-spring-boot-starter-rest</artifactId>
+      <groupId>io.orqueio.bpm.springboot</groupId>
+      <artifactId>orqueio-bpm-spring-boot-starter-rest</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm.springboot</groupId>
-      <artifactId>camunda-bpm-spring-boot-starter-webapp</artifactId>
+      <groupId>io.orqueio.bpm.springboot</groupId>
+      <artifactId>orqueio-bpm-spring-boot-starter-webapp</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
-      <artifactId>camunda-engine-plugin-spin</artifactId>
+      <groupId>io.orqueio.bpm</groupId>
+      <artifactId>orqueio-engine-plugin-spin</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.spin</groupId>
-      <artifactId>camunda-spin-dataformat-all</artifactId>
+      <groupId>io.orqueio.spin</groupId>
+      <artifactId>orqueio-spin-dataformat-all</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>io.orqueio.spin</groupId>
+      <artifactId>orqueio-spin-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.orqueio.spin</groupId>
+      <artifactId>orqueio-spin-dataformat-json-jackson</artifactId>
     </dependency>
 
     <dependency>
@@ -110,5 +119,14 @@
       </plugin>
     </plugins>
   </build>
-
+  <repositories>
+    <repository>
+      <id>central-portal-snapshots</id>
+      <name>Central Portal Snapshots</name>
+      <url>https://central.sonatype.com/repository/maven-snapshots/</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
 </project>

@@ -2,13 +2,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.camunda.bpm.springboot.example</groupId>
-  <artifactId>camunda-bpm-spring-boot-starter-example-invoice</artifactId>
+  <groupId>io.orqueio.bpm.springboot.example</groupId>
+  <artifactId>orqueio-bpm-spring-boot-starter-example-invoice</artifactId>
   <version>0.0.1-SNAPSHOT</version>
 
   <properties>
     <!-- spring -->
-    <camunda.version>7.23.0-ee</camunda.version>
+    <orqueio.version>0.25.0-SNAPSHOT</orqueio.version>
     <spring.boot.version>3.4.4</spring.boot.version>
     <!-- maven -->
     <maven.compiler.release>17</maven.compiler.release>
@@ -28,9 +28,9 @@
       </dependency>
 
       <dependency>
-        <groupId>org.camunda.bpm</groupId>
-        <artifactId>camunda-bom</artifactId>
-        <version>${camunda.version}</version>
+        <groupId>io.orqueio.bpm</groupId>
+        <artifactId>orqueio-bom</artifactId>
+        <version>${orqueio.version}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -39,13 +39,13 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.camunda.bpm.springboot</groupId>
-      <artifactId>camunda-bpm-spring-boot-starter-webapp-ee</artifactId>
+      <groupId>io.orqueio.bpm.springboot</groupId>
+      <artifactId>orqueio-bpm-spring-boot-starter-webapp</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm.springboot</groupId>
-      <artifactId>camunda-bpm-spring-boot-starter-rest</artifactId>
+      <groupId>io.orqueio.bpm.springboot</groupId>
+      <artifactId>orqueio-bpm-spring-boot-starter-rest</artifactId>
     </dependency>
 
     <dependency>
@@ -101,9 +101,9 @@
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm.example</groupId>
-      <artifactId>camunda-example-invoice-jakarta</artifactId>
-      <version>${camunda.version}</version>
+      <groupId>io.orqueio.bpm.example</groupId>
+      <artifactId>orqueio-example-invoice-jakarta</artifactId>
+      <version>${orqueio.version}</version>
       <classifier>classes</classifier>
       <scope>compile</scope>
     </dependency>
@@ -136,14 +136,12 @@
 
   <repositories>
     <repository>
-      <id>camunda-bpm-nexus</id>
-      <name>camunda-bpm-nexus</name>
-      <url>https://artifacts.camunda.com/artifactory/public/</url>
-    </repository>
-    <repository>
-      <id>camunda-bpm-nexus-ee</id>
-      <name>camunda-bpm-nexus-ee</name>
-      <url>https://artifacts.camunda.com/artifactory/camunda-bpm-ee/</url>
+      <id>central-portal-snapshots</id>
+      <name>Central Portal Snapshots</name>
+      <url>https://central.sonatype.com/repository/maven-snapshots/</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
     </repository>
   </repositories>
 </project>

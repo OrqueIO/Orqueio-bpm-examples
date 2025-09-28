@@ -1,20 +1,20 @@
-# Camunda Platform Runtime: Quarkus Engine Extension Spin Example
+# Orqueio Platform Runtime: Quarkus Engine Extension Spin Example
 
 This example uses Quarkus, the Supersonic Subatomic Java Framework, 
-in combination with the extension `camunda-bpm-quarkus-engine`.
+in combination with the extension `orqueio-bpm-quarkus-engine`.
 
 If you want to learn more about Quarkus, please visit: https://quarkus.io/.
 
-The example demonstrates how you can use the Camunda Platform Runtime Engine in combination with Quarkus to spawn a node that:
+The example demonstrates how you can use the Orqueio Platform Runtime Engine in combination with Quarkus to spawn a node that:
 
 * Connects to an H2 on-disk database.
-* [Registers the Camunda Spin Process Engine Plugin](org/camunda/bpm/quarkus/example/EngineConfiguration.java).
+* [Registers the Orqueio Spin Process Engine Plugin](io/orqueio/bpm/quarkus/example/EngineConfiguration.java).
 * Bootstraps a process engine.
-* [Automatically deploys](org/camunda/bpm/quarkus/example/ResourceDeployment.java) the resource [process.bpmn](src/main/resources/process.bpmn) to the process engine.
+* [Automatically deploys](io/orqueio/bpm/quarkus/example/ResourceDeployment.java) the resource [process.bpmn](src/main/resources/process.bpmn) to the process engine.
 * Exposes a REST endpoint that:
   * starts a process instance
   * stores the JSON payload as a process variable
-  * calls the [StoreOderItemService](org/camunda/bpm/quarkus/example/service/StoreOrderItemService.java) bean.
+  * calls the [StoreOderItemService](io/orqueio/bpm/quarkus/example/service/StoreOrderItemService.java) bean.
 
 To store order items, perform the following REST API request:
 
@@ -79,4 +79,4 @@ If you want to build an _über-jar_, execute the following command:
 mvn clean package -Dquarkus.package.jar.type=uber-jar
 ```
 
-The application is now runnable using `java -jar target/camunda-bpm-quarkus-example-spin-plugin-1.0.0-SNAPSHOT-runner.jar`.
+The application is now runnable using `java -jar target/orqueio-bpm-quarkus-example-spin-plugin-1.0.0-SNAPSHOT-runner.jar`.

@@ -29,7 +29,7 @@ The process model is composed of three tasks:
 
 ### Create a Signallable Activity Behavior Implementation
 
-Create a new Java Class extending `org.camunda.bpm.engine.impl.bpmn.behavior.AbstractBpmnActivityBehavior`:
+Create a new Java Class extending `io.orqueio.bpm.engine.impl.bpmn.behavior.AbstractBpmnActivityBehavior`:
 
 ``` java
 public class AsynchronousServiceTask extends AbstractBpmnActivityBehavior {
@@ -102,13 +102,13 @@ The Java Deleagte can be referenced using the `class` attribute from the process
 
 ``` xml
 <bpmn2:serviceTask id="serviceTaskActivity"
-  camunda:class="org.camunda.quickstart.servicetask.invocation.AsynchronousServiceTask"
+  orqueio:class="io.orqueio.quickstart.servicetask.invocation.AsynchronousServiceTask"
   name="Asynchronous Service Task">
 ```
 
-Using the camunda Modeler, you can configure the service task using the properties panel:
+Using the orqueio Modeler, you can configure the service task using the properties panel:
 
-![Configure Signallable Activity Behavior using the camunda Modeler][2]
+![Configure Signallable Activity Behavior using the orqueio Modeler][2]
 
 
 ## Invocation Semantics
@@ -134,5 +134,5 @@ Additionally, it has to be noted that `signal()` can't create an Incident if an 
 3. Inspect the sources and run the unit test.
 
 [1]: docs/process-model.png
-[2]: docs/service-camunda-modeler.png
+[2]: docs/service-orqueio-modeler.png
 [3]: docs/asynchronous-service-invocation-sequence.png

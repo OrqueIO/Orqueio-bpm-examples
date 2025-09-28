@@ -3,14 +3,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.camunda.bpm.quickstart</groupId>
-  <artifactId>camunda-quickstart-message-start</artifactId>
+  <groupId>io.orqueio.bpm.quickstart</groupId>
+  <artifactId>orqueio-quickstart-message-start</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>Start Process By Message</name>
 
   <properties>
-    <version.camunda>7.23.0</version.camunda>
+    <version.orqueio>0.25.0-SNAPSHOT</version.orqueio>
     <version.junit>4.13.2</version.junit>
     <version.h2>2.3.232</version.h2>
     <version.slf4j>1.7.36</version.slf4j>
@@ -23,19 +23,19 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>org.camunda.bpm</groupId>
-        <artifactId>camunda-bom</artifactId>
+        <groupId>io.orqueio.bpm</groupId>
+        <artifactId>orqueio-bom</artifactId>
         <scope>import</scope>
         <type>pom</type>
-        <version>${version.camunda}</version>
+        <version>${version.orqueio}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
 
   <dependencies>
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
-      <artifactId>camunda-engine</artifactId>
+      <groupId>io.orqueio.bpm</groupId>
+      <artifactId>orqueio-engine</artifactId>
       <scope>provided</scope>
     </dependency>
 
@@ -76,9 +76,12 @@
 
   <repositories>
     <repository>
-      <id>camunda-bpm-nexus</id>
-      <name>camunda-bpm-nexus</name>
-      <url>https://artifacts.camunda.com/artifactory/public/</url>
+      <id>central-portal-snapshots</id>
+      <name>Central Portal Snapshots</name>
+      <url>https://central.sonatype.com/repository/maven-snapshots/</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
     </repository>
   </repositories>
 

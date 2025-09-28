@@ -17,7 +17,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Bump versions
-        uses: camunda/bump-versions-action@v1.7
+        uses: orqueio/bump-versions-action@v1.7
         with:
           files: "*/**/package.json,*/**/pom.xml,*/**/README.md"
           sliceVersion: -2

@@ -3,12 +3,12 @@
 This example demonstrates how to work with json variables in embedded forms.
 
 # Overview
-This example uses Jakarta API. It is compatible with the latest release of Camunda Tomcat distribution.
+This example uses Jakarta API. It is compatible with the latest release of Orqueio Tomcat distribution.
 
 ## Creating a Json Variable in a Start Form
 
 The process instance is started using a form. The form is a plain HTML form which is displayed
-inside Camunda Tasklist (or inside a custom application using the camunda-bpm-sdk-js library).
+inside Orqueio Tasklist (or inside a custom application using the orqueio-bpm-sdk-js library).
 
 ```html
 <form role="form" class="form-horizontal">
@@ -43,7 +43,7 @@ inside Camunda Tasklist (or inside a custom application using the camunda-bpm-sd
 ```
 
 The custom java script creates a Javascript Object and binds it to the angular `$scope` of the form
-as a variable named `customer`. We then hook into the lifecycle of camunda SDK JS Form and
+as a variable named `customer`. We then hook into the lifecycle of orqueio SDK JS Form and
 create a process variable named `customer` and provide as type information 'json' used for serialization.
 
 The form itself is a plain angular js form (see `ng-model` binding of input field).
@@ -80,9 +80,9 @@ public void execute(DelegateExecution execution) throws Exception {
 
 ## Running the example
 
-1. [Download a Camunda Platform Distribution](http://camunda.com/download)
+1. [Download a Orqueio Platform Distribution](http://orqueio.com/download)
 2. Checkout this repository using Git
 3. Build the example using `mvn clean package`
 4. Deploy the `.war` file located in the `target/` folder to the server
-5. Open Camunda Tasklist using the URL [http://localhost:8080/camunda/app/tasklist](http://localhost:8080/camunda/app/tasklist)
+5. Open Orqueio Tasklist using the URL [http://localhost:8080/orqueio/app/tasklist](http://localhost:8080/orqueio/app/tasklist)
 6. Start a new instance of the Process.

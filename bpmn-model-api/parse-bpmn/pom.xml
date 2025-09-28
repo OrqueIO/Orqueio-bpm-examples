@@ -3,14 +3,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.camunda.bpm.example</groupId>
-  <artifactId>camunda-example-parse-bpmn</artifactId>
+  <groupId>io.orqueio.bpm.example</groupId>
+  <artifactId>orqueio-example-parse-bpmn</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>Parse BPMN by model API</name>
 
   <properties>
-    <version.camunda>7.23.0</version.camunda>
+    <version.orqueio>0.25.0-SNAPSHOT</version.orqueio>
     <version.junit>4.13.2</version.junit>
     <version.assertj>3.26.3</version.assertj>
 
@@ -23,9 +23,9 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.camunda.bpm.model</groupId>
-      <artifactId>camunda-bpmn-model</artifactId>
-      <version>${version.camunda}</version>
+      <groupId>io.orqueio.bpm.model</groupId>
+      <artifactId>orqueio-bpmn-model</artifactId>
+      <version>${version.orqueio}</version>
     </dependency>
 
     <dependency>
@@ -54,10 +54,12 @@
 
   <repositories>
     <repository>
-      <id>camunda-bpm-nexus</id>
-      <name>camunda-bpm-nexus</name>
-      <url>https://artifacts.camunda.com/artifactory/public/</url>
+      <id>central-portal-snapshots</id>
+      <name>Central Portal Snapshots</name>
+      <url>https://central.sonatype.com/repository/maven-snapshots/</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
     </repository>
   </repositories>
-
 </project>

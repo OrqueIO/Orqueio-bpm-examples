@@ -27,7 +27,7 @@ The process model is composed of three tasks:
 
 ### Create a Java Delegate Implementation
 
-Implement the `org.camunda.bpm.engine.delegate.JavaDelegate` interface:
+Implement the `io.orqueio.bpm.engine.delegate.JavaDelegate` interface:
 
 ``` java
 public class SynchronousServiceTask implements JavaDelegate {
@@ -71,13 +71,13 @@ The Java Deleagte can be referenced using the `class` attribute from the process
 
 ``` xml
 <bpmn2:serviceTask id="ServiceTask_1"
-  camunda:class="org.camunda.quickstart.servicetask.invocation.sync.SynchronousServiceTask"
+  orqueio:class="sync.io.orqueio.quickstart.servicetask.invocation.SynchronousServiceTask"
   name="Synchronous Service Task">
 ```
 
-Using the camunda Modeler, you can configure the service task using the properties panel:
+Using the orqueio Modeler, you can configure the service task using the properties panel:
 
-![Configure Java Delegate using the camunda Modeler][2]
+![Configure Java Delegate using the orqueio Modeler][2]
 
 
 ## How does it work?
@@ -111,6 +111,6 @@ state is the usertask preceding the service task ("Wait State Before").
 3. Inspect the sources and run the unit test.
 
 [1]: docs/process-model.png
-[2]: docs/service-camunda-modeler.png
+[2]: docs/service-orqueio-modeler.png
 [3]: docs/synchronous-service-invocation-sequence.png
-[4]: src/test/java/org/camunda/quickstart/servicetask/invocation/sync/TestSynchronousServiceTask.java
+[4]: src/test/java/io/orqueio/quickstart/servicetask/invocation/sync/TestSynchronousServiceTask.java

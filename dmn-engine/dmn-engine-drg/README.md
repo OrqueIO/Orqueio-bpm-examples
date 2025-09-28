@@ -1,6 +1,6 @@
 # Decision Requirements Graph (DRG) Example
 
-This example demonstrates how to use the [Camunda DMN engine] as library
+This example demonstrates how to use the [Orqueio DMN engine] as library
 in a custom application to evaluate a decision from a DRG. The DMN Engine is added to the example as a Maven dependency.
 The example contains a Java class with a Main Method in which the DMN Engine is bootstraped and
 used to execute a decision loaded from the classpath.
@@ -115,13 +115,13 @@ Beverages:
 ```
 
 
-[Camunda DMN engine]: https://docs.camunda.org/manual/7.23/user-guide/dmn-engine/
-[Reference Guide]: https://docs.camunda.org/manual/7.23/reference/dmn/drg/
-[User Guide]: https://docs.camunda.org/manual/7.23/user-guide/dmn-engine/testing/
-[Dinner Decisions]: src/main/resources/org/camunda/bpm/example/drg/dinnerDecisions.png
-[Beverages Decision]: src/main/resources/org/camunda/bpm/example/drg/beverages.png
-[Dish Decision]: src/main/resources/org/camunda/bpm/example/drg/dish.png
-[dinnerDecisions.dmn]: src/main/resources/org/camunda/bpm/example/drg/dinnerDecisions.dmn
-[BeveragesDecider.java]: src/main/java/org/camunda/bpm/example/drg/BeveragesDecider.java
-[DrgDecisionTest.java]: src/test/java/org/camunda/bpm/example/drg/DrgDecisionTest.java
+[Orqueio DMN engine]: https://docs.orqueio.io/manual/7.23/user-guide/dmn-engine/
+[Reference Guide]: https://docs.orqueio.io/manual/7.23/reference/dmn/drg/
+[User Guide]: https://docs.orqueio.io/manual/7.23/user-guide/dmn-engine/testing/
+[Dinner Decisions]: src/main/resources/io/orqueio/bpm/example/drg/dinnerDecisions.png
+[Beverages Decision]: src/main/resources/io/orqueio/bpm/example/drg/beverages.png
+[Dish Decision]: src/main/resources/io/orqueio/bpm/example/drg/dish.png
+[dinnerDecisions.dmn]: src/main/resources/io/orqueio/bpm/example/drg/dinnerDecisions.dmn
+[BeveragesDecider.java]: src/main/java/io/orqueio/bpm/example/drg/BeveragesDecider.java
+[DrgDecisionTest.java]: src/test/java/io/orqueio/bpm/example/drg/DrgDecisionTest.java
 [dmn-engine-java-main-method]: ../dmn-engine-java-main-method/

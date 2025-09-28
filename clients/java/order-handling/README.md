@@ -1,43 +1,43 @@
-# Camunda External Task Client (Java) Example
+# Orqueio External Task Client (Java) Example
 
 In this tutorial you will learn how to use the External Task client for Java.
 
 In a nutshell you will be guided through the following steps:
-* Starting the Camunda Platform Runtime
-* Modeling and Deploying a process with the Camunda Modeler
+* Starting the Orqueio Platform Runtime
+* Modeling and Deploying a process with the Orqueio Modeler
 * Bootstrapping the External Task client
-* Monitor the process in Camunda Cockpit
+* Monitor the process in Orqueio Cockpit
 
 ## Prerequisites
 * [Java JDK 11+](https://www.oracle.com/java/technologies/downloads/#java11)
 * [Apache Maven](https://maven.apache.org/download.cgi)
-* [Camunda Modeler](https://camunda.com/download/modeler/)
-* [Camunda Platform Runtime](https://camunda.com/download/)
-* Camunda External Task Client
+* [Orqueio Modeler](https://orqueio.com/download/modeler/)
+* [Orqueio Platform Runtime](https://orqueio.com/download/)
+* Orqueio External Task Client
 
 First, make sure you have downloaded and installed all the necessary prerequisites, 
-and the running platform is [compatible](https://docs.camunda.org/manual/user-guide/ext-client/compatibility-matrix/) with the client version.
+and the running platform is [compatible](https://docs.orqueio.io/manual/user-guide/ext-client/compatibility-matrix/) with the client version.
 
-## Start the Camunda Platform Runtime
+## Start the Orqueio Platform Runtime
 * Microsoft Windows users need to run the `start.bat` file
 * Users of Unix based operating systems need to run the `start.sh` file
 
 ## Deploy a Process
 
-Next, we want to deploy a model to the Camunda Platform Runtime with the following steps:
+Next, we want to deploy a model to the Orqueio Platform Runtime with the following steps:
 
 * Download the BPMN 2.0 XML of that model [here](./order-handling.bpmn).
-* Open the model in the Camunda Modeler.
-* Click on the "Deploy" icon ![Camunda Modeler – Deploy Button](./img/deploy-icon.png).
+* Open the model in the Orqueio Modeler.
+* Click on the "Deploy" icon ![Orqueio Modeler – Deploy Button](./img/deploy-icon.png).
 * Select "Deploy Current Diagram". 
 * Select a deployment name of your choice.
 
 To complete the deployment, click on the "Deploy" button.
-Your model is now ready to be executed by the **Camunda Platform Process Engine**.
-Start an instance of it in [Camunda Tasklist](http://localhost:8080/camunda/app/tasklist).
+Your model is now ready to be executed by the **Orqueio Platform Process Engine**.
+Start an instance of it in [Orqueio Tasklist](http://localhost:8080/orqueio/app/tasklist).
 
-## Monitor the Process in Camunda Cockpit
-Open [Camunda Cockpit](http://localhost:8080/camunda/app/cockpit) click in the top navigation on "Processes" and then
+## Monitor the Process in Orqueio Cockpit
+Open [Orqueio Cockpit](http://localhost:8080/orqueio/app/cockpit) click in the top navigation on "Processes" and then
 on the process "Order Process". You should see the process with the activity instances.
 
 ## Set Up a Project
@@ -47,17 +47,17 @@ You can create a new Maven project using your IDE, or run the following command:
 
 ```sh
 mvn archetype:generate \
-    -DgroupId=org.camunda.bpm \
+    -DgroupId=io.orqueio.bpm \
     -DartifactId=order-handling \
     -DarchetypeArtifactId=maven-archetype-quickstart \
     -DinteractiveMode=false
 ```
 
-Add the `camunda-external-task-client` dependency to the project's `pom.xml`:
+Add the `orqueio-external-task-client` dependency to the project's `pom.xml`:
 ```xml
 <dependency>
-  <groupId>org.camunda.bpm</groupId>
-  <artifactId>camunda-external-task-client</artifactId>
+  <groupId>io.orqueio.bpm</groupId>
+  <artifactId>orqueio-external-task-client</artifactId>
   <version>${version}</version>
 </dependency>
 ```

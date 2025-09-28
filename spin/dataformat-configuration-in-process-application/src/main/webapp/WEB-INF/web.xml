@@ -3,7 +3,7 @@
 
   <servlet>
     <servlet-name>Process Starter Servlet</servlet-name>
-    <servlet-class>org.camunda.bpm.example.spin.dataformat.servlet.StartProcessServlet</servlet-class>
+    <servlet-class>io.orqueio.bpm.example.spin.dataformat.servlet.StartProcessServlet</servlet-class>
   </servlet>
   
   <servlet-mapping>

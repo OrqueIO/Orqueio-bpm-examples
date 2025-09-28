@@ -17,7 +17,7 @@
 
 export default {
   // // custom libraries and scripts loading and initialization,
-  // // see: https://docs.camunda.org/manual/latest/webapps/cockpit/extend/configuration/#custom-scripts
+  // // see: https://docs.orqueio.io/manual/latest/webapps/cockpit/extend/configuration/#custom-scripts
   customScripts: [
     'scripts/react/loadReact',
   ]

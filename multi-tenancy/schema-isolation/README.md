@@ -14,7 +14,7 @@
 <li><a href="#testing">Testing</a></li>
 
 
-Sometimes it is desired to share one Camunda installation between multiple independent parties, also referred to as *tenants*. While sharing an installation means sharing computational resources, the tenants' data should be separated from each other. This tutorial shows how to work with the [one process engine per tenant approach](https://docs.camunda.org/manual/7.23/user-guide/process-engine/multi-tenancy/#one-process-engine-per-tenant).
+Sometimes it is desired to share one Orqueio installation between multiple independent parties, also referred to as *tenants*. While sharing an installation means sharing computational resources, the tenants' data should be separated from each other. This tutorial shows how to work with the [one process engine per tenant approach](https://docs.orqueio.io/manual/7.23/user-guide/process-engine/multi-tenancy/#one-process-engine-per-tenant).
 
 In detail it explains how to:
 
@@ -22,12 +22,12 @@ In detail it explains how to:
 * develop a process application with tenant-specific deployments
 * access the correct process engine from a REST resource based on a tenant identifier
 
-See the [user guide](https://docs.camunda.org/manual/7.23/user-guide/process-engine/multi-tenancy/) for a general introduction on multi-tenancy and the different options Camunda offers.
+See the [user guide](https://docs.orqueio.io/manual/7.23/user-guide/process-engine/multi-tenancy/) for a general introduction on multi-tenancy and the different options Orqueio offers.
 
 
 # Before Starting
 
-Before starting, make sure to download the [Camunda Platform WildFly distribution](https://downloads.camunda.cloud/release/camunda-bpm/wildfly/) and extract it to a folder. We will call this folder `$CAMUNDA_HOME` in the following explanations.
+Before starting, make sure to download the [Orqueio Platform WildFly distribution](https://downloads.orqueio.cloud/release/orqueio-bpm/wildfly/) and extract it to a folder. We will call this folder `$ORQUEIO_HOME` in the following explanations.
 
 # Configuring the Database
 
@@ -36,7 +36,7 @@ Before configuring process engines, we have to set up a database schema for ever
 Start up WildFly. After the database has been created, start a DB client (e.g. [DBeaver](https://dbeaver.io/)) and connect to the database. This is the default connection information:
 
 * **Driver Class**: org.h2.Driver
-* **JDBC URL**: jdbc:h2:./camunda-h2-dbs/process-engine
+* **JDBC URL**: jdbc:h2:./orqueio-h2-dbs/process-engine
 * **User Name**: sa
 * **Password**: sa
 
@@ -73,7 +73,7 @@ After creating the tables in the two schemas, check that the tables have been cr
 
 In this step, we configure a process engine for each tenant. We ensure that these engines access the database schemas we have previously created. This way, process data of a tenant cannot interfere with that of another.
 
-Open the file `$WILDFLY_HOME/standalone/configuration/standalone.xml`. In that file, navigate to the configuration of the Camunda jboss subsystem, declared in an XML element `<subsystem xmlns="urn:org.camunda.bpm.jboss:1.1">`. In this file, add two entries to the `<process-engines>` section (do *not* remove default engine configuration):
+Open the file `$WILDFLY_HOME/standalone/configuration/standalone.xml`. In that file, navigate to the configuration of the Orqueio jboss subsystem, declared in an XML element `<subsystem xmlns="urn:io.orqueio.bpm.jboss:1.1">`. In this file, add two entries to the `<process-engines>` section (do *not* remove default engine configuration):
 
 The configuration of the process engine for tenant 1:
 
@@ -92,7 +92,7 @@ The configuration of the process engine for tenant 1:
   <plugins>
     <!-- plugin enabling Process Application event listener support -->
     <plugin>
-      <class>org.camunda.bpm.application.impl.event.ProcessApplicationEventListenerPlugin</class>
+      <class>io.orqueio.bpm.application.impl.event.ProcessApplicationEventListenerPlugin</class>
     </plugin>
   </plugins>
 </process-engine>
@@ -115,7 +115,7 @@ The configuration of the process engine for tenant 2:
   <plugins>
     <!-- plugin enabling Process Application event listener support -->
     <plugin>
-      <class>org.camunda.bpm.application.impl.event.ProcessApplicationEventListenerPlugin</class>
+      <class>io.orqueio.bpm.application.impl.event.ProcessApplicationEventListenerPlugin</class>
     </plugin>
   </plugins>
 </process-engine>
@@ -137,19 +137,19 @@ The following descriptions highlight the concepts related to implementing multi-
 
 ## Set Up the Process Application
 
-In the project, we have set up a plain Camunda EJB process application.
+In the project, we have set up a plain Orqueio EJB process application.
 
-In [pom.xml](pom.xml), the `camunda-engine-cdi` and `camunda-ejb-client` dependencies are added:
+In [pom.xml](pom.xml), the `orqueio-engine-cdi` and `orqueio-ejb-client` dependencies are added:
 
 ```xml
 <dependency>
-  <groupId>org.camunda.bpm</groupId>
-  <artifactId>camunda-engine-cdi-jakarta</artifactId>
+  <groupId>io.orqueio.bpm</groupId>
+  <artifactId>orqueio-engine-cdi-jakarta</artifactId>
 </dependency>
 
 <dependency>
-  <groupId>org.camunda.bpm.javaee</groupId>
-  <artifactId>camunda-ejb-client-jakarta</artifactId>
+  <groupId>io.orqueio.bpm.javaee</groupId>
+  <artifactId>orqueio-ejb-client-jakarta</artifactId>
 </dependency>
 ```
 
@@ -164,7 +164,7 @@ In order to deploy the two definitions to the two different engines, we have add
 
 ```xml
 <process-application
-  xmlns="http://www.camunda.org/schema/1.0/ProcessApplication"
+  xmlns="http://www.orqueio.io/schema/1.0/ProcessApplication"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
   <process-archive name="tenant1-archive">
@@ -195,7 +195,7 @@ This file declares two *process archives*. By the `process-engine` element, we c
 
 ## Build a Simple JAX-RS Resource
 
-To showcase the programming model for multi-tenancy with CDI, we have added a simple REST resource that returns all deployed process definitions for a process engine. The resource has the following [source code](src/main/java/org/camunda/bpm/tutorial/multitenancy/ProcessDefinitionResource.java):
+To showcase the programming model for multi-tenancy with CDI, we have added a simple REST resource that returns all deployed process definitions for a process engine. The resource has the following [source code](src/main/java/io/orqueio/bpm/tutorial/multitenancy/ProcessDefinitionResource.java):
 
 ```java
 @Path("/process-definition")
@@ -220,7 +220,7 @@ Note that the distinction between tenants is not made in this resource.
 
 ## Make CDI Injection Tenant-aware
 
-We want the injected process engine to always be the one that matches the current tenant making a REST request. For this matter, we have added a request-scoped [tenant bean](src/main/java/org/camunda/bpm/tutorial/multitenancy/Tenant.java):
+We want the injected process engine to always be the one that matches the current tenant making a REST request. For this matter, we have added a request-scoped [tenant bean](src/main/java/io/orqueio/bpm/tutorial/multitenancy/Tenant.java):
 
 ```java
 @RequestScoped
@@ -238,7 +238,7 @@ public class Tenant {
 }
 ```
 
-To populate this bean with the tenant ID for the current user, we add a [RestEasy interceptor](src/main/java/org/camunda/bpm/tutorial/multitenancy/TenantInterceptor.java). This interceptor is called before a REST request is dispatched to the `ProcessDefinitionResource`. It has the following content:
+To populate this bean with the tenant ID for the current user, we add a [RestEasy interceptor](src/main/java/io/orqueio/bpm/tutorial/multitenancy/TenantInterceptor.java). This interceptor is called before a REST request is dispatched to the `ProcessDefinitionResource`. It has the following content:
 
 ```java
 @Provider
@@ -270,7 +270,7 @@ public class TenantInterceptor implements ContainerRequestFilter {
 
 Note that the tenant ID is determined based on a simple static map. Of course, in real-world applications one would implement a more sophisticated lookup procedure here.
 
-To resolve the process engine based on the tenant, we have [specialized the process engine producer](src/main/java/org/camunda/bpm/tutorial/multitenancy/TenantAwareProcessEngineServicesProducer.java) bean as follows:
+To resolve the process engine based on the tenant, we have [specialized the process engine producer](src/main/java/io/orqueio/bpm/tutorial/multitenancy/TenantAwareProcessEngineServicesProducer.java) bean as follows:
 
 ```java
 @Specializes
@@ -336,8 +336,8 @@ http://localhost:8080/multi-tenancy-tutorial/process-definition?user=gonzo
 
 Only the process for tenant 2 is returned.
 
-Go to Camunda Cockpit and switch the engine to `tenant1` on the following URL (you will be asked to create an admin user first):
-http://localhost:8080/camunda/app/cockpit/tenant1/
+Go to Orqueio Cockpit and switch the engine to `tenant1` on the following URL (you will be asked to create an admin user first):
+http://localhost:8080/orqueio/app/cockpit/tenant1/
 
 Only the process for tenant 1 shows up. You can check the same for tenant 2 by switching to engine `tenant2`.
 
@@ -346,12 +346,12 @@ And you're done! :)
 
 # Testing
 
-The test class [ProcessIntegrationTest](src/test/java/org/camunda/bpm/tutorial/multitenancy/ProcessIntegrationTest.java) uses Arquillian to verify the behavior. 
+The test class [ProcessIntegrationTest](src/test/java/io/orqueio/bpm/tutorial/multitenancy/ProcessIntegrationTest.java) uses Arquillian to verify the behavior. 
 
 Follow the steps to run the test:
 
-* Download the [Camunda Platform WildFly distribution](https://downloads.camunda.cloud/release/camunda-bpm/wildfly/)
-* Replace the `camunda-bpm-wildfly-{version}/server/wildfly-{version}/standalone/configuration/standalone.xml` with
+* Download the [Orqueio Platform WildFly distribution](https://downloads.orqueio.cloud/release/orqueio-bpm/wildfly/)
+* Replace the `orqueio-bpm-wildfly-{version}/server/wildfly-{version}/standalone/configuration/standalone.xml` with
   * [standalone.xml](standalone.xml) (two schemas - requires manual schema creation) or 
   * [standalone_test.xml](standalone_test.xml) (two databases - auto schema creation)
 * Start the server.

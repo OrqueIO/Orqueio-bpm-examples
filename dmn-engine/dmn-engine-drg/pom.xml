@@ -4,13 +4,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.camunda.bpm.example.drg</groupId>
-  <artifactId>camunda-example-drg</artifactId>
+  <groupId>io.orqueio.bpm.example.drg</groupId>
+  <artifactId>orqueio-example-drg</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <properties>
-    <version.camunda>7.23.0</version.camunda>
+    <version.orqueio>0.25.0-SNAPSHOT</version.orqueio>
     <version.slf4j>2.0.16</version.slf4j>
     <version.junit>4.13.2</version.junit>
     <version.assertj>3.26.3</version.assertj>
@@ -23,9 +23,9 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>org.camunda.bpm.dmn</groupId>
-        <artifactId>camunda-engine-dmn-bom</artifactId>
-        <version>${version.camunda}</version>
+        <groupId>io.orqueio.bpm.dmn</groupId>
+        <artifactId>orqueio-engine-dmn-bom</artifactId>
+        <version>${version.orqueio}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -34,8 +34,8 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.camunda.bpm.dmn</groupId>
-      <artifactId>camunda-engine-dmn</artifactId>
+      <groupId>io.orqueio.bpm.dmn</groupId>
+      <artifactId>orqueio-engine-dmn</artifactId>
     </dependency>
 
     <!-- redirect slf4j logging to jdk logging -->
@@ -67,7 +67,7 @@
         <artifactId>exec-maven-plugin</artifactId>
         <version>1.4.0</version>
         <configuration>
-          <mainClass>org.camunda.bpm.example.drg.BeveragesDecider</mainClass>
+          <mainClass>io.orqueio.bpm.example.drg.BeveragesDecider</mainClass>
           <arguments>
             <argument>Spring</argument>
             <argument>10</argument>
@@ -105,7 +105,7 @@
               <addClasspath>true</addClasspath>
               <classpathPrefix>lib/</classpathPrefix>
               <useUniqueVersions>false</useUniqueVersions>
-              <mainClass>org.camunda.bpm.example.drg.BeveragesDecider</mainClass>
+              <mainClass>io.orqueio.bpm.example.drg.BeveragesDecider</mainClass>
             </manifest>
           </archive>
           <finalName>BeveragesDecider</finalName>
@@ -119,5 +119,17 @@
 
     </plugins>
   </build>
-
+  <repositories>
+    <repository>
+      <id>central-portal-snapshots</id>
+      <name>Central Portal Snapshots</name>
+      <url>https://central.sonatype.com/repository/maven-snapshots/</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
 </project>

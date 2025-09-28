@@ -5,7 +5,7 @@ This example demonstrates how to use multi-tenancy for a shared process engine. 
 * How to deploy a process definition with a tenant-id,
 * How to start a process instance from a process definition with a tenant-id,
 * How to implement a service task which uses the tenant-id from the process instance,
-* How to use multi-tenancy with Camunda Web Applications
+* How to use multi-tenancy with Orqueio Web Applications
 
 The example process for the tenants looks like:
 
@@ -13,7 +13,7 @@ The example process for the tenants looks like:
 
 ## How it works
 
-Please refer to the [User Guide](http://docs.camunda.org/manual/7.23/user-guide/process-engine/multi-tenancy/) for details about multi-tenancy.
+Please refer to the [User Guide](http://docs.orqueio.io/manual/7.23/user-guide/process-engine/multi-tenancy/) for details about multi-tenancy.
 
 ### Deploy a Process Definition with Tenant-Id
 
@@ -21,7 +21,7 @@ Create a `processes.xml` deployment descriptor which includes one process-archiv
 
 ``` xml
 <process-application
-  xmlns="http://www.camunda.org/schema/1.0/ProcessApplication"
+  xmlns="http://www.orqueio.io/schema/1.0/ProcessApplication"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
   <process-archive name="tenant1-archive" tenantId="tenant1">
@@ -98,15 +98,15 @@ public class TenantAwareServiceTask implements JavaDelegate {
 1. Checkout the project with Git
 2. Import the project into your IDE
 3. Build it with Maven
-4. Deploy it to a shared process engine distribution of your own choice (Tomcat, Wildfly, Weblogic, Websphere - this example does not work with Camunda Platform Run)
+4. Deploy it to a shared process engine distribution of your own choice (Tomcat, Wildfly, Weblogic, Websphere - this example does not work with Orqueio Platform Run)
 5. Check the console or the log file if you can find: 
 `TenantAwareServiceTask.execute invoked for tenant with id: tenant1` and
 `TenantAwareServiceTask.execute invoked for tenant with id: tenant2`
 
-### Check the Result in Camunda Web Applications
+### Check the Result in Orqueio Web Applications
 
-1. Open your browser and go to http://localhost:8080/camunda/app/cockpit
-2. Log in with `demo` / `demo` as member of group `camunda-admin`
+1. Open your browser and go to http://localhost:8080/orqueio/app/cockpit
+2. Log in with `demo` / `demo` as member of group `orqueio-admin`
 3. Check that you see two deployed process definitions with key `example-process` - one for each tenant
 4. Switch to Admin and create a new user
 5. Go to tenant section and create a new tenant with id `tenant1`

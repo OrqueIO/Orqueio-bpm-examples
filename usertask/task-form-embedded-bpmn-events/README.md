@@ -3,11 +3,11 @@
 This quickstart demonstrates how to use escalation and error events in embedded forms.
 
 # Overview
-This example uses Jakarta API. It is compatible with the latest releases of Camunda Tomcat and WildFly distributions.
+This example uses Jakarta API. It is compatible with the latest releases of Orqueio Tomcat and WildFly distributions.
 
 ## Where are Error and Escalation events defined?
 
-Boundary Events can be added in the Camunda Modeler. Each can be referenced by its error- or escalation code.
+Boundary Events can be added in the Orqueio Modeler. Each can be referenced by its error- or escalation code.
 
 ![Modeler Screenshot][1]
 
@@ -21,7 +21,7 @@ Similarly, an escalation can be triggered using `camForm.escalate('escalation-co
 
 1. Checkout the project with Git
 2. Build the project with maven
-3. Deploy the war file to a Camunda Platform distribution
+3. Deploy the war file to a Orqueio Platform distribution
 4. Go to the Tasklist and start a process instance for the process named "Embedded Forms BPMN Events"
 
 [1]: docs/screenshot-modeler.png

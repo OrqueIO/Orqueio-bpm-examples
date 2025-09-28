@@ -24,21 +24,21 @@ Let's first add the dependencies to the project's `pom.xml` file:
 ```xml
 <!--...-->
 <dependency>
-  <groupId>org.camunda.bpm.springboot</groupId>
-  <artifactId>camunda-bpm-spring-boot-starter-external-task-client</artifactId>
-  <version>7.23.0</version>
+  <groupId>io.orqueio.bpm.springboot</groupId>
+  <artifactId>orqueio-bpm-spring-boot-starter-external-task-client</artifactId>
+  <version>0.25.0-SNAPSHOT</version>
 </dependency>
 
 <dependency>
-  <groupId>org.camunda.bpm.springboot</groupId>
-  <artifactId>camunda-bpm-spring-boot-starter-rest</artifactId>
-  <version>7.23.0</version>
+  <groupId>io.orqueio.bpm.springboot</groupId>
+  <artifactId>orqueio-bpm-spring-boot-starter-rest</artifactId>
+  <version>0.25.0-SNAPSHOT</version>
 </dependency>
 
 <dependency>
-  <groupId>org.camunda.bpm.springboot</groupId>
-  <artifactId>camunda-bpm-spring-boot-starter-webapp</artifactId>
-  <version>7.23.0</version>
+  <groupId>io.orqueio.bpm.springboot</groupId>
+  <artifactId>orqueio-bpm-spring-boot-starter-webapp</artifactId>
+  <version>0.25.0-SNAPSHOT</version>
 </dependency>
 <!--...-->
 ```
@@ -59,12 +59,12 @@ public class Application {
 To configure the Runtime Platform admin user, the External Task Client, and the topic subscriptions, 
 we create an `application.yml` file:
 ```yaml
-camunda.bpm:
+orqueio.bpm:
   admin-user: # Configure the login credentials for the Runtime Platform admin user
     id: demo # configure the username
     password: demo # configure the password
   client:
-    base-url: http://localhost:8080/engine-rest # The URL pointing to the Camunda Platform Runtime REST API
+    base-url: http://localhost:8080/engine-rest # The URL pointing to the Orqueio Platform Runtime REST API
     async-response-timeout: 1000 # Defines the maximum duration of the long-polling request
     worker-id: spring-boot-client # Identifies the worker towards the Engine
 #      basic-auth: # Configure if REST API is secured with basic authentication
@@ -159,21 +159,21 @@ to the Process Engine since it is located under `/src/main/resources/`.
  |_____| /_/\_\  \__|  \___| |_|    |_| |_|  \__,_| |_|     |_|    \__,_| |___/ |_|\_\    \____| |_| |_|  \___| |_| |_|  \__|
 
   Spring-Boot:  (v2.7.9)
-  Camunda Platform: (v7.23.0)
-2021-03-19 10:57:54.493  INFO 23614 --- [           main] o.c.bpm.spring.boot.example.Application  : Starting Application using Java 1.8.0_131 on localhost with PID 23614 (~//camunda-bpm-examples/spring-boot-starter/external-task-client/loan-granting-spring-boot-webapp/target/classes started by user in ~//camunda-bpm-examples/spring-boot-starter/external-task-client)
+  Orqueio Platform: (v7.23.0)
+2021-03-19 10:57:54.493  INFO 23614 --- [           main] o.c.bpm.spring.boot.example.Application  : Starting Application using Java 1.8.0_131 on localhost with PID 23614 (~//orqueio-bpm-examples/spring-boot-starter/external-task-client/loan-granting-spring-boot-webapp/target/classes started by user in ~//orqueio-bpm-examples/spring-boot-starter/external-task-client)
 2021-03-19 10:57:54.495  INFO 23614 --- [           main] o.c.bpm.spring.boot.example.Application  : No active profile set, falling back to default profiles: default
 2021-03-19 10:57:55.766  INFO 23614 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
 2021-03-19 10:57:55.784  INFO 23614 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
 2021-03-19 10:57:55.785  INFO 23614 --- [           main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.41]
 ...
-2021-03-19 10:58:02.537  INFO 23614 --- [           main] org.camunda.bpm.engine                   : ENGINE-00001 Process Engine default created.
-2021-03-19 10:58:02.628  INFO 23614 --- [           main] org.camunda.bpm.spring.boot              : STARTER-SB010 creating initial Admin User: AdminUserProperty[id=demo, firstName=Demo, lastName=Demo, email=demo@localhost, password=******]
+2021-03-19 10:58:02.537  INFO 23614 --- [           main] io.orqueio.bpm.engine                   : ENGINE-00001 Process Engine default created.
+2021-03-19 10:58:02.628  INFO 23614 --- [           main] io.orqueio.bpm.spring.boot              : STARTER-SB010 creating initial Admin User: AdminUserProperty[id=demo, firstName=Demo, lastName=Demo, email=demo@localhost, password=******]
 ...
 2021-03-19 10:58:03.632  INFO 23614 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
 2021-03-19 10:58:03.659  INFO 23614 --- [           main] o.c.bpm.spring.boot.example.Application  : Started Application in 9.51 seconds (JVM running for 10.128)
 2021-03-19 10:58:03.674  INFO 23614 --- [           main] o.c.b.s.b.example.HandlerConfiguration   : Subscription with topic name 'creditScoreChecker' has been opened!
-2021-03-19 10:58:03.684  INFO 23614 --- [           main] org.camunda.bpm.engine.jobexecutor       : ENGINE-14014 Starting up the JobExecutor[org.camunda.bpm.engine.spring.components.jobexecutor.SpringJobExecutor].
-2021-03-19 10:58:03.690  INFO 23614 --- [ingJobExecutor]] org.camunda.bpm.engine.jobexecutor       : ENGINE-14018 JobExecutor[org.camunda.bpm.engine.spring.components.jobexecutor.SpringJobExecutor] starting to acquire jobs
+2021-03-19 10:58:03.684  INFO 23614 --- [           main] io.orqueio.bpm.engine.jobexecutor       : ENGINE-14014 Starting up the JobExecutor[io.orqueio.bpm.engine.spring.components.jobexecutor.SpringJobExecutor].
+2021-03-19 10:58:03.690  INFO 23614 --- [ingJobExecutor]] io.orqueio.bpm.engine.jobexecutor       : ENGINE-14018 JobExecutor[io.orqueio.bpm.engine.spring.components.jobexecutor.SpringJobExecutor] starting to acquire jobs
 2021-03-19 10:58:12.363  INFO 23614 --- [criptionManager] o.c.b.s.b.example.HandlerConfiguration   : spring-boot-client: The External Task 9bd0aca1-8899-11eb-85fb-8e4eb3fc8d8b has been checked!
 2021-03-19 10:58:12.412  INFO 23614 --- [criptionManager] o.c.b.s.b.example.HandlerConfiguration   : spring-boot-client: The External Task 9dc3a349-8899-11eb-85fb-8e4eb3fc8d8b has been rejected with score 4!
 2021-03-19 10:58:12.425  INFO 23614 --- [criptionManager] o.c.b.s.b.example.HandlerConfiguration   : spring-boot-client: The External Task 9dc3f171-8899-11eb-85fb-8e4eb3fc8d8b has been granted with score 10!

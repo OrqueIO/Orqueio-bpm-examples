@@ -1,4 +1,4 @@
-camunda.bpm:
+orqueio.bpm:
   webapp:
     index-redirect-enabled: true
   admin-user:

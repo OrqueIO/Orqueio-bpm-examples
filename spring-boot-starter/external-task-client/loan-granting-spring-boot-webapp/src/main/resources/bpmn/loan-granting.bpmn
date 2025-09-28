@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.6.0">
-  <bpmn:process id="loan_process" name="Granting Loans" isExecutable="true" camunda:historyTimeToLive="P180D">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:orqueio="http://orqueio.io/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Orqueio Modeler" exporterVersion="4.6.0">
+  <bpmn:process id="loan_process" name="Granting Loans" isExecutable="true" orqueio:historyTimeToLive="P180D">
     <bpmn:sequenceFlow id="SequenceFlow_0nww3wx" sourceRef="StartEvent_1" targetRef="Task_1lvjtd4" />
-    <bpmn:serviceTask id="Task_1lvjtd4" name="Check credit score" camunda:type="external" camunda:topic="creditScoreChecker">
+    <bpmn:serviceTask id="Task_1lvjtd4" name="Check credit score" orqueio:type="external" orqueio:topic="creditScoreChecker">
       <bpmn:extensionElements>
-        <camunda:inputOutput>
-          <camunda:inputParameter name="Input_2rvtuu9">
-            <camunda:script scriptFormat="javascript">execution.setVariable("defaultScore", 5);</camunda:script>
-          </camunda:inputParameter>
-        </camunda:inputOutput>
+        <orqueio:inputOutput>
+          <orqueio:inputParameter name="Input_2rvtuu9">
+            <orqueio:script scriptFormat="javascript">execution.setVariable("defaultScore", 5);</orqueio:script>
+          </orqueio:inputParameter>
+        </orqueio:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_0nww3wx</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_12biatx</bpmn:outgoing>
@@ -16,7 +16,7 @@
     <bpmn:subProcess id="SubProcess_16kr5xn" name="Decide if a loan is granted">
       <bpmn:incoming>SequenceFlow_12biatx</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1pbe3dr</bpmn:outgoing>
-      <bpmn:multiInstanceLoopCharacteristics camunda:collection="${creditScores}" camunda:elementVariable="score" />
+      <bpmn:multiInstanceLoopCharacteristics orqueio:collection="${creditScores}" orqueio:elementVariable="score" />
       <bpmn:exclusiveGateway id="ExclusiveGateway_12xhuxz">
         <bpmn:incoming>SequenceFlow_04c54bl</bpmn:incoming>
         <bpmn:outgoing>SequenceFlow_17zmvol</bpmn:outgoing>
@@ -40,11 +40,11 @@
         <bpmn:outgoing>SequenceFlow_04c54bl</bpmn:outgoing>
       </bpmn:startEvent>
       <bpmn:sequenceFlow id="SequenceFlow_04c54bl" sourceRef="StartEvent_01840xx" targetRef="ExclusiveGateway_12xhuxz" />
-      <bpmn:serviceTask id="Task_0v4gadf" name="Grant loan" camunda:type="external" camunda:topic="loanGranter">
+      <bpmn:serviceTask id="Task_0v4gadf" name="Grant loan" orqueio:type="external" orqueio:topic="loanGranter">
         <bpmn:incoming>SequenceFlow_17zmvol</bpmn:incoming>
         <bpmn:outgoing>SequenceFlow_0crpu1y</bpmn:outgoing>
       </bpmn:serviceTask>
-      <bpmn:serviceTask id="Task_0j0sjlk" name="Reject loan request" camunda:type="external" camunda:topic="requestRejecter">
+      <bpmn:serviceTask id="Task_0j0sjlk" name="Reject loan request" orqueio:type="external" orqueio:topic="requestRejecter">
         <bpmn:incoming>SequenceFlow_0vpum3q</bpmn:incoming>
         <bpmn:outgoing>SequenceFlow_1p8qb0a</bpmn:outgoing>
       </bpmn:serviceTask>
@@ -65,7 +65,7 @@
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>SequenceFlow_0nww3wx</bpmn:outgoing>
       <bpmn:timerEventDefinition>
-        <bpmn:timeCycle xsi:type="bpmn:tFormalExpression">0/5 0/1 * 1/1 * ? *</bpmn:timeCycle>
+        <bpmn:timeCycle xsi:type="bpmn:tFormalExpression">0/5 0/1 * 1/1 * ? </bpmn:timeCycle>
       </bpmn:timerEventDefinition>
     </bpmn:startEvent>
     <bpmn:textAnnotation id="TextAnnotation_0k1pblj">

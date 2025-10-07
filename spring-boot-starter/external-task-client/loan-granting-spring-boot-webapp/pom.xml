@@ -11,10 +11,10 @@
   <packaging>jar</packaging>
 
   <properties>
-    <orqueio.platform.version>0.25.0-SNAPSHOT</orqueio.platform.version>
+    <orqueio.platform.version>1.0.2</orqueio.platform.version>
     <spring.boot.version>3.4.4</spring.boot.version>
     <!-- maven -->
-    <maven.compiler.release>17</maven.compiler.release>
+    <maven.compiler.release>21</maven.compiler.release>
     <maven.compiler.plugin.version>3.11.0</maven.compiler.plugin.version>
 
     <graaljs.version>21.3.12</graaljs.version>

@@ -10,7 +10,7 @@
   <name>Spin - Configuring a Data Format Per Process Application</name>
 
   <properties>
-    <version.orqueio>0.25.0-SNAPSHOT</version.orqueio>
+    <version.orqueio>1.0.2</version.orqueio>
     <version.graal.js>21.3.12</version.graal.js>
     <version.jakarta-api>10.0.0</version.jakarta-api>
     <version.h2>2.1.214</version.h2>

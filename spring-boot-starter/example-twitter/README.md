@@ -22,7 +22,7 @@ It also demonstrates the usage of the `application.yaml` configuration file.
 <dependency>
  <groupId>io.orqueio.bpm.springboot</groupId>
  <artifactId>orqueio-bpm-spring-boot-starter-webapp</artifactId>
- <version>0.25.0-SNAPSHOT</version>
+ <version>1.0.2</version>
 </dependency>
 ...
 ```

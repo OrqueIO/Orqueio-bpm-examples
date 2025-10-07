@@ -9,14 +9,14 @@
   <version>1.0.0-SNAPSHOT</version>
 
   <properties>
-    <version.orqueio>0.25.0-SNAPSHOT</version.orqueio>
+    <version.orqueio>1.0.2</version.orqueio>
     <version.quarkus>3.20.0</version.quarkus>
     <version.assertj>3.27.3</version.assertj>
     <compiler-plugin.version>3.14.0</compiler-plugin.version>
     <version.surefire-plugin>3.5.3</version.surefire-plugin>
 
     <maven.compiler.parameters>true</maven.compiler.parameters>
-    <maven.compiler.release>17</maven.compiler.release>
+    <maven.compiler.release>21</maven.compiler.release>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
   </properties>

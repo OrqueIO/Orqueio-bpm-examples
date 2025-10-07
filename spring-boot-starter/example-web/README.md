@@ -19,7 +19,7 @@ It also contains a couple of integration tests, showing how this can be tested.
 <dependency>
   <groupId>io.orqueio.bpm.springboot</groupId>
   <artifactId>orqueio-bpm-spring-boot-starter-rest</artifactId>
-  <version>0.25.0-SNAPSHOT</version>
+  <version>1.0.2</version>
 </dependency>
 ...
 ```

@@ -8,9 +8,9 @@
   <properties>
     <!-- spring -->
     <spring.boot.version>3.4.4</spring.boot.version>
-    <orqueio.spring.boot.starter.version>0.25.0-SNAPSHOT</orqueio.spring.boot.starter.version>
+    <orqueio.spring.boot.starter.version>1.0.2</orqueio.spring.boot.starter.version>
     <!-- maven -->
-    <maven.compiler.release>17</maven.compiler.release>
+    <maven.compiler.release>21</maven.compiler.release>
     <maven.compiler.plugin.version>3.11.0</maven.compiler.plugin.version>
   </properties>
 

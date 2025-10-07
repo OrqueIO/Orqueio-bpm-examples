@@ -26,19 +26,19 @@ Let's first add the dependencies to the project's `pom.xml` file:
 <dependency>
   <groupId>io.orqueio.bpm.springboot</groupId>
   <artifactId>orqueio-bpm-spring-boot-starter-external-task-client</artifactId>
-  <version>0.25.0-SNAPSHOT</version>
+  <version>1.0.2</version>
 </dependency>
 
 <dependency>
   <groupId>io.orqueio.bpm.springboot</groupId>
   <artifactId>orqueio-bpm-spring-boot-starter-rest</artifactId>
-  <version>0.25.0-SNAPSHOT</version>
+  <version>1.0.2</version>
 </dependency>
 
 <dependency>
   <groupId>io.orqueio.bpm.springboot</groupId>
   <artifactId>orqueio-bpm-spring-boot-starter-webapp</artifactId>
-  <version>0.25.0-SNAPSHOT</version>
+  <version>1.0.2</version>
 </dependency>
 <!--...-->
 ```

@@ -7,12 +7,12 @@
   <version>0.0.1-SNAPSHOT</version>
 
   <properties>
-    <version.orqueio>0.25.0-SNAPSHOT</version.orqueio>
+    <version.orqueio>1.0.2</version.orqueio>
     <version.mockito>4.3.1</version.mockito>
     <version.h2>2.1.214</version.h2>
     <version.junit>4.13.2</version.junit>
     <version.slf4j>1.7.36</version.slf4j>
-    <maven.compiler.release>17</maven.compiler.release>
+    <maven.compiler.release>21</maven.compiler.release>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
     <version.plugin.maven-compiler>3.11.0</version.plugin.maven-compiler>

@@ -20,7 +20,7 @@ It also contains a simple integration test, showing how this can be tested.
 <dependency>
   <groupId>io.orqueio.bpm.springboot</groupId>
   <artifactId>orqueio-bpm-spring-boot-starter-webapp</artifactId>
-  <version>0.25.0-SNAPSHOT</version>
+  <version>1.0.2</version>
 </dependency>
 ...
 ```

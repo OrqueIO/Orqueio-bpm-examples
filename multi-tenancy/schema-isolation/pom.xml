@@ -8,13 +8,13 @@
   <version>0.0.1-SNAPSHOT</version>
 
   <properties>
-    <orqueio.version>0.25.0-SNAPSHOT</orqueio.version>
+    <orqueio.version>1.0.2</orqueio.version>
     <arquillian.version>1.7.0.Final</arquillian.version>
     <wildfly.container.adapter.version>3.0.1.Final</wildfly.container.adapter.version>
     <version.resteasy>6.2.3.Final</version.resteasy>
     <version.junit>4.13.2</version.junit>
     <version.slf4j>1.7.36</version.slf4j>
-    <maven.compiler.release>17</maven.compiler.release>
+    <maven.compiler.release>21</maven.compiler.release>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <failOnMissingWebXml>false</failOnMissingWebXml>
 

@@ -8,10 +8,10 @@
 
   <properties>
     <!-- spring -->
-    <orqueio.version>0.25.0-SNAPSHOT</orqueio.version>
+    <orqueio.version>1.0.2</orqueio.version>
     <spring.boot.version>3.4.4</spring.boot.version>
     <!-- maven -->
-    <maven.compiler.release>17</maven.compiler.release>
+    <maven.compiler.release>21</maven.compiler.release>
     <maven.compiler.plugin.version>3.11.0</maven.compiler.plugin.version>
 
     <graaljs.version>21.3.12</graaljs.version>
@@ -41,11 +41,13 @@
     <dependency>
       <groupId>io.orqueio.bpm.springboot</groupId>
       <artifactId>orqueio-bpm-spring-boot-starter-webapp</artifactId>
+      <version>${orqueio.version}</version>
     </dependency>
 
     <dependency>
       <groupId>io.orqueio.bpm.springboot</groupId>
       <artifactId>orqueio-bpm-spring-boot-starter-rest</artifactId>
+      <version>${orqueio.version}</version>
     </dependency>
 
     <dependency>
@@ -142,6 +144,14 @@
       <snapshots>
         <enabled>true</enabled>
       </snapshots>
+    </repository>
+    <repository>
+      <id>maven-central</id>
+      <name>Maven Central</name>
+      <url>https://repo1.maven.org/maven2</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
     </repository>
   </repositories>
 </project>

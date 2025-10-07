@@ -10,12 +10,12 @@
   <name>Parse BPMN by model API</name>
 
   <properties>
-    <version.orqueio>0.25.0-SNAPSHOT</version.orqueio>
+    <version.orqueio>1.0.2</version.orqueio>
     <version.junit>4.13.2</version.junit>
     <version.assertj>3.26.3</version.assertj>
 
     <!-- maven -->
-    <maven.compiler.release>17</maven.compiler.release>
+    <maven.compiler.release>21</maven.compiler.release>
     <maven.compiler.plugin.version>3.13.0</maven.compiler.plugin.version>
 
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

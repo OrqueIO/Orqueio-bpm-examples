@@ -7,7 +7,7 @@ This example uses Jakarta API. It is compatible with the latest releases of Orqu
 
 ## Where are Error and Escalation events defined?
 
-Boundary Events can be added in the Orqueio Modeler. Each can be referenced by its error- or escalation code.
+Boundary Events can be added in the Camunda Modeler. Each can be referenced by its error- or escalation code.
 
 ![Modeler Screenshot][1]
 

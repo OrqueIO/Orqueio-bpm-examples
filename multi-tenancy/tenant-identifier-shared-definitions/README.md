@@ -118,12 +118,12 @@ In this example, one tenant (tenant 2) should have a different sub-process:
 
 The sub-process has the same process definition key like the default one and is deployed for the specific tenant.
 
-In order to use the tenant specific sub-process, the tenant id of the called element has to be set on the call activity using the `orqueio:calledElementTenantId` attribute.
+In order to use the tenant specific sub-process, the tenant id of the called element has to be set on the call activity using the `camunda:calledElementTenantId` attribute.
 
 ```xml
 <bpmn:callActivity id="CallActivity_0ahffuc" name="subprocess" 
   calledElement="subProcess" 
-  orqueio:calledElementTenantId="${ calledElementTenantIdProvider.resolveTenantId(execution) }">
+  camunda:calledElementTenantId="${ calledElementTenantIdProvider.resolveTenantId(execution) }">
   <!-- ... --->    
 </bpmn:callActivity>
 ```

@@ -1,6 +1,6 @@
 # Orqueio Task Forms
 
-This quickstart demonstrates how to use the [Orqueio Forms][5] feature. Orqueio Forms are `.form` files created in the Orqueio Modeler and embedded inside the orqueio Tasklist:
+This quickstart demonstrates how to use the [Orqueio Forms][5] feature. Orqueio Forms are `.form` files created in the Camunda Modeler and embedded inside the orqueio Tasklist:
 
 ![Orqueio Forms Screenshot][1]
 
@@ -13,15 +13,15 @@ Orqueio Forms can be added to the web resources of a web application. As we use 
 
 ## How are Orqueio Forms referenced?
 
-Orqueio Forms are referenced using the `orqueio:formKey` property of a BPMN `<startEvent>` or a BPMN `<userTask>`:
+Orqueio Forms are referenced using the `camunda:formKey` property of a BPMN `<startEvent>` or a BPMN `<userTask>`:
 
 ```xml
-<startEvent id="startEvent" orqueio:formKey="orqueio-forms:app:start-form.form" name="Invoice Received">
+<startEvent id="startEvent" camunda:formKey="orqueio-forms:app:start-form.form" name="Invoice Received">
   ...
 </startEvent>
 ```
 
-The attribute can also be set through the properties panel using the orqueio Modeler:
+The attribute can also be set through the properties panel using the Camunda Modeler:
 
 ![Orqueio Forms Screenshot Modeler][2]
 

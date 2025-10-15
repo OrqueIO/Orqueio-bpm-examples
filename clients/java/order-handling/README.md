@@ -4,14 +4,14 @@ In this tutorial you will learn how to use the External Task client for Java.
 
 In a nutshell you will be guided through the following steps:
 * Starting the Orqueio Platform Runtime
-* Modeling and Deploying a process with the Orqueio Modeler
+* Modeling and Deploying a process with the Camunda Modeler
 * Bootstrapping the External Task client
 * Monitor the process in Orqueio Cockpit
 
 ## Prerequisites
 * [Java JDK 11+](https://www.oracle.com/java/technologies/downloads/#java11)
 * [Apache Maven](https://maven.apache.org/download.cgi)
-* [Orqueio Modeler](https://orqueio.com/download/modeler/)
+* [Camunda Modeler](https://orqueio.com/download/modeler/)
 * [Orqueio Platform Runtime](https://orqueio.com/download/)
 * Orqueio External Task Client
 
@@ -27,8 +27,8 @@ and the running platform is [compatible](https://docs.orqueio.io/manual/user-gui
 Next, we want to deploy a model to the Orqueio Platform Runtime with the following steps:
 
 * Download the BPMN 2.0 XML of that model [here](./order-handling.bpmn).
-* Open the model in the Orqueio Modeler.
-* Click on the "Deploy" icon ![Orqueio Modeler – Deploy Button](./img/deploy-icon.png).
+* Open the model in the Camunda Modeler.
+* Click on the "Deploy" icon ![Camunda Modeler – Deploy Button](./img/deploy-icon.png).
 * Select "Deploy Current Diagram". 
 * Select a deployment name of your choice.
 

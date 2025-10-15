@@ -12,7 +12,7 @@ The example uses a decision table from the [DMN tutorial] to decided which dish 
 ![Dish Decision]
 
 You can find the corresponding DMN XML file [dish-decision.dmn11.xml] in the
-resources. To modify it you can use the [Orqueio Modeler].
+resources. To modify it you can use the [Camunda Modeler].
 
 ## Code Walkthrough
 
@@ -200,7 +200,7 @@ Dish Decision:
 [DMN tutorial]: https://orqueio.com/dmn/
 [Dish Decision]: src/main/resources/io/orqueio/bpm/example/dish-decision.png
 [dish-decision.dmn11.xml]: src/main/resources/io/orqueio/bpm/example/dish-decision.dmn11.xml
-[Orqueio Modeler]: https://orqueio.com/products/orqueio-bpm/modeler/
+[Camunda Modeler]: https://orqueio.com/products/orqueio-bpm/modeler/
 [DishDecider.java]: src/main/java/io/orqueio/bpm/example/DishDecider.java
 [User Guide]: https://docs.orqueio.io/manual/7.23/user-guide/dmn-engine/testing/
 [DishDecisionTest.java]: src/test/java/io.orqueio/bpm/example/DishDecisionTest.java

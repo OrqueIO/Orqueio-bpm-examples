@@ -13,15 +13,15 @@ Embedded Forms can be added to the web resources of a web application. As we use
 
 ## How are embedded taskforms referenced?
 
-Embedded Taskforms are referenced using the `orqueio:taskKey` property of a BPMN `<startEvent>` or a BPMN `<userTask>`:
+Embedded Taskforms are referenced using the `camunda:taskKey` property of a BPMN `<startEvent>` or a BPMN `<userTask>`:
 
 ```xml
-<startEvent id="startEvent" orqueio:formKey="embedded:app:start-form.html" name="Loan Request Received">
+<startEvent id="startEvent" camunda:formKey="embedded:app:start-form.html" name="Loan Request Received">
   ...
 </startEvent>
 ```
 
-The attribute can also be set through the properties panel using the orqueio Modeler:
+The attribute can also be set through the properties panel using the Camunda Modeler:
 
 ![Embedded Forms Screenshot Modeler][2]
 

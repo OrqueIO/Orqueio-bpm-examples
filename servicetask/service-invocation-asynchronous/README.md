@@ -102,13 +102,13 @@ The Java Deleagte can be referenced using the `class` attribute from the process
 
 ``` xml
 <bpmn2:serviceTask id="serviceTaskActivity"
-  orqueio:class="io.orqueio.quickstart.servicetask.invocation.AsynchronousServiceTask"
+  camunda:class="io.orqueio.quickstart.servicetask.invocation.AsynchronousServiceTask"
   name="Asynchronous Service Task">
 ```
 
-Using the orqueio Modeler, you can configure the service task using the properties panel:
+Using the Camunda Modeler, you can configure the service task using the properties panel:
 
-![Configure Signallable Activity Behavior using the orqueio Modeler][2]
+![Configure Signallable Activity Behavior using the Camunda Modeler][2]
 
 
 ## Invocation Semantics

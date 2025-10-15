@@ -22,7 +22,7 @@ It also demonstrates the usage of the `application.yaml` configuration file.
 <dependency>
  <groupId>io.orqueio.bpm.springboot</groupId>
  <artifactId>orqueio-bpm-spring-boot-starter-webapp</artifactId>
- <version>1.0.2</version>
+ <version>1.0.4</version>
 </dependency>
 ...
 ```
@@ -54,7 +54,7 @@ the BPMN diagram via "Delegate expression" in a service task:
 
 ```xml
 ...
-<serviceTask id="service_task_publish_on_twitter" name="Publish on Twitter" orqueio:delegateExpression="#{tweetAdapter}">
+<serviceTask id="service_task_publish_on_twitter" name="Publish on Twitter" camunda:delegateExpression="#{tweetAdapter}">
   ...
 </serviceTask>
 ...

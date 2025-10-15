@@ -71,13 +71,13 @@ The Java Deleagte can be referenced using the `class` attribute from the process
 
 ``` xml
 <bpmn2:serviceTask id="ServiceTask_1"
-  orqueio:class="sync.io.orqueio.quickstart.servicetask.invocation.SynchronousServiceTask"
+  camunda:class="sync.io.orqueio.quickstart.servicetask.invocation.SynchronousServiceTask"
   name="Synchronous Service Task">
 ```
 
-Using the orqueio Modeler, you can configure the service task using the properties panel:
+Using the Camunda Modeler, you can configure the service task using the properties panel:
 
-![Configure Java Delegate using the orqueio Modeler][2]
+![Configure Java Delegate using the Camunda Modeler][2]
 
 
 ## How does it work?

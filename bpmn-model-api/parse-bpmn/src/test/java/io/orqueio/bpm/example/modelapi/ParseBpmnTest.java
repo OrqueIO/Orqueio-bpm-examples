@@ -121,7 +121,7 @@ public class ParseBpmnTest {
     // if the element contains an attribute which is not accessible by a special getter a generic getter can be used
     // Note: for demonstrating purpose we read attributes which also can be accessed by special getters
     assertThat(userTaskB.getAttributeValue("name")).isEqualTo("User Task B");
-    assertThat(userTaskB.getAttributeValueNs(BpmnModelConstants.ORQUEIO_NS, "assignee")).isEqualTo("demo");
+    assertThat(userTaskB.getAttributeValueNs(BpmnModelConstants.CAMUNDA_NS, "assignee")).isEqualTo("demo");
   }
 
   @Test
@@ -161,10 +161,10 @@ public class ParseBpmnTest {
     ExtensionElements extensionElements = startEvent.getExtensionElements();
     // get all extension elements of the start event (child elements of 'extensionElements')
     Collection<ModelElementInstance> elements = extensionElements.getElements();
-    // the start event contains a single extension element (orqueio:formData)
+    // the start event contains a single extension element (camunda:formData)
     assertThat(elements).hasSize(1);
 
-    // get the orqueio:formData extension element and containing form fields
+    // get the camunda:formData extension element and containing form fields
     OrqueioFormData formData = extensionElements.getElementsQuery().filterByType(OrqueioFormData.class).singleResult();
     for (OrqueioFormField formField : formData.getOrqueioFormFields()) {
       assertThat(formField.getOrqueioLabel()).isIn("Name", "Age");

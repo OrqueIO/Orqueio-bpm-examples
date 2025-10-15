@@ -102,43 +102,43 @@ In general, the task is declared as follows (see the [process model][3]):
 ```xml
 <bpmn2:serviceTask id="ServiceTask_1" name="Get holiday">
   <bpmn2:extensionElements>
-    <orqueio:connector>
+    <camunda:connector>
       CONNECTOR DECLARATION
-    </orqueio:connector>
+    </camunda:connector>
   </bpmn2:extensionElements>
   <bpmn2:incoming>SequenceFlow_1</bpmn2:incoming>
   <bpmn2:outgoing>SequenceFlow_2</bpmn2:outgoing>
 </bpmn2:serviceTask>
 ```
 
-The task uses a `orqueio:connector` extension element. It means that a connector should be invoked when the service task is executed. In detail, the connector is declared as follows:
+The task uses a `camunda:connector` extension element. It means that a connector should be invoked when the service task is executed. In detail, the connector is declared as follows:
 
 ```xml
-<orqueio:connector>
-  <orqueio:connectorId>http-connector</orqueio:connectorId>
-  <orqueio:inputOutput>
+<camunda:connector>
+  <camunda:connectorId>http-connector</camunda:connectorId>
+  <camunda:inputOutput>
 
-    <orqueio:inputParameter name="url">
+    <camunda:inputParameter name="url">
       http://feiertage.jarmedia.de/api/?jahr=2014&amp;nur_land=BE
-    </orqueio:inputParameter>
+    </camunda:inputParameter>
 
-    <orqueio:inputParameter name="method">
+    <camunda:inputParameter name="method">
       GET
-    </orqueio:inputParameter>
+    </camunda:inputParameter>
 
-    <orqueio:inputParameter name="headers">
+    <camunda:inputParameter name="headers">
       <map>
         <entry key="Accept">
           application/json
         </entry>
       </map>
-    </orqueio:inputParameter>
+    </camunda:inputParameter>
 
-    <orqueio:outputParameter name="isHoliday">
-      <orqueio:script scriptFormat="Javascript" resource="parseHoliday.js" />
-    </orqueio:outputParameter>
-  </orqueio:inputOutput>
-</orqueio:connector>
+    <camunda:outputParameter name="isHoliday">
+      <camunda:script scriptFormat="Javascript" resource="parseHoliday.js" />
+    </camunda:outputParameter>
+  </camunda:inputOutput>
+</camunda:connector>
 ```
 
 The `connector-id` element identifies the HTTP connector. The `inputOutput` element defines a mapping of values to connector parameters. For example, the `url` parameter identifies the REST endpoint to be called.

@@ -7,7 +7,7 @@
   <packaging>war</packaging>
 
   <properties>
-    <version.orqueio>1.0.2</version.orqueio>
+    <version.orqueio>1.0.4</version.orqueio>
     <version.jakarta-servlet-api>6.0.0</version.jakarta-servlet-api>
 
     <maven.compiler.release>11</maven.compiler.release>
@@ -22,7 +22,7 @@
       <dependency>
         <groupId>io.orqueio.bpm</groupId>
         <artifactId>orqueio-bom</artifactId>
-        <version>${orqueio.version}</version>
+        <version>${version.orqueio}</version>
         <scope>import</scope>
         <type>pom</type>
       </dependency>

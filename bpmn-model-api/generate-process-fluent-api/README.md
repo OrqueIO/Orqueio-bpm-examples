@@ -58,8 +58,8 @@ BpmnModelInstance modelInstance = Bpmn.createExecutableProcess()
 ```
 
 From now on we can create user, service or script tasks and parallel or exclusive gateways to
-model the process we want to create. For every task we can set attributes like the `id`, `name`, `orqueio:formKey`,
-`orqueio:assignee`, `orqueio:class`, `orqueio:candidateUsers` or `orqueio:candidateGroups`.
+model the process we want to create. For every task we can set attributes like the `id`, `name`, `camunda:formKey`,
+`camunda:assignee`, `camunda:class`, `camunda:candidateUsers` or `camunda:candidateGroups`.
 
 ```java
 BpmnModelInstance modelInstance = Bpmn.createExecutableProcess()

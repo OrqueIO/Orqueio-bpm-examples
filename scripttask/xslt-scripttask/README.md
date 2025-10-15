@@ -30,9 +30,9 @@ The execution listener attached to the start event references a groovy script.
 ```xml
 <bpmn2:startEvent id="StartEvent_1" name="give input">
   <bpmn2:extensionElements>
-    <orqueio:executionListener event="end">
-      <orqueio:script scriptFormat="groovy" resource="io/orqueio/bpm/example/xsltexample/readXmlFile.groovy" />
-    </orqueio:executionListener>
+    <camunda:executionListener event="end">
+      <camunda:script scriptFormat="groovy" resource="io/orqueio/bpm/example/xsltexample/readXmlFile.groovy" />
+    </camunda:executionListener>
   </bpmn2:extensionElements>
 </bpmn2:startEvent>
 ```
@@ -53,11 +53,11 @@ The following script task uses the [xsl stylesheet][3] to transform the XML save
 and saves the result in the `xmlOutput` process variable.
 
 ```xml
-<bpmn2:scriptTask id="ScriptTask_1" name="convert input" scriptFormat="xslt" orqueio:resource="io/orqueio/bpm/example/xsltexample/example.xsl" orqueio:resultVariable="xmlOutput">
+<bpmn2:scriptTask id="ScriptTask_1" name="convert input" scriptFormat="xslt" camunda:resource="io/orqueio/bpm/example/xsltexample/example.xsl" camunda:resultVariable="xmlOutput">
   <bpmn2:extensionElements>
-    <orqueio:inputOutput>
-      <orqueio:inputParameter name="camunda_source">${customers}</orqueio:inputParameter>
-    </orqueio:inputOutput>
+    <camunda:inputOutput>
+      <camunda:inputParameter name="camunda_source">${customers}</camunda:inputParameter>
+    </camunda:inputOutput>
   </bpmn2:extensionElements>
 </bpmn2:scriptTask>
 ```
@@ -67,9 +67,9 @@ Before the process ends the execution listener of the end event again executes a
 ```xml
 <bpmn2:endEvent id="EndEvent_1" name="show output">
   <bpmn2:extensionElements>
-    <orqueio:executionListener event="start">
-      <orqueio:script scriptFormat="groovy" resource="io/orqueio/bpm/example/xsltexample/printResult.groovy" />
-    </orqueio:executionListener>
+    <camunda:executionListener event="start">
+      <camunda:script scriptFormat="groovy" resource="io/orqueio/bpm/example/xsltexample/printResult.groovy" />
+    </camunda:executionListener>
   </bpmn2:extensionElements>
 </bpmn2:endEvent>
 ```

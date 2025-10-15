@@ -114,7 +114,7 @@ public class EvaluateNotificationDecisionDelegate implements JavaDelegate {
 }
 ```
 
-Use the delegate in your BPMN model via the Implementation field: `orqueio:delegateExpression="#{sendNotification}"`
+Use the delegate in your BPMN model via the Implementation field: `camunda:delegateExpression="#{sendNotification}"`
 
 ### 5. Configuration
 

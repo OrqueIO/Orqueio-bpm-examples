@@ -26,19 +26,19 @@ Let's first add the dependencies to the project's `pom.xml` file:
 <dependency>
   <groupId>io.orqueio.bpm.springboot</groupId>
   <artifactId>orqueio-bpm-spring-boot-starter-external-task-client</artifactId>
-  <version>1.0.2</version>
+  <version>1.0.4</version>
 </dependency>
 
 <dependency>
   <groupId>io.orqueio.bpm.springboot</groupId>
   <artifactId>orqueio-bpm-spring-boot-starter-rest</artifactId>
-  <version>1.0.2</version>
+  <version>1.0.4</version>
 </dependency>
 
 <dependency>
   <groupId>io.orqueio.bpm.springboot</groupId>
   <artifactId>orqueio-bpm-spring-boot-starter-webapp</artifactId>
-  <version>1.0.2</version>
+  <version>1.0.4</version>
 </dependency>
 <!--...-->
 ```
@@ -59,7 +59,7 @@ public class Application {
 To configure the Runtime Platform admin user, the External Task Client, and the topic subscriptions, 
 we create an `application.yml` file:
 ```yaml
-orqueio.bpm:
+camunda.bpm:
   admin-user: # Configure the login credentials for the Runtime Platform admin user
     id: demo # configure the username
     password: demo # configure the password

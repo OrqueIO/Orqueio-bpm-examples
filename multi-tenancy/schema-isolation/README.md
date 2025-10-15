@@ -164,7 +164,7 @@ In order to deploy the two definitions to the two different engines, we have add
 
 ```xml
 <process-application
-  xmlns="http://www.orqueio.io/schema/1.0/ProcessApplication"
+  xmlns="http://www.camunda.org/schema/1.0/ProcessApplication"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
   <process-archive name="tenant1-archive">

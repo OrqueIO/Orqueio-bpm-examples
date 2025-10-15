@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions xmlns="http://www.omg.org/spec/DMN/20151101/dmn.xsd" xmlns:biodi="http://bpmn.io/schema/dmn/biodi/1.0"
-xmlns:orqueio="http://orqueio.io/schema/1.0/dmn" id="dinnerDecisions" name="Dinner Decisions" namespace="http://orqueio.io/schema/1.0/dmn">
-  <decision id="beverages" name="Beverages" orqueio:historyTimeToLive="P180D">
+xmlns:camunda="http://camunda.org/schema/1.0/dmn" id="dinnerDecisions" name="Dinner Decisions" namespace="http://camunda.org/schema/1.0/dmn">
+  <decision id="beverages" name="Beverages" camunda:historyTimeToLive="P180D">
     <extensionElements>
       <biodi:bounds x="55" y="153" width="180" height="80" />
       <biodi:edge source="Decision_0v6lvdk">
@@ -27,11 +27,11 @@ xmlns:orqueio="http://orqueio.io/schema/1.0/dmn" id="dinnerDecisions" name="Dinn
       <requiredDecision href="#dish" />
     </informationRequirement>
     <decisionTable hitPolicy="COLLECT">
-      <input id="InputClause_1acmlkd" label="Dish" orqueio:inputVariable="">
+      <input id="InputClause_1acmlkd" label="Dish" camunda:inputVariable="">
         <inputExpression id="LiteralExpression_0bqgrlg" typeRef="string">        <text>desiredDish</text>
 </inputExpression>
       </input>
-      <input id="InputClause_0bo3uen" label="Guests with children" orqueio:inputVariable="">
+      <input id="InputClause_0bo3uen" label="Guests with children" camunda:inputVariable="">
         <inputExpression id="LiteralExpression_0d6l79o" typeRef="boolean">        <text>guestsWithChildren</text>
 </inputExpression>
       </input>
@@ -87,7 +87,7 @@ xmlns:orqueio="http://orqueio.io/schema/1.0/dmn" id="dinnerDecisions" name="Dinn
       </rule>
     </decisionTable>
   </decision>
-  <decision id="dish" name="Dish" orqueio:historyTimeToLive="P180D">
+  <decision id="dish" name="Dish" camunda:historyTimeToLive="P180D">
     <extensionElements>
       <biodi:bounds x="-84" y="307" width="180" height="80" />
       <biodi:edge source="KnowledgeSource_0b8hnqo">
@@ -113,11 +113,11 @@ xmlns:orqueio="http://orqueio.io/schema/1.0/dmn" id="dinnerDecisions" name="Dinn
       <requiredAuthority href="#KnowledgeSource_0b8hnqo" />
     </authorityRequirement>
     <decisionTable id="DecisionTable_040j91i">
-      <input id="InputClause_0bbq1z8" label="Season" orqueio:inputVariable="">
+      <input id="InputClause_0bbq1z8" label="Season" camunda:inputVariable="">
         <inputExpression id="LiteralExpression_1iwaqcz" typeRef="string">        <text>season</text>
 </inputExpression>
       </input>
-      <input id="InputClause_0pcbpc9" label="How many guests" orqueio:inputVariable="">
+      <input id="InputClause_0pcbpc9" label="How many guests" camunda:inputVariable="">
         <inputExpression id="LiteralExpression_1uu3xe6" typeRef="integer">        <text>guestCount</text>
 </inputExpression>
       </input>

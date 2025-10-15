@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" orqueio:historyTimeToLive="P180D"
-                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:orqueio="http://orqueio.io/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://orqueio.io/schema/modeler/1.0" id="Definitions_0qxzjew" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Orqueio Modeler" exporterVersion="4.11.0" modeler:executionPlatform="Orqueio Platform" modeler:executionPlatformVersion="7.15.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" camunda:historyTimeToLive="P180D"
+                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0qxzjew" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.11.0" modeler:executionPlatform="Orqueio Platform" modeler:executionPlatformVersion="7.15.0">
   <bpmn:process id="orqueio-testing-job-announcement-publication" name="Job Announcement Publication (Subprocess)"
-                isExecutable="true" orqueio:historyTimeToLive="P180D">
+                isExecutable="true" camunda:historyTimeToLive="P180D">
     <bpmn:startEvent id="Event_0izgki4" name="">
       <bpmn:outgoing>Flow_1l9m60y</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:serviceTask id="publish_announcement_website" name="Publish announcement on website" implementation="webService" orqueio:expression="#{jobAnnouncementService.postToWebsite(jobAnnouncementId)}">
+    <bpmn:serviceTask id="publish_announcement_website" name="Publish announcement on website" implementation="webService" camunda:expression="#{jobAnnouncementService.postToWebsite(jobAnnouncementId)}">
       <bpmn:incoming>Flow_1l9m60y</bpmn:incoming>
       <bpmn:outgoing>Flow_01jfu1t</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -20,7 +20,7 @@
       <bpmn:outgoing>Flow_0zn9zem</bpmn:outgoing>
       <bpmn:outgoing>Flow_0cpvktx</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:serviceTask id="publish_announcement_twitter" name="Publish announcement on Twitter" implementation="webService" orqueio:expression="#{jobAnnouncementService.postToTwitter(jobAnnouncementId)}">
+    <bpmn:serviceTask id="publish_announcement_twitter" name="Publish announcement on Twitter" implementation="webService" camunda:expression="#{jobAnnouncementService.postToTwitter(jobAnnouncementId)}">
       <bpmn:incoming>Flow_0zn9zem</bpmn:incoming>
       <bpmn:outgoing>Flow_1j7gwrq</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -39,7 +39,7 @@
       <bpmn:incoming>Flow_0jly80u</bpmn:incoming>
       <bpmn:outgoing>Flow_1wswgjn</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:serviceTask id="publish_announcement_facebook" name="Publish announcement on Facebook" implementation="webService" orqueio:expression="#{jobAnnouncementService.postToFacebook(jobAnnouncementId)}">
+    <bpmn:serviceTask id="publish_announcement_facebook" name="Publish announcement on Facebook" implementation="webService" camunda:expression="#{jobAnnouncementService.postToFacebook(jobAnnouncementId)}">
       <bpmn:incoming>Flow_1oretgu</bpmn:incoming>
       <bpmn:outgoing>Flow_0q0pm3k</bpmn:outgoing>
     </bpmn:serviceTask>

@@ -1,0 +1,46 @@
+<h3>Start Order Process</h3>
+
+<form role="form" class="form-horizontal">
+  <div class="form-group">
+    <label class="control-label col-md-2">Order ID</label>
+    <div class="col-md-10">
+      <input
+        type="text"
+        class="form-control"
+        cam-variable-name="orderId"
+        cam-variable-type="String"
+        required
+      />
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="control-label col-md-2">Premium Level</label>
+    <div class="col-md-10">
+      <select
+        class="form-control"
+        cam-variable-name="premium"
+        cam-variable-type="String"
+      >
+        <option value="High">High</option>
+        <option value="Medium">Medium</option>
+        <option value="Low">Low</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="control-label col-md-2">Customer Status</label>
+    <div class="col-md-10">
+      <select
+        class="form-control"
+        cam-variable-name="status"
+        cam-variable-type="String"
+      >
+        <option value="New">New</option>
+        <option value="Existing">Existing</option>
+        <option value="VIP">VIP</option>
+      </select>
+    </div>
+  </div>
+</form>

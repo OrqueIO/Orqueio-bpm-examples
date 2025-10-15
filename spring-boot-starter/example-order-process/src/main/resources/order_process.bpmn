@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL"
+  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+  xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
+  id="_OrderProcessDefs"
+  targetNamespace="http://camunda.org/schema/1.0/bpmn"
+  exporter="camunda Modeler"
+  exporterVersion="3.5.0">
+
+  <bpmn2:process id="OrderProcess"
+    name="Order Process with DMN Notification Decision"
+    isExecutable="true"
+    camunda:historyTimeToLive="P180D">
+
+    <bpmn2:startEvent id="StartOrder"
+      name="New Order"
+      camunda:formKey="embedded:app:forms/create_order.html"
+      camunda:initiator="initiator">
+      <bpmn2:outgoing>Flow_1</bpmn2:outgoing>
+    </bpmn2:startEvent>
+    <bpmn2:serviceTask id="CheckStock"
+      name="Check Stock"
+      camunda:delegateExpression="#{checkStock}">
+      <bpmn2:incoming>Flow_1</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_2</bpmn2:outgoing>
+    </bpmn2:serviceTask>
+
+    <bpmn2:businessRuleTask id="DecideNotification"
+      name="Decide Notification"
+      camunda:decisionRef="NotificationDecision"
+      camunda:mapDecisionResult="singleEntry"
+      camunda:resultVariable="notification">
+      <bpmn2:incoming>Flow_2</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_3</bpmn2:outgoing>
+    </bpmn2:businessRuleTask>
+
+    <bpmn2:serviceTask id="SendNotification"
+      name="Send Notification"
+      camunda:delegateExpression="#{sendNotification}">
+      <bpmn2:incoming>Flow_3</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_4</bpmn2:outgoing>
+    </bpmn2:serviceTask>
+
+    <bpmn2:userTask id="PrepareOrder" name="Prepare Order">
+      <bpmn2:incoming>Flow_4</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_5</bpmn2:outgoing>
+    </bpmn2:userTask>
+
+    <bpmn2:endEvent id="OrderCompleted" name="Order Completed">
+      <bpmn2:incoming>Flow_5</bpmn2:incoming>
+    </bpmn2:endEvent>
+
+    <bpmn2:sequenceFlow id="Flow_1" sourceRef="StartOrder" targetRef="CheckStock" />
+    <bpmn2:sequenceFlow id="Flow_2" sourceRef="CheckStock" targetRef="DecideNotification" />
+    <bpmn2:sequenceFlow id="Flow_3" sourceRef="DecideNotification" targetRef="SendNotification" />
+    <bpmn2:sequenceFlow id="Flow_4" sourceRef="SendNotification" targetRef="PrepareOrder" />
+    <bpmn2:sequenceFlow id="Flow_5" sourceRef="PrepareOrder" targetRef="OrderCompleted" />
+
+  </bpmn2:process>
+
+  <bpmndi:BPMNDiagram id="BPMNDiagram_Order">
+    <bpmndi:BPMNPlane id="BPMNPlane_Order" bpmnElement="OrderProcess">
+
+      <bpmndi:BPMNShape id="Shape_StartOrder" bpmnElement="StartOrder">
+        <dc:Bounds x="150" y="150" width="36" height="36" />
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="Shape_CheckStock" bpmnElement="CheckStock">
+        <dc:Bounds x="300" y="130" width="120" height="76" />
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="Shape_DecideNotification" bpmnElement="DecideNotification">
+        <dc:Bounds x="470" y="130" width="120" height="76" />
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="Shape_SendNotification" bpmnElement="SendNotification">
+        <dc:Bounds x="640" y="130" width="120" height="76" />
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="Shape_PrepareOrder" bpmnElement="PrepareOrder">
+        <dc:Bounds x="810" y="130" width="120" height="76" />
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="Shape_EndOrder" bpmnElement="OrderCompleted">
+        <dc:Bounds x="980" y="150" width="36" height="36" />
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNEdge id="Edge_Flow_1" bpmnElement="Flow_1">
+        <di:waypoint x="186" y="168" />
+        <di:waypoint x="300" y="168" />
+      </bpmndi:BPMNEdge>
+
+      <bpmndi:BPMNEdge id="Edge_Flow_2" bpmnElement="Flow_2">
+        <di:waypoint x="420" y="168" />
+        <di:waypoint x="470" y="168" />
+      </bpmndi:BPMNEdge>
+
+      <bpmndi:BPMNEdge id="Edge_Flow_3" bpmnElement="Flow_3">
+        <di:waypoint x="590" y="168" />
+        <di:waypoint x="640" y="168" />
+      </bpmndi:BPMNEdge>
+
+      <bpmndi:BPMNEdge id="Edge_Flow_4" bpmnElement="Flow_4">
+        <di:waypoint x="760" y="168" />
+        <di:waypoint x="810" y="168" />
+      </bpmndi:BPMNEdge>
+
+      <bpmndi:BPMNEdge id="Edge_Flow_5" bpmnElement="Flow_5">
+        <di:waypoint x="930" y="168" />
+        <di:waypoint x="980" y="168" />
+      </bpmndi:BPMNEdge>
+
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn2:definitions>

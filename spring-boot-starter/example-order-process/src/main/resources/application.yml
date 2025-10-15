@@ -1,0 +1,30 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/process_engine?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    username: orqueio
+    password: orqueio
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: true
+    show-sql: true
+
+camunda:
+  bpm:
+    database:
+      schema-update: true
+    job-execution:
+      core-pool-size: 10
+    authorization:
+      enabled: true
+    skip-isolation-level-check: true
+    admin-user:
+      id: demo
+      password: demo
+      firstName: Demo
+    filter:
+      create: All tasks

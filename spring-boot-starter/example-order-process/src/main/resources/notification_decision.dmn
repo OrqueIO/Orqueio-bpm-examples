@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/"
+  xmlns:camunda="http://camunda.org/schema/1.0/dmn"
+  xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/"
+  xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/"
+  xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/"
+  id="notificationDecisionDefs"
+  name="Notification Decision"
+  namespace="http://camunda.org/schema/1.0/dmn"
+  exporter="camunda Modeler"
+  exporterVersion="4.2.0">
+
+  <decision id="NotificationDecision" name="Notification Decision" camunda:historyTimeToLive="P180D">
+<decisionTable id="DecisionTable_Notification" hitPolicy="UNIQUE">
+      <input id="Input_1" label="Premium Level">
+        <inputExpression id="Expr_1" typeRef="string">
+          <text>premium</text>
+        </inputExpression>
+      </input>
+      <input id="Input_2" label="Customer Status">
+        <inputExpression id="Expr_2" typeRef="string">
+          <text>status</text>
+        </inputExpression>
+      </input>
+
+      <output id="Output_1" label="Notification Type" name="notification" typeRef="string" />
+
+      <rule id="row-1">
+        <inputEntry>
+          <text>"High"</text>
+        </inputEntry>
+        <inputEntry>
+          <text>"New"</text>
+        </inputEntry>
+        <outputEntry>
+          <text>"Send call to confirm and email"</text>
+        </outputEntry>
+      </rule>
+
+      <rule id="row-2">
+        <inputEntry>
+          <text>"Medium"</text>
+        </inputEntry>
+        <inputEntry>
+          <text>"Existing"</text>
+        </inputEntry>
+        <outputEntry>
+          <text>"Send email only"</text>
+        </outputEntry>
+      </rule>
+
+      <rule id="row-3">
+        <inputEntry>
+          <text>"Low"</text>
+        </inputEntry>
+        <inputEntry>
+          <text>"VIP"</text>
+        </inputEntry>
+        <outputEntry>
+          <text>"Send thank-you SMS"</text>
+        </outputEntry>
+      </rule>
+
+      <rule id="row-4">
+        <inputEntry>
+          <text>"High"</text>
+        </inputEntry>
+        <inputEntry>
+          <text>"VIP"</text>
+        </inputEntry>
+        <outputEntry>
+          <text>"Call personally and send VIP email"</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="DMNDiagram_1">
+      <dmndi:DMNShape id="DMNShape_NotificationDecision" dmnElementRef="NotificationDecision">
+        <dc:Bounds x="180" y="200" width="200" height="80" />
+      </dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>

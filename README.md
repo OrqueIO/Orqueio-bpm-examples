@@ -37,11 +37,11 @@ Orqueio Platform examples is a collection of focused usage examples for the [Orq
 
 | Name                                                                                                             | Container         | Keywords                  |
 |------------------------------------------------------------------------------------------------------------------|-------------------|---------------------------|
-| [Service Task REST HTTP](/servicetask/rest-service)                                                              | Unit Test         | Rest Scripting, classless |
-| [Service Task SOAP HTTP](/servicetask/soap-service) [^1]                                                         | Unit Test         | SOAP Scripting, classless |
-| [Service Task SOAP CXF HTTP](/servicetask/soap-cxf-service) [^1]                                                 | Unit Test         | SOAP, CXF, Spring, Spin   |
-| [Service Invocation Synchronous](/servicetask/service-invocation-synchronous)                                    | Unit Test         | Java Delegate, Sync       |
-| [Service Invocation Asynchronous](/servicetask/service-invocation-asynchronous)                                  | Unit Test         | Signal, Async             |
+| [Service Task REST HTTP](/service-task/rest-service)                                                              | Unit Test         | Rest Scripting, classless |
+| [Service Task SOAP HTTP](/service-task/soap-service) [^1]                                                         | Unit Test         | SOAP Scripting, classless |
+| [Service Task SOAP CXF HTTP](/service-task/soap-cxf-service) [^1]                                                 | Unit Test         | SOAP, CXF, Spring, Spin   |
+| [Service Invocation Synchronous](/service-task/service-invocation-synchronous)                                    | Unit Test         | Java Delegate, Sync       |
+| [Service Invocation Asynchronous](/service-task/service-invocation-asynchronous)                                  | Unit Test         | Signal, Async             |
 | [User Task Assignment Email](/usertask/task-assignment-email) [^1][^2]                                           | All               | Email, Usertask           |
 | [User Task Form Embedded](/usertask/task-form-embedded) [^2]                                                     | All               | Html, Form, Usertask      |
 | [User Task Form Embedded - Serialized Java Object](/usertask/task-form-embedded-serialized-java-object) [^1][^2] | All               | Html, Form, Usertask      |
@@ -51,10 +51,10 @@ Orqueio Platform examples is a collection of focused usage examples for the [Orq
 | [User Task Form - Orqueio Forms](/usertask/task-orqueio-forms) [^2]                                              | All               | Html, Form, Usertask      |
 | [User Task Form Generated](/usertask/task-form-generated) [^1][^2]                                               | All               | Html, Form, Usertask      |
 | [User Task Form JSF](/usertask/task-form-external-jsf) [^1][^2]                                                  | JavaEE Containers | JSF, Form, Usertask       |
-| [Script Task XSLT](/scripttask/xslt-scripttask)                                                                  | Unit Test         | XSLT Scripttask           |
-| [Script Task XQuery](/scripttask/xquery-scripttask) [^1]                                                         | Unit Test         | XQuery Scripttask         |
-| [Start Event - Message](/startevent/message-start)                                                               | Unit Test         | Message Start Event       |
-| [Start Process - SOAP CXF](/startevent/soap-cxf-server-start) [^1]                                               | War               | SOAP, CXF, Spring         |
+| [Script Task XSLT](/script-task/xslt-scripttask)                                                                  | Unit Test         | XSLT Scripttask           |
+| [Script Task XQuery](/script-task/xquery-scripttask) [^1]                                                         | Unit Test         | XQuery Scripttask         |
+| [Start Event - Message](/start-event/message-start)                                                               | Unit Test         | Message Start Event       |
+| [Start Process - SOAP CXF](/start-event/soap-cxf-server-start) [^1]                                               | War               | SOAP, CXF, Spring         |
 
 ### Deployment & Project Setup Examples
 

@@ -1,116 +1,174 @@
-# Synchronous Service Invocation
+# Synchronous Service Invocation — OrqueIO BPM Example
 
-This quickstart demonstrates how to implement a synchronous service invocation using a Java Delegate.
-We learn
+This example demonstrates how to implement a **synchronous service invocation** in OrqueIO using the `JavaDelegate` interface. The service task executes in the same thread as the process engine, participates in the same transaction, and triggers an automatic rollback on failure.
 
-* How to implement the Java Delegate Interface,
-* How to reference a Java Delegate Implementation from BPMN 2.0
+### Process diagram
 
-After having looked through the code, you will understand the behavior of a synchronous service invocation in case of
+![Process Model](docs/process-model.png)
 
-* Successful invocation
-* An invocation failure.
+| Step | Type | Role |
+|------|------|------|
+| Wait State Before | UserTask | Initial wait state — manually triggered |
+| Synchronous Service Task | ServiceTask | Executes JavaDelegate synchronously |
+| Wait State After | UserTask | Reached only after successful execution |
+
+---
 
 ## Requirements
 
-* Java 17+
+| Requirement | Version |
+|-------------|---------|
+| Java | 21+ |
+| Maven | 3.6+ |
 
-## Show me the important parts!
+---
 
-The process model is composed of three tasks:
+## Project structure
 
-![Process Model][1]
+```
+service-invocation-synchronous/
+├── pom.xml
+├── docs/                                              # Diagrams and screenshots
+└── src/
+    ├── main/
+    │   ├── java/.../invocation/sync/
+    │   │   └── SynchronousServiceTask.java            # JavaDelegate implementation
+    │   └── resources/
+    │       └── synchronousServiceInvocation.bpmn      # BPMN process definition
+    └── test/
+        ├── java/.../TestSynchronousServiceTask.java   # 2 test scenarios
+        └── resources/
+            └── orqueio.cfg.xml                        # In-memory engine configuration
+```
 
-* Wait State Before: initially the process instance is waiting here
-* Synchronous Service Task: the service task invoked by the process engine in a synchronous fashion
-* Wait State After: in case of successful invocation, the process instance will advance to here
+---
 
-### Create a Java Delegate Implementation
+## How it works
 
-Implement the `io.orqueio.bpm.engine.delegate.JavaDelegate` interface:
+### Core concept — JavaDelegate
 
-``` java
+`JavaDelegate` is the standard and simplest way to implement a ServiceTask in OrqueIO. The engine calls `execute()` synchronously on the **same thread** as the caller, blocking until the method returns.
+
+```
+Client Thread (e.g. taskService.complete())
+     │
+     │── advance to ServiceTask
+     │── invoke JavaDelegate.execute()  ←── blocking call
+     │       │
+     │       │  business logic runs here
+     │       │  (same thread, same transaction)
+     │       │
+     │◄──────┘  returns
+     │
+     │── advance to next activity
+```
+
+![Synchronous Service Invocation Sequence](docs/synchronous-service-invocation-sequence.png)
+
+---
+
+### 1. SynchronousServiceTask — JavaDelegate implementation
+
+Implements `io.orqueio.bpm.engine.delegate.JavaDelegate`:
+
+```java
 public class SynchronousServiceTask implements JavaDelegate {
 
-  // some constants provided to the unit test
-
-  public static final String SHOULD_FAIL_VAR_NAME = "shouldFail";
-  public static final String PRICE_VAR_NAME = "price";
-  public static final float PRICE = 199.00f;
-
   public void execute(DelegateExecution execution) {
+    boolean shouldFail = (Boolean) execution.getVariable(SHOULD_FAIL_VAR_NAME);
 
-    // Here you could either add the business logic of the service task
-    // or delegate to the actual business logic implementation provided
-    // by a different class.
-
-    // You could also invoke a Remote Service using REST, SOAP or EJB-Remote
-    // in a synchronous fashion.
-
-    // In this example, we
-    //  - either throw an exception
-    //  - or add a variable to the execution so that we can check for it in the unit test:
-
-    boolean shouldFailVarName = ((Boolean) execution.getVariable(SHOULD_FAIL_VAR_NAME));
-    if (shouldFailVarName) {
+    if (shouldFail) {
+      // Exception triggers transaction rollback — process returns to "Wait State Before"
       throw new RuntimeException("Service invocation failure!");
-
     } else {
+      // Set result variable — visible to subsequent steps in the process
       execution.setVariable(PRICE_VAR_NAME, PRICE);
-
     }
-
   }
-
 }
 ```
 
-### Reference the JavaDelegate from BPMN 2.0
+Referenced in the BPMN via `camunda:class`:
 
-The Java Deleagte can be referenced using the `class` attribute from the process engine Namespace:
-
-``` xml
+```xml
 <bpmn2:serviceTask id="ServiceTask_1"
-  camunda:class="sync.io.orqueio.quickstart.servicetask.invocation.SynchronousServiceTask"
-  name="Synchronous Service Task">
+    name="Synchronous Service Task"
+    camunda:class="io.orqueio.quickstart.servicetask.invocation.sync.SynchronousServiceTask">
 ```
 
-Using the Camunda Modeler, you can configure the service task using the properties panel:
+---
 
-![Configure Java Delegate using the Camunda Modeler][2]
+### 2. Transaction and failure behavior
 
+The synchronous model provides strong transactional guarantees:
 
-## How does it work?
+| Scenario | Process engine behavior |
+|----------|------------------------|
+| `execute()` succeeds | Process advances to "Wait State After", `price = 199.0` set |
+| `execute()` throws exception | **Transaction rollback** — process returns to last persistent state ("Wait State Before") |
 
-If you are impatient, just have a look at the [unit test][4].
+This is the key advantage over the asynchronous pattern: **failures are handled automatically via rollback**, with no need for external retry infrastructure.
 
-By default, the process engine uses the client thread to do work. In this example, the unit test
-triggers the process engine using the `completeTask()` method. The process engine uses that very thread to
-advance execution from the user task to the service task and invoke the `execute()` method provided by the
-`Java Delegate` implementation:
+> The stacktrace printed in the logs during the failure test is **expected** — it is logged by the engine when it intercepts the exception before rolling back.
 
-![Synchronous Service Invocation Sequence][3]
+---
 
-This blocks the process engine from advancing in the process
-instance until the call returns.
+## Running the example
 
-The synchronous nature of the invocation allows leveraging of the Thread Context:
-the `JavaDelegate` implementation may participate in the same transaction
-as the process engine, Security Context is propagated and so on.
+### Known requirement — Java 21
 
-The synchronous nature of the invocation also allows very simple failure
-handling strategy: if this delegate implementation throws an exception, it will be
-caught by the blocked thread and handled using a transaction rollback: the process
-engine will roll back to the last persistent state. In this example the last persistent
-state is the usertask preceding the service task ("Wait State Before").
+Maven must use JDK 21. If your default `JAVA_HOME` points to an older JDK, set it explicitly:
 
-## How to use it?
+**Linux / Git Bash:**
+```bash
+JAVA_HOME="/path/to/jdk-21" mvn clean test
+```
 
-1. Checkout the project with Git
-2. Import the project into your IDE
-3. Inspect the sources and run the unit test.
+**PowerShell:**
+```powershell
+$env:JAVA_HOME = 'C:\Path\To\jdk-21'
+mvn clean test
+```
 
-[1]: docs/process-model.png
-[2]: docs/service-orqueio-modeler.png
-[3]: docs/synchronous-service-invocation-sequence.png
-[4]: src/test/java/io/orqueio/quickstart/servicetask/invocation/sync/TestSynchronousServiceTask.java
+### Run the tests
+
+```bash
+mvn clean test
+```
+
+Expected output:
+```
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0
+```
+
+> The error stacktrace in the console output during tests is intentional — it is produced by the `shouldCallServiceWithFailure` test scenario.
+
+### Test scenarios
+
+| Test | `shouldFail` | Expected outcome |
+|------|-------------|-----------------|
+| `shouldCallServiceSuccessfully` | `false` | Process advances to "Wait State After", `price = 199.0` set |
+| `shouldCallServiceWithFailure` | `true` | Exception thrown, **rollback** — process stays in "Wait State Before", `price` not set |
+
+---
+
+## JavaDelegate vs SignallableActivityBehavior
+
+| | `JavaDelegate` (this example) | `SignallableActivityBehavior` |
+|-|-------------------------------|-------------------------------|
+| Execution | Synchronous — same thread | Asynchronous — suspends and waits |
+| Transaction | Shared with engine | Isolated from engine |
+| Failure handling | Automatic rollback | Manual (external retry logic) |
+| Complexity | Simple | Advanced |
+| Recommended for | Most service invocations | Long-running or external async services |
+
+---
+
+## Source files
+
+| File | Description |
+|------|-------------|
+| [synchronousServiceInvocation.bpmn](src/main/resources/synchronousServiceInvocation.bpmn) | BPMN process definition |
+| [SynchronousServiceTask.java](src/main/java/io/orqueio/quickstart/servicetask/invocation/sync/SynchronousServiceTask.java) | JavaDelegate implementation |
+| [TestSynchronousServiceTask.java](src/test/java/io/orqueio/quickstart/servicetask/invocation/sync/TestSynchronousServiceTask.java) | Unit tests |
+| [orqueio.cfg.xml](src/test/resources/orqueio.cfg.xml) | In-memory engine configuration |

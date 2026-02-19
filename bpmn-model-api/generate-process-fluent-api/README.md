@@ -1,183 +1,207 @@
-# Create process with fluent BPMN model API
+# BPMN Model API — Fluent Process Builder Example
 
-This quickstart demonstrates how to create a process with the BPMN model API. We
-will even learn how to create complex BPMN processes with the fluent builder API of the
-BPMN model API.
+This example demonstrates how to create a **complete BPMN process entirely in Java** using the OrqueIO fluent BPMN Model API — without any `.bpmn` XML file. The process is built programmatically, deployed to an in-memory engine, and executed within a single JUnit test.
 
-After this quickstart, you will be able to create processes with the
-BPMN model API, composed of the following elements:
+---
 
-* Start event
-* End event
-* Parallel gateway
-* Exclusive gateway
-* Service task
-* User task
-* Script task
+## Requirements
 
-## Invoice example process
+| Requirement | Version |
+|-------------|---------|
+| Java | 21+ |
+| Maven | 3.6+ |
 
-The process we want to create is similar to the invoice process from the [orqueio/examples][1].
-We aim to file it again with the executable process definition of the depicted invoice process.
+---
 
-![Invoice Process][3]
+## Project structure
 
-## Create the process with the BPMN model API
-
-Have a look at the JUnit test [CreateInvoiceProcessTest][4] for an example on how to create a BPMN process by using the BPMN model API.
-
-The entry point for the fluent builder API is the `Bpmn.createProcess()` method. To finish the
-building process we can call the `.done()` method at any time, which will return the
-created model instance containing the process.
-
-```java
-BpmnModelInstance modelInstance = Bpmn.createProcess()
-  .[...]
-  .done();
+```
+generate-process-fluent-api/
+├── pom.xml
+└── src/
+    ├── main/
+    │   └── java/.../invoice/service/
+    │       └── ArchiveInvoiceService.java    # JavaDelegate: archives the invoice
+    └── test/
+        ├── java/.../quickstart/
+        │   └── CreateInvoiceProcessTest.java # Builds process in Java, deploys and runs it
+        └── resources/
+            └── orqueio.cfg.xml               # In-memory engine configuration
 ```
 
-After calling `Bpmn.createProcess()`, we can set attributes for the process. For example, we can set the name.
+> No `.bpmn` file — the process definition is generated entirely by Java code at test time.
+
+---
+
+## The generated process
+
+The test builds and executes an invoice approval process:
+
+![Invoice Process](invoice.png)
+
+```
+[Start: Invoice received]
+        │
+[UserTask: Assign Approver]
+        │
+[UserTask: Approve Invoice] ◄──────────────────────────────┐
+        │                                                   │
+[Gateway: Invoice approved?]                                │
+  ├── yes → [UserTask: Prepare Bank Transfer]               │
+  │         → [ServiceTask: Archive Invoice]                │
+  │         → [End: Invoice processed]                      │
+  └── no  → [UserTask: Review Invoice]                      │
+            → [Gateway: Review successful?]                 │
+              ├── yes ──────────────────────────────────────┘ (loop)
+              └── no  → [End: Invoice not processed]
+```
+
+---
+
+## How it works
+
+### 1. Entry point — `Bpmn.createExecutableProcess()`
 
 ```java
 BpmnModelInstance modelInstance = Bpmn.createExecutableProcess("invoice")
-  .name("BPMN API Invoice Process")
-  .[...]
-  .done();
+    .orqueioHistoryTimeToLive(180)
+    .name("BPMN API Invoice Process")
+    .startEvent().name("Invoice received")
+    // ... add tasks, gateways, events
+    .done();
 ```
 
-The next step is to create a start event and set its attributes. In this example we set
-a name.
+`.done()` finalizes the builder and returns the `BpmnModelInstance`.
+
+### 2. Adding tasks
+
+Each method returns the builder, allowing chaining. OrqueIO-specific attributes use the `orqueio*` prefix:
 
 ```java
-BpmnModelInstance modelInstance = Bpmn.createExecutableProcess()
-  .name("BPMN API Invoice Process")
-  .startEvent()
-    .name("Invoice received")
-  .[...]
-  .done();
-```
-
-From now on we can create user, service or script tasks and parallel or exclusive gateways to
-model the process we want to create. For every task we can set attributes like the `id`, `name`, `camunda:formKey`,
-`camunda:assignee`, `camunda:class`, `camunda:candidateUsers` or `camunda:candidateGroups`.
-
-```java
-BpmnModelInstance modelInstance = Bpmn.createExecutableProcess()
-  .name("BPMN API Invoice Process")
-  .[...]
-  .userTask()
-    .name("Assign Approver")
-    .orqueioAssignee("demo")
-  .userTask()
-    .id("approveInvoice")
-    .name("Approve Invoice")
-  .[...]
-  .userTask()
-    .name("Prepare Bank Transfer")
+.userTask().name("Assign Approver").orqueioAssignee("demo")
+.userTask().id("approveInvoice").name("Approve Invoice")
+.userTask().name("Prepare Bank Transfer")
+    .orqueioFormKey("embedded:app:forms/prepare-bank-transfer.html")
     .orqueioCandidateGroups("accounting")
-  .serviceTask()
-    .name("Archive Invoice")
+.serviceTask().name("Archive Invoice")
     .orqueioClass("io.orqueio.bpm.example.invoice.service.ArchiveInvoiceService")
-  .[...]
-  .done();
 ```
 
-Gateways are also flow nodes which we can add after every task. We can set the
-gateway direction and conditions for outgoing sequence flows on exclusive gateways.
+### 3. Exclusive gateways and conditions
 
 ```java
-BpmnModelInstance modelInstance = Bpmn.createExecutableProcess()
-  .name("BPMN API Invoice Process")
-  .[...]
-  .userTask()
-    .id("approveInvoice")
-    .name("Approve Invoice")
-  .exclusiveGateway()
-    .name("Invoice approved?")
+.exclusiveGateway().name("Invoice approved?")
     .gatewayDirection(GatewayDirection.Diverging)
-  .condition("yes", "${approved}")
-  .userTask()
-    .name("Prepare Bank Transfer")
-    .orqueioCandidateGroups("accounting")
-  .[...]
-  .done();
+.condition("yes", "${approved}")
+.userTask().name("Prepare Bank Transfer")
+    // ... first path
+.endEvent().name("Invoice processed")
+.moveToLastGateway()              // jump back to the gateway
+.condition("no", "${!approved}")
+.userTask().name("Review Invoice") // second path
 ```
 
-If we add a gateway, we usually want to create parallel execution paths. To create this,
-the pattern is the following:
+### 4. Three navigation methods
 
-1. Create a gateway (optionally set an ID)
-2. Create the first execution path till another gateway or end event
-3. Jump back to a gateway to create a new execution path
- 1. Jump back to the last unique gateway with the method `.moveToLastGateway()`, or
- 2. Jump to a specific gateway by ID with the method `.moveToNode(gatewayId)`
+| Method | Purpose |
+|--------|---------|
+| `.moveToLastGateway()` | Jump back to the last gateway to add a new outgoing path |
+| `.moveToNode(id)` | Jump to any node by ID |
+| `.connectTo(id)` | Connect current position to an existing node (loops, joins) |
+
+The loop back to `approveInvoice` is created with `.connectTo()`:
 
 ```java
-BpmnModelInstance modelInstance = Bpmn.createExecutableProcess()
-  .name("BPMN API Invoice Process")
-  .[...]
-  .exclusiveGateway()
-    .name("Invoice approved?")
-    .gatewayDirection(GatewayDirection.Diverging)
-  .condition("yes", "${approved}")
-  .userTask()
-    .name("Prepare Bank Transfer")
-    .orqueioCandidateGroups("accounting")
-  .serviceTask()
-    .name("Archive Invoice")
-    .orqueioClass("io.orqueio.bpm.example.invoice.service.ArchiveInvoiceService")
-  .endEvent()
-    .name("Invoice processed")
-  .moveToLastGateway()
-  .condition("no", "${!approved}")
-  .userTask()
-    .name("Review Invoice")
-    .orqueioAssignee("demo")
-  .[...]
-  .done();
+.condition("yes", "${clarified}")
+.connectTo("approveInvoice")   // loops back to the Approve Invoice user task
 ```
 
-When we create parallel and diverging execution paths it is a common use case to
-connect an execution path to an existing element such as a parallel
-gateway (join) or a previous element in the process (loop). You can achieve that with the
-`.connectTo(id)` method.
+### 5. Deploy and execute
+
+The model instance is deployed directly without a file:
 
 ```java
-BpmnModelInstance modelInstance = Bpmn.createExecutableProcess()
-  .name("BPMN API Invoice Process")
-  .[...]
-  .userTask()
-    .id("approveInvoice")
-    .name("Approve Invoice")
-    .orqueioAssignee("${approver}")
-  .[...]
-  .exclusiveGateway()
-    .name("Review successful?")
-    .gatewayDirection(GatewayDirection.Diverging)
-  .condition("no", "${!clarified}")
-  .endEvent()
-    .name("Invoice not processed")
-  .moveToLastGateway()
-  .condition("yes", "${clarified}")
-  .connectTo("approveInvoice")
-  .done();
+processEngine.getRepositoryService()
+    .createDeployment()
+    .addModelInstance("invoice.bpmn", modelInstance)
+    .deploy();
+
+processEngine.getRuntimeService().startProcessInstanceByKey("invoice");
 ```
 
-## How to use it?
+### 6. Inspect the generated XML
 
-1. Checkout the project with Git
-2. Import the project into your IDE
-3. Inspect the sources and run the unit test
-4. Check if the JUnit test is green
-
-Note: Please note that since the process is generated by our code, no DI information is contained. If you want to see the
-process model XML, go to the end of the JUnit test [CreateInvoiceProcessTest][4] and uncomment the following line of code.
+To print the generated BPMN XML to the console, uncomment this line in the test:
 
 ```java
 Bpmn.writeModelToStream(System.out, modelInstance);
 ```
 
-[1]: https://github.com/orqueio/orqueio/tree/master/examples/invoice
-[3]: invoice.png
-[4]: src/test/java/org/orqueio/bpm/quickstart/CreateInvoiceProcessTest.java
-[5]: https://github.com/orqueio/orqueio/tree/master/model-api/bpmn-model
+---
+
+## Running the example
+
+### Known requirement — Java 21
+
+Maven must use JDK 21. If your default `JAVA_HOME` points to an older JDK, set it explicitly:
+
+**Linux / Git Bash:**
+```bash
+JAVA_HOME="/path/to/jdk-21" mvn clean test
+```
+
+**PowerShell:**
+```powershell
+$env:JAVA_HOME = 'C:\Path\To\jdk-21'
+mvn clean test
+```
+
+### Run the tests
+
+```bash
+mvn clean test
+```
+
+Expected output:
+```
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+```
+
+The log will also confirm the service task executed:
+```
+... Now archiving invoice
+```
+
+---
+
+## Test scenario
+
+| Step | Action | Assertion |
+|------|--------|-----------|
+| 1 | Start process | 1 active task: "Assign Approver" |
+| 2 | Complete "Assign Approver" | 1 active task: "Approve Invoice" |
+| 3 | Complete "Approve Invoice" with `approved=true` | 1 active task: "Prepare Bank Transfer" |
+| 4 | Complete "Prepare Bank Transfer" | `ArchiveInvoiceService.wasExecuted = true` |
+| 5 | After archive | 0 active process instances — process ended |
+
+---
+
+## BPMN file vs Fluent API
+
+| | `.bpmn` file | Fluent API (this project) |
+|-|-------------|--------------------------|
+| Process defined in | XML | Java code |
+| Dynamic generation | No | Yes |
+| Tooling (modeler) | Yes | No |
+| Versionable in code | Requires XML | Native Java |
+| Use case | Standard workflows | Generated/dynamic processes |
+
+---
+
+## Source files
+
+| File | Description |
+|------|-------------|
+| [CreateInvoiceProcessTest.java](src/test/java/io/orqueio/bpm/quickstart/CreateInvoiceProcessTest.java) | Builds, deploys and executes the invoice process using the Fluent API |
+| [ArchiveInvoiceService.java](src/main/java/io/orqueio/bpm/example/invoice/service/ArchiveInvoiceService.java) | JavaDelegate executed by the Archive Invoice service task |
+| [orqueio.cfg.xml](src/test/resources/orqueio.cfg.xml) | In-memory engine configuration |

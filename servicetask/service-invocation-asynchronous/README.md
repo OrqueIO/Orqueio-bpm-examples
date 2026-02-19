@@ -1,138 +1,197 @@
-# Asynchronous Service Invocation
+# Asynchronous Service Invocation — OrqueIO BPM Example
 
-> **Warning:** this example demonstrates an advanced usage pattern of the process engine based on internal (non-public) API. Similar behavior can be achieved using a send task and a receive task. The latter option is recommended in most usecases.
+> **Note:** This example uses the `SignallableActivityBehavior` internal API.
+> For most use cases, a **Send Task + Receive Task** pair is the recommended alternative.
 
-This quickstart demonstrates how to implement an asynchronous service invocation using a Signallable Activity Behavior.
-We learn
+This example demonstrates how to implement an **asynchronous service invocation** in OrqueIO using the `SignallableActivityBehavior` interface. The service task acts as a wait state: it sends a message to a queue, then suspends until it receives a callback signal from the external service.
 
-* How to implement the Signallable Activity Behavior Interface,
-* How to reference a Signallable Activity Behavior Implementation from BPMN 2.0
+### Process diagram
 
-After having looked through the code, you will understand the behavior of an asynchronous service invocation in case of
+![Process Model](docs/process-model.png)
 
-* Successful invocation
-* A service failure.
+| Step | Type | Role |
+|------|------|------|
+| Wait State Before | UserTask | Initial wait state — manually triggered |
+| Asynchronous Service Task | ServiceTask | Sends message to queue, then suspends |
+| Wait State After | UserTask | Reached only after successful service callback |
+
+---
 
 ## Requirements
 
-* Java 17+
+| Requirement | Version |
+|-------------|---------|
+| Java | 21+ |
+| Maven | 3.6+ |
 
-## Show me the important parts!
+---
 
-The process model is composed of three tasks:
+## Project structure
 
-![Process Model][1]
+```
+service-invocation-asynchronous/
+├── pom.xml
+├── docs/                                              # Diagrams and screenshots
+└── src/
+    ├── main/
+    │   ├── java/.../invocation/
+    │   │   ├── AsynchronousServiceTask.java           # SignallableActivityBehavior implementation
+    │   │   ├── BusinessLogic.java                     # External service logic (sends callback)
+    │   │   └── MockMessageQueue.java                  # Mock queue infrastructure
+    │   └── resources/
+    │       └── asynchronousServiceInvocation.bpmn     # BPMN process definition
+    └── test/
+        ├── java/.../TestAsynchronousServiceTask.java  # 2 test scenarios
+        └── resources/
+            └── orqueio.cfg.xml                        # In-memory engine configuration
+```
 
-* Wait State Before: initially, the process instance is waiting here.
-* Asynchronous Service Task: the service task invoked by the process engine in an asynchronous fashion.
-* Wait State After: in case of successful invocation, the process instance will advance to here.
+---
 
-### Create a Signallable Activity Behavior Implementation
+## How it works
 
-Create a new Java Class extending `io.orqueio.bpm.engine.impl.bpmn.behavior.AbstractBpmnActivityBehavior`:
+### Core concept — SignallableActivityBehavior
 
-``` java
+A standard `JavaDelegate` executes synchronously and immediately advances the process. `SignallableActivityBehavior` changes this: the engine **suspends** after `execute()` returns and only resumes when `signal()` is explicitly called externally.
+
+```
+Process Engine                         External Service
+     │                                        │
+     │── execute() ──── sends to queue ──────>│
+     │                                        │
+     │  [suspended, state flushed to DB]      │  (processes message)
+     │                                        │
+     │<── signal(executionId) ───────────────-│  (sends callback)
+     │                                        │
+     │  [resumes, moves to next activity]     │
+```
+
+![Asynchronous Service Invocation Sequence](docs/asynchronous-service-invocation-sequence.png)
+
+---
+
+### 1. AsynchronousServiceTask — wait state implementation
+
+Extends `AbstractBpmnActivityBehavior` and implements two lifecycle methods:
+
+```java
 public class AsynchronousServiceTask extends AbstractBpmnActivityBehavior {
 
-  public static final String EXECUTION_ID = "executionId";
-
   public void execute(final ActivityExecution execution) {
-
-    // Build the payload for the message:
+    // Build payload with execution ID as correlation key
     Map<String, Object> payload = new HashMap<>(execution.getVariables());
-    // Add the execution id to the payload:
     payload.put(EXECUTION_ID, execution.getId());
 
-    // Publish a message to the outbound message queue. This method returns after the message has
-    // been put into the queue. The actual service implementation (Business Logic) will not yet
-    // be invoked:
+    // Enqueue message — returns immediately
+    // Engine suspends here and waits for signal()
     MockMessageQueue.INSTANCE.send(new Message(payload));
-
   }
 
   public void signal(ActivityExecution execution, String signalName, Object signalData) {
-
-    // leave the service task activity:
+    // Called by the external service callback — resumes and leaves the activity
     leave(execution);
   }
-
 }
 ```
 
-The actual business logic is placed inside a different class and invoked by the message queue:
+Referenced in the BPMN via `camunda:class`:
 
-``` java
-public class BusinessLogic {
-
-  public static final String SHOULD_FAIL_VAR_NAME = "shouldFail";
-  public static final String PRICE_VAR_NAME = "price";
-  public static final float PRICE = 199.00f;
-
-  public static BusinessLogic INSTANCE = new BusinessLogic();
-
-  public void invoke(Message message, ProcessEngine processEngine) {
-
-    // Process the message and send a callback.
-
-    // Extract values from payload:     
-    Map<String, Object> requestPayload = message.getPayload();
-    // the execution id is used as correlation identifier 
-    String executionId = (String) requestPayload.get(AsynchronousServiceTask.EXECUTION_ID);
-    Boolean shouldFail = (Boolean) requestPayload.get(SHOULD_FAIL_VAR_NAME);
-
-    if (shouldFail) {
-      throw new RuntimeException("Service invocation failure!");
-
-    } else {
-      // Send the callback to the process engine. In this example we send 
-      // a synchronous callback. We could also send an asynchronous callback 
-      // using a message queue.
-      Map<String, Object> callbackPayload = Collections.singletonMap(PRICE_VAR_NAME, PRICE);
-      processEngine.getRuntimeService().signal(executionId, callbackPayload);
-
-    }
-  }
-
-}
-```
-
-### Reference the Signallable Activity Behavior from BPMN 2.0
-
-The Java Deleagte can be referenced using the `class` attribute from the process engine Namespace:
-
-``` xml
+```xml
 <bpmn2:serviceTask id="serviceTaskActivity"
-  camunda:class="io.orqueio.quickstart.servicetask.invocation.AsynchronousServiceTask"
-  name="Asynchronous Service Task">
+    name="Asynchronous Service Task"
+    camunda:class="io.orqueio.quickstart.servicetask.invocation.AsynchronousServiceTask">
 ```
 
-Using the Camunda Modeler, you can configure the service task using the properties panel:
+### 2. BusinessLogic — external service with callback
 
-![Configure Signallable Activity Behavior using the Camunda Modeler][2]
+Processes the message and signals the engine using `executionId` as the correlation key:
 
+```java
+public void invoke(Message message, ProcessEngine processEngine) {
+  String executionId = (String) message.getPayload().get(AsynchronousServiceTask.EXECUTION_ID);
+  Boolean shouldFail  = (Boolean) message.getPayload().get(SHOULD_FAIL_VAR_NAME);
 
-## Invocation Semantics
+  if (shouldFail) {
+    // Exception isolated — process engine is NOT affected, no rollback
+    throw new RuntimeException("Service invocation failure!");
+  } else {
+    // Send callback with result — resumes the waiting process instance
+    Map<String, Object> callbackPayload = Collections.singletonMap(PRICE_VAR_NAME, PRICE);
+    processEngine.getRuntimeService().signal(executionId, callbackPayload);
+  }
+}
+```
 
-The `SignallableActivityBehavior` provides two methods: `execute()` and `signal()`:
+### 3. MockMessageQueue — queue infrastructure
 
-![Asynchronous Service Invocation Sequence][3]
+A simple in-memory list simulating a real messaging system (JMS, RabbitMQ, Kafka, etc.):
 
-* The `execute(ActivityExecution)` method is invoked when the service task is entered. It is typically used for sending an asynchronous message to the actual service (Business Logic). When the method returns, the process engine will NOT continue execution. The `SignallableActivityBehavior` acts as a wait state.
+```java
+MockMessageQueue.INSTANCE.send(message);       // called by AsynchronousServiceTask
+MockMessageQueue.INSTANCE.getNextMessage();    // called by consumer (test or real worker)
+```
 
-* The `signal(ActivityExecution, String, Object)` method is invoked as the process engine is being triggered by the callback. The signal method is responsible for leaving the service task activity.
+In production, replace this with a transactional message broker to guarantee delivery.
 
-The asynchronous nature of the invocation decouples the process engine from the service implementation. The process engine does not propagate any thread context to the service implementation. Most prominently, the service implementation is not invoked in the context of the process engine transaction. On the contrary, from the point of view of the process engine, the `SignallableActivityBehavior` is a wait state: after the `execute()` method returns, the process engine will stop execution, flush the state of the execution to the database and wait for the callback to occur.
+---
 
-If a failure occurs in the service implementation (Business Logic), the failure will not cause the process engine to roll back. The reason being that the service implementation is not directly invoked by the process engine and does not participate in the process engine transaction.
+## Failure behavior
 
-Additionally, it has to be noted that `signal()` can't create an Incident if an error occurred while running the Business Logic.
+A key property of this pattern: **service failures are isolated from the process engine.**
 
-## How to use it?
+| Scenario | Process engine state |
+|----------|---------------------|
+| Service succeeds | `signal()` called → process advances to "Wait State After", `price = 199.0` set |
+| Service fails (exception) | Process stays suspended in service task — no rollback, no incident created |
 
-1. Checkout the project with Git
-2. Import the project into your IDE
-3. Inspect the sources and run the unit test.
+> `signal()` cannot automatically create an Incident. Error handling (retries, dead-letter queues, alerts) must be managed by the external service infrastructure.
 
-[1]: docs/process-model.png
-[2]: docs/service-orqueio-modeler.png
-[3]: docs/asynchronous-service-invocation-sequence.png
+---
+
+## Running the example
+
+### Known requirement — Java 21
+
+Maven must use JDK 21. If your default `JAVA_HOME` points to an older JDK, set it explicitly:
+
+**Linux / Git Bash:**
+```bash
+JAVA_HOME="/path/to/jdk-21" mvn clean test
+```
+
+**PowerShell:**
+```powershell
+$env:JAVA_HOME = 'C:\Path\To\jdk-21'
+mvn clean test
+```
+
+### Run the tests
+
+```bash
+mvn clean test
+```
+
+Expected output:
+```
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0
+```
+
+### Test scenarios
+
+| Test | `shouldFail` | Expected outcome |
+|------|-------------|-----------------|
+| `shouldCallServiceSuccessfully` | `false` | Process advances to "Wait State After", `price = 199.0` set |
+| `shouldCallServiceWithFailure` | `true` | Exception thrown, process stays suspended in service task |
+
+---
+
+## Source files
+
+| File | Description |
+|------|-------------|
+| [asynchronousServiceInvocation.bpmn](src/main/resources/asynchronousServiceInvocation.bpmn) | BPMN process definition |
+| [AsynchronousServiceTask.java](src/main/java/io/orqueio/quickstart/servicetask/invocation/AsynchronousServiceTask.java) | SignallableActivityBehavior implementation |
+| [BusinessLogic.java](src/main/java/io/orqueio/quickstart/servicetask/invocation/BusinessLogic.java) | External service logic with callback |
+| [MockMessageQueue.java](src/main/java/io/orqueio/quickstart/servicetask/invocation/MockMessageQueue.java) | Mock queue infrastructure |
+| [TestAsynchronousServiceTask.java](src/test/java/io/orqueio/quickstart/servicetask/invocation/sync/TestAsynchronousServiceTask.java) | Unit tests |
+| [orqueio.cfg.xml](src/test/resources/orqueio.cfg.xml) | In-memory engine configuration |

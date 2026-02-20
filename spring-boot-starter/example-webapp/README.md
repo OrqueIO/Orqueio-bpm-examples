@@ -55,7 +55,7 @@ The `orqueio-bpm-spring-boot-starter-webapp` includes the embedded engine + all 
 <dependency>
   <groupId>io.orqueio.bpm.springboot</groupId>
   <artifactId>orqueio-bpm-spring-boot-starter-webapp</artifactId>
-  <version>1.0.5</version>
+  <version>1.0.6</version>
 </dependency>
 ```
 

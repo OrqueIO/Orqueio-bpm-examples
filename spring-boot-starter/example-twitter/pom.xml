@@ -9,7 +9,7 @@
   <properties>
     <!-- spring -->
     <spring.boot.version>3.5.9</spring.boot.version>
-    <orqueio.spring.boot.starter.version>1.0.5</orqueio.spring.boot.starter.version>
+    <orqueio.spring.boot.starter.version>1.0.6</orqueio.spring.boot.starter.version>
 
     <twitter4j.version>4.0.7</twitter4j.version>
     <!-- maven -->

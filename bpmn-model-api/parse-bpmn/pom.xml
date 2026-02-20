@@ -10,7 +10,7 @@
   <name>Parse BPMN by model API</name>
 
   <properties>
-    <version.orqueio>1.0.7</version.orqueio>
+    <version.orqueio>1.0.3</version.orqueio>
     <version.junit>4.13.2</version.junit>
     <version.assertj>3.26.3</version.assertj>
 

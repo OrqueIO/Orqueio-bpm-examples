@@ -17,6 +17,7 @@
 package io.orqueio.bpm.exemple.dmn;
 
 import io.orqueio.bpm.engine.RuntimeService;
+import io.orqueio.bpm.exemple.dmn.service.OrderService;
 import io.orqueio.bpm.spring.boot.starter.annotation.EnableProcessApplication;
 import io.orqueio.bpm.spring.boot.starter.event.PostDeployEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,15 +34,27 @@ public class OrderApplication {
 
     @Autowired
     private RuntimeService runtimeService;
+
+    @Autowired
+    private OrderService orderService;
+
     public static void main(String... args) {
         SpringApplication.run(OrderApplication.class, args);
     }
+
     @EventListener
     public void onPostDeploy(PostDeployEvent event) {
+        String orderId = "ORD-101";
+
+        if (orderService.getOrderByOrderId(orderId).isPresent()) {
+            System.out.println("Order " + orderId + " already exists. Skipping process start.");
+            return;
+        }
+
         Map<String, Object> vars = new HashMap<>();
-        vars.put("orderId", "ORD-101");
-        vars.put("premium", "High");   
-        vars.put("status", "VIP");     
+        vars.put("orderId", orderId);
+        vars.put("premium", "High");
+        vars.put("status", "VIP");
 
         runtimeService.startProcessInstanceByKey("OrderProcess", vars);
         System.out.println("Processus OrderProcess démarré avec les variables : " + vars);

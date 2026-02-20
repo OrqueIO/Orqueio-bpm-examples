@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/process_engine?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3306/process_engine?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&sessionVariables=transaction_isolation='READ-COMMITTED'
     username: orqueio
     password: orqueio
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -13,7 +13,7 @@ spring:
         format_sql: true
     show-sql: true
 
-camunda:
+orqueio:
   bpm:
     database:
       schema-update: true
@@ -21,7 +21,9 @@ camunda:
       core-pool-size: 10
     authorization:
       enabled: true
-    skip-isolation-level-check: true
+    generic-properties:
+      properties:
+        skipIsolationLevelCheck: true
     admin-user:
       id: demo
       password: demo

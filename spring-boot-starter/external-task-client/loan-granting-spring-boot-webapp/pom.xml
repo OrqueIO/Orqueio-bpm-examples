@@ -11,7 +11,7 @@
   <packaging>jar</packaging>
 
   <properties>
-    <orqueio.platform.version>1.0.6</orqueio.platform.version>
+    <orqueio.platform.version>1.0.7</orqueio.platform.version>
     <spring.boot.version>3.5.9</spring.boot.version>
     <!-- maven -->
     <maven.compiler.release>21</maven.compiler.release>

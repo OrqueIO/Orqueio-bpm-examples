@@ -1,146 +1,68 @@
-# Orqueio BPM - Example Order Process
+# OrqueIO Order Process — BPMN + DMN Integration Example
 
-This project demonstrates the integration between a **BPMN process** and a **DMN decision** using **Orqueio BPM Engine** and **Spring Boot**.  
-It automates an order workflow that includes a DMN evaluation to determine the customer notification type and sends it automatically.
+This example demonstrates **BPMN process orchestration with DMN decision automation** using OrqueIO BPM and Spring Boot — automating an e-commerce order fulfillment workflow with intelligent customer notification routing.
 
-## Features
+---
 
-- Complete BPMN process: start event, service tasks, business rule task, user task, and end event.
-- Integrated DMN decision table to select the notification type.
-- MySQL database integration.
-- Simple HTML form interface to create an order.
+## What You Get
 
-## Prerequisites
+- ✅ **Complete Order Workflow** — BPMN process from order creation to fulfillment  
+- ✅ **DMN Decision Table** — Automatic notification type selection based on customer premium status  
+- ✅ **MySQL Integration** — Production-ready database configuration with Docker Compose  
+- ✅ **OrqueIO Webapps** — Cockpit, Tasklist, Admin UI  
+- ✅ **REST API** — Full OrqueIO REST API  
+- ✅ **JPA Entities** — Order persistence with Spring Data JPA  
 
-- Java 17 or 21
-- MySQL 8+
+---
 
-## Setup
+## Requirements
 
-### 1. Add Orqueio dependencies
+| Requirement | Version |
+|-------------|---------|
+| Java | 21+ |
+| Maven | 3.6+ |
+| MySQL | 8.0+ |
+| Docker | Optional |
 
-To embed the Orqueio Engine with Enterprise Webapps and REST API, add the following Maven coordinates to your `pom.xml`:
+---
 
-```xml
-<dependencyManagement>
-  <dependencies>
-    <dependency>
-      <groupId>io.orqueio.bpm</groupId>
-      <artifactId>orqueio-bom</artifactId>
-      <version>${orqueio.version}</version>
-      <type>pom</type>
-      <scope>import</scope>
-    </dependency>
-  </dependencies>
-</dependencyManagement>
+## Version Compatibility
 
-<dependencies>
-  <dependency>
-    <groupId>io.orqueio.bpm.springboot</groupId>
-    <artifactId>orqueio-bpm-spring-boot-starter-webapp</artifactId>
-  </dependency>
+| OrqueIO Version | Spring Boot Version |
+|-----------------|---------------------|
+| **2.0.0+**      | **4.0.0+**          |
 
-  <dependency>
-    <groupId>io.orqueio.bpm.springboot</groupId>
-    <artifactId>orqueio-bpm-spring-boot-starter-rest</artifactId>
-  </dependency>
+**Important**: OrqueIO 2.0.0+ requires Spring Boot 4.0.0 or higher.
 
-    <dependency>
-      <groupId>mysql</groupId>
-      <artifactId>mysql-connector-java</artifactId>
-      <version>8.0.33</version>
-    </dependency>
-</dependencies>
+---
+
+## Running the Application
+
+### 1. Start MySQL
+
+```bash
+docker-compose up -d
 ```
 
-### 2. Create the application class
+### 2. Build and run
 
-Create an application class annotated with `@SpringBootApplication` and `@EnableProcessApplication`.
-Include a `processes.xml` file under the `META-INF` directory.
-
-```java
-@SpringBootApplication
-@EnableProcessApplication
-public class OrderApplication {
-
-    @Autowired
-    private RuntimeService runtimeService;
-    public static void main(String... args) {
-        SpringApplication.run(OrderApplication.class, args);
-    }
-    @EventListener
-    public void onPostDeploy(PostDeployEvent event) {
-        Map<String, Object> vars = new HashMap<>();
-        vars.put("orderId", "ORD-1001");
-        vars.put("premium", "High");
-        vars.put("status", "VIP");
-
-        runtimeService.startProcessInstanceByKey("OrderProcess", vars);
-        System.out.println("Processus OrderProcess démarré avec les variables : " + vars);
-    }
-}
+```bash
+mvn clean install
+mvn spring-boot:run
 ```
 
-### 3. Add BPMN, DMN, and Forms
+### 3. Access
 
-Place your BPMN and DMN files in the classpath — they will be automatically deployed and registered by the process application.
-Add your HTML forms under the `/resources/static/forms` directory.
+Open **http://localhost:8080** (demo/demo)
 
-### 4. Add Delegate Classes
+---
 
-Implement your business logic inside Java Delegate classes.
+## Source Files
 
-Example:
-
-```java
-@Component("DecideNotification")
-public class EvaluateNotificationDecisionDelegate implements JavaDelegate {
-    @Override
-    public void execute(DelegateExecution execution) throws Exception {
-        String premium = (String) execution.getVariable("premium");
-        String status = (String) execution.getVariable("status");
-        VariableMap variables = Variables.createVariables()
-            .putValue("premium", premium)
-            .putValue("status", status);
-        DecisionService decisionService = execution.getProcessEngineServices().getDecisionService();
-        VariableMap result = (VariableMap) decisionService
-            .evaluateDecisionTableByKey("NotificationDecision")
-            .variables(variables)
-            .evaluate()
-            .get(0);
-        Object notification = result.get("notification");
-        execution.setVariable("notification", notification);
-    }
-}
-```
-
-Use the delegate in your BPMN model via the Implementation field: `camunda:delegateExpression="#{sendNotification}"`
-
-### 5. Configuration
-
-Adjust the src/main/resources/application.yaml file according to your preferences, and configure the database connection as shown below:
-
-```yaml
-spring:
-  datasource:
-    url: jdbc:mysql://localhost:3306/process_engine?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
-    username: orqueio
-    password: orqueio
-    driver-class-name: com.mysql.cj.jdbc.Driver
-  jpa:
-    hibernate:
-      ddl-auto: update
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQL8Dialect
-        format_sql: true
-    show-sql: true
-```
-
-### 6. Run the application and use Orqueio Platform
-
-You can build the application with `mvn clean install` and then run it with the `java -jar` command.
-You can also execute the application with `mvn spring-boot:run`.
-
-Then you can access the Orqueio Webapps in your browser: `http://localhost:8080/` (provide login/password
-from `application.yaml`, default: demo/demo).
+| File | Description |
+|------|-------------|
+| [OrderApplication.java](src/main/java/io/orqueio/bpm/exemple/dmn/OrderApplication.java) | Main application |
+| [EvaluateNotificationDecisionDelegate.java](src/main/java/io/orqueio/bpm/exemple/dmn/EvaluateNotificationDecisionDelegate.java) | DMN evaluation |
+| [OrderProcess.bpmn](src/main/resources/bpmn/OrderProcess.bpmn) | BPMN workflow |
+| [NotificationDecision.dmn](src/main/resources/dmn/NotificationDecision.dmn) | DMN decision table |
+| [docker-compose.yml](docker-compose.yml) | MySQL setup |

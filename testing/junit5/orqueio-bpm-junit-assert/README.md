@@ -1,45 +1,173 @@
-# Orqueio Platform Assert Example for JUnit 5
+# OrqueIO BPM Assert — JUnit 5 Example
 
-This project contains simple examples of how to write a unit test for Orqueio Platform using the [JUnit 5 extension][junit5] and [Orqueio Platform Assert][assert].
+This example demonstrates how to write unit tests for OrqueIO processes using **JUnit 5** (`junit-jupiter`) combined with **OrqueIO BPM Assert** (`orqueio-bpm-assert`).
 
-The project contains the following files:
+It shows two different ways to register the `ProcessEngineExtension` in a JUnit 5 test class.
 
-```
-src/
-├── main
-│   ├── java
-│   └── resources
-└── test
-    ├── java
-    │   └── org
-    │       └── orqueio
-    │           └── bpm
-    │               └── unittest                                               (1)
-    │                   ├── ProcessEngineExtensionExtendWithTest.java
-    │                   └── ProcessEngineExtensionRegisterExtensionTest.java
-    └── resources
-        ├── orqueio.cfg.xml                                                    (2)
-        └── testProcess.bpmn                                                   (3)
-```
-Explanation:
+---
 
-* (1) A folder containing two java class. Each class contains a JUnit Test. They use the `ProcessEngineExtension` for bootstrapping the process engine. Each test demonstrates one way to set up the `ProcessEngineExtension`. Both tests also use [orqueio-bpm-assert][assert] to make your test life easier.
-* (2) Configuration file for the process engine.
-* (3) An example BPMN process.
+## Requirements
 
-## Prerequisites
-* Java 17/21
+| Requirement | Version |
+|-------------|---------|
+| Java | 21+ |
+| Maven | 3.6+ |
 
-## Running the test with maven
+---
 
-In order to run the testsuite with maven you can use:
+## Project structure
 
 ```
+orqueio-bpm-junit-assert/
+├── pom.xml
+└── src/
+    └── test/
+        ├── java/.../unittest/
+        │   ├── ProcessEngineExtensionExtendWithTest.java      # Extension via @ExtendWith
+        │   └── ProcessEngineExtensionRegisterExtensionTest.java # Extension via @RegisterExtension
+        └── resources/
+            ├── testProcess.bpmn     # Simple process: Start → UserTask → End
+            ├── orqueio.cfg.xml      # In-memory H2 engine configuration
+            └── logback-test.xml     # Logging configuration
+```
+
+---
+
+## The process under test
+
+A minimal BPMN process with a single user task:
+
+```
+[Start] → [UserTask: Handle Request] → [End]
+```
+
+---
+
+## How it works
+
+### JUnit 4 vs JUnit 5 integration
+
+| | JUnit 4 (`testing/assert`) | JUnit 5 (this project) |
+|-|---------------------------|------------------------|
+| Engine bootstrap | `@Rule ProcessEngineRule` | `ProcessEngineExtension` |
+| Lifecycle hooks | `@Before` / `@After` | `@BeforeEach` / `@AfterEach` |
+| Registration | `@Rule` field | `@ExtendWith` or `@RegisterExtension` |
+| Test annotation | `@Test` (JUnit 4) | `@Test` (JUnit Jupiter) |
+
+---
+
+### Approach 1 — `@ExtendWith` (class-level annotation)
+
+The extension is declared at the class level. Services are accessed via the static methods of `BpmnAwareTests`.
+
+```java
+@ExtendWith(ProcessEngineExtension.class)
+public class ProcessEngineExtensionExtendWithTest {
+
+  @Test
+  @Deployment(resources = {"testProcess.bpmn"})
+  public void shouldExecuteProcess() {
+    ProcessInstance processInstance = runtimeService().startProcessInstanceByKey("testProcess");
+
+    assertThat(processInstance).isActive();
+    assertThat(processInstanceQuery().count()).isEqualTo(1);
+    assertThat(task(processInstance)).isNotNull();
+
+    complete(task(processInstance));
+
+    assertThat(processInstance).isEnded();
+  }
+}
+```
+
+- Engine is configured from `orqueio.cfg.xml`
+- `runtimeService()`, `task()`, `complete()` are static imports from `BpmnAwareTests`
+- `@Deployment` deploys the BPMN for the duration of the test, then undeploys it
+
+---
+
+### Approach 2 — `@RegisterExtension` (instance field)
+
+The extension is declared as an instance field. Services are accessed via `extension.getXxxService()`.
+
+```java
+public class ProcessEngineExtensionRegisterExtensionTest {
+
+  @RegisterExtension
+  ProcessEngineExtension extension = ProcessEngineExtension.builder().build();
+
+  @Test
+  @Deployment(resources = {"testProcess.bpmn"})
+  public void shouldExecuteProcess() {
+    ProcessInstance processInstance = extension.getRuntimeService()
+        .startProcessInstanceByKey("testProcess");
+
+    assertThat(processInstance).isActive();
+    complete(task(processInstance));
+    assertThat(processInstance).isEnded();
+  }
+}
+```
+
+- Engine can be configured programmatically via `ProcessEngineExtension.builder()`
+- Useful when you need direct access to the extension object or programmatic configuration
+
+---
+
+### Choosing between the two approaches
+
+| | `@ExtendWith` | `@RegisterExtension` |
+|-|---------------|----------------------|
+| Configuration source | `orqueio.cfg.xml` | `orqueio.cfg.xml` or builder |
+| Service access | Static methods (`BpmnAwareTests.*`) | Instance methods (`extension.getXxxService()`) |
+| Typical use case | Standard tests | Tests needing programmatic engine setup |
+
+---
+
+## Running the example
+
+### Known requirement — Java 21
+
+Maven must use JDK 21. If your default `JAVA_HOME` points to an older JDK, set it explicitly:
+
+**Linux / Git Bash:**
+```bash
+JAVA_HOME="/path/to/jdk-21" mvn clean test
+```
+
+**PowerShell:**
+```powershell
+$env:JAVA_HOME = 'C:\Path\To\jdk-21'
 mvn clean test
 ```
 
-## Further reading
-If you want to read more about [Orqueio Platform Assert][assert] or the [Orqueio JUnit 5 extension], go to the [testing user guide](https://docs.orqueio.io/manual/7.23/user-guide/testing/) in the Orqueio docs.
+### Run the tests
 
-[junit5]: https://github.com/orqueio/orqueio/tree/master/test-utils/junit5-extension
-[assert]: https://github.com/orqueio/orqueio/tree/master/test-utils/assert
+```bash
+mvn clean test
+```
+
+Expected output:
+```
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0
+```
+
+---
+
+## Test scenarios
+
+| Test class | Approach | What it verifies |
+|------------|----------|-----------------|
+| `ProcessEngineExtensionExtendWithTest` | `@ExtendWith` | Process starts active, single instance, task exists, completes, ends |
+| `ProcessEngineExtensionRegisterExtensionTest` | `@RegisterExtension` | Same flow using `extension.getRuntimeService()` |
+
+---
+
+## Source files
+
+| File | Description |
+|------|-------------|
+| [ProcessEngineExtensionExtendWithTest.java](src/test/java/io/orqueio/bpm/unittest/ProcessEngineExtensionExtendWithTest.java) | Test using `@ExtendWith(ProcessEngineExtension.class)` |
+| [ProcessEngineExtensionRegisterExtensionTest.java](src/test/java/io/orqueio/bpm/unittest/ProcessEngineExtensionRegisterExtensionTest.java) | Test using `@RegisterExtension` |
+| [testProcess.bpmn](src/test/resources/testProcess.bpmn) | Minimal BPMN process: Start → UserTask → End |
+| [orqueio.cfg.xml](src/test/resources/orqueio.cfg.xml) | In-memory H2 engine configuration |

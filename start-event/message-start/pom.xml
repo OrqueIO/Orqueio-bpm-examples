@@ -1,50 +1,42 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.1 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.1 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
+
   <groupId>io.orqueio.bpm.quickstart</groupId>
-  <artifactId>orqueio-quickstart-create-invoice-process</artifactId>
-  <packaging>war</packaging>
-  <name>Create Invoice Process</name>
-  <version>1.0-SNAPSHOT</version>
+  <artifactId>orqueio-quickstart-message-start</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
+  <name>Start Process By Message</name>
 
   <properties>
     <version.orqueio>2.0.2</version.orqueio>
     <version.junit>4.13.2</version.junit>
     <version.h2>2.3.232</version.h2>
-    <version.slf4j>1.7.26</version.slf4j>
+    <version.slf4j>1.7.36</version.slf4j>
 
-    <!-- maven -->
     <maven.compiler.release>21</maven.compiler.release>
-    <maven.compiler.plugin.version>3.13.0</maven.compiler.plugin.version>
-    <maven.war.plugin.version>3.4.0</maven.war.plugin.version>
-
+    <maven.compiler.version>3.11.0</maven.compiler.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <failOnMissingWebXml>false</failOnMissingWebXml>
   </properties>
-
 
   <dependencyManagement>
     <dependencies>
       <dependency>
         <groupId>io.orqueio.bpm</groupId>
         <artifactId>orqueio-bom</artifactId>
-        <version>${version.orqueio}</version>
-        <type>pom</type>
         <scope>import</scope>
+        <type>pom</type>
+        <version>${version.orqueio}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
 
   <dependencies>
-
     <dependency>
       <groupId>io.orqueio.bpm</groupId>
       <artifactId>orqueio-engine</artifactId>
       <scope>provided</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>io.orqueio.bpm.model</groupId>
-      <artifactId>orqueio-bpmn-model</artifactId>
     </dependency>
 
     <dependency>
@@ -71,20 +63,17 @@
   </dependencies>
 
   <build>
-    <plugins>
-      <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>${maven.compiler.plugin.version}</version>
-      </plugin>
-	    <plugin>
-        <artifactId>maven-war-plugin</artifactId>
-        <version>${maven.war.plugin.version}</version>
-		    <configuration>
-          <failOnMissingWebXml>false</failOnMissingWebXml>
-        </configuration>
-      </plugin>
-    </plugins>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>${maven.compiler.version}</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
   </build>
+
   <repositories>
     <repository>
       <id>central-portal-snapshots</id>
@@ -95,4 +84,5 @@
       </snapshots>
     </repository>
   </repositories>
+
 </project>

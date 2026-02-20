@@ -1,24 +1,59 @@
-# Orqueio Dmn Engine in a Java Main Method
+# DMN Engine — Java Main Method Example
 
-This example demonstrates how to use the [Orqueio DMN engine] as library
-in a custom application. The DMN Engine is added to the example as a Maven dependency.
-The example contains a Java class with a Main Method in which the DMN Engine is bootstraped and
-used to execute a decision table loaded from the classpath.
+This example demonstrates how to use the OrqueIO DMN engine as a **standalone library** in a plain Java application. There is no process engine, no Spring Boot — just the DMN engine bootstrapped directly in a `main()` method.
 
-## The used DMN Decision Table
+---
 
-The example uses a decision table from the [DMN tutorial] to decided which dish should be served to our guests for dinner:
+## Requirements
 
-![Dish Decision]
+| Requirement | Version |
+|-------------|---------|
+| Java | 21+ |
+| Maven | 3.6+ |
 
-You can find the corresponding DMN XML file [dish-decision.dmn11.xml] in the
-resources. To modify it you can use the [Camunda Modeler].
+---
 
-## Code Walkthrough
+## Project structure
 
-### Maven Dependencies
+```
+dmn-engine-java-main-method/
+├── pom.xml
+└── src/
+    ├── main/
+    │   ├── java/.../
+    │   │   └── DishDecider.java             # Main class: bootstraps DMN engine, evaluates decision
+    │   └── resources/.../
+    │       ├── dish-decision.dmn11.xml      # DMN decision table: Dish
+    │       └── dish-decision.png            # Decision table diagram
+    └── test/
+        └── java/.../
+            └── DishDecisionTest.java        # 3 unit tests
+```
 
-Include the DMN engine BOM for dependency management:
+---
+
+## The Dish decision table
+
+The DMN file models a single decision: **which dish to serve** based on the season and number of guests.
+
+Hit policy: **UNIQUE** — exactly one rule matches per evaluation.
+
+| Season | Guests | Dish |
+|--------|--------|------|
+| Fall | ≤ 8 | Spareribs |
+| Winter | ≤ 8 | Roastbeef |
+| Spring | ≤ 4 | Dry Aged Gourmet Steak |
+| Spring | 5–8 | Steak |
+| Fall / Winter / Spring | > 8 | Stew |
+| Summer | any | Light Salad and a nice Steak |
+
+---
+
+## How it works
+
+### 1. Maven dependency
+
+Add the DMN engine BOM for version management and the engine itself:
 
 ```xml
 <dependencyManagement>
@@ -32,175 +67,138 @@ Include the DMN engine BOM for dependency management:
     </dependency>
   </dependencies>
 </dependencyManagement>
+
+<dependencies>
+  <dependency>
+    <groupId>io.orqueio.bpm.dmn</groupId>
+    <artifactId>orqueio-engine-dmn</artifactId>
+  </dependency>
+</dependencies>
 ```
 
-Add the DMN engine as a dependency:
-
-```xml
-<dependency>
-  <groupId>io.orqueio.bpm.dmn</groupId>
-  <artifactId>orqueio-engine-dmn</artifactId>
-</dependency>
-```
-
-Include some slf4j backend. The simplest option is to not add a backend at all but simply redirect logging to jdk logging:
-
-```xml
-<!-- redirect slf4j logging to jdk logging -->
-<dependency>
-  <groupId>org.slf4j</groupId>
-  <artifactId>slf4j-jdk14</artifactId>
-  <version>2.0.16</version>
-</dependency>
-```
-
-### Bootstrap the DMN Engine in a Main Method
-
-The Java Class [DishDecider.java] has a main method which bootstraps the DMN Engine using the
-default configuration:
+### 2. Bootstrap the DMN engine
 
 ```java
-public class DishDecider {
-
-  public static void main(String[] args) {
-
-    // create a new default DMN engine
-    DmnEngine dmnEngine = DmnEngineConfiguration
-      .createDefaultDmnEngineConfiguration()
-      .buildEngine();
-
-  }
-
-}
-
+DmnEngine dmnEngine = DmnEngineConfiguration
+    .createDefaultDmnEngineConfiguration()
+    .buildEngine();
 ```
 
-### Parsing and Executing the Decision Table
+The engine is created once. It can be reused for multiple evaluations.
 
-Once the DMN Engine is bootstrapped, it can be used to first parse a decision loaded from the classpath:
+### 3. Parse the decision
 
 ```java
-InputStream inputStream = DishDecider.class.getResourceAsStream("dish-decision.dmn11.xml");
+InputStream inputStream = DishDecider.class
+    .getResourceAsStream("dish-decision.dmn11.xml");
 
 DmnDecision decision = dmnEngine.parseDecision("decision", inputStream);
-
 ```
 
-The parsed DmnDecsion can be cached and executed multiple times.
+The parsed `DmnDecision` can be cached and evaluated multiple times.
 
-In order to execute it, it needs to be passed to the `evaluateDecisionTable` method:
+### 4. Evaluate the decision
 
 ```java
+VariableMap variables = Variables
+    .putValue("season", "Winter")
+    .putValue("guestCount", 4);
+
 DmnDecisionTableResult result = dmnEngine.evaluateDecisionTable(decision, variables);
+String dish = result.getSingleResult().getSingleEntry();
 ```
 
-The File [DishDecider.java] contains the complete source code including variable handling and parsing
-of the command line arguments.
+`getSingleResult().getSingleEntry()` is used because the hit policy is UNIQUE — exactly one rule matches.
 
-### Writing Tests with JUnit
+### 5. Testing with DmnEngineRule
 
-> Note: You can read more about decision testing in our [User Guide].
-
-[DishDecisionTest.java] uses the `DmnEngineRule` JUnit Rule to create a default DMN engine and than test different
-inputs on the decision:
+`DishDecisionTest` uses `DmnEngineRule` — a JUnit 4 rule that bootstraps a default DMN engine for each test:
 
 ```java
-public class DishDecisionTest {
-
-  @Rule
-  public DmnEngineRule dmnEngineRule = new DmnEngineRule();
-
-  public DmnEngine dmnEngine;
-  public DmnDecision decision;
-
-  @Before
-  public void parseDecision() {
-    InputStream inputStream = DishDecisionTest.class.getResourceAsStream("dish-decision.dmn11.xml");
-    dmnEngine = dmnEngineRule.getDmnEngine();
-    decision = dmnEngine.parseDecision("decision", inputStream);
-  }
-
-  @Test
-  public void shouldServeDryAgedInSpringForFewGuests() {
-    VariableMap variables = Variables
-      .putValue("season", "Spring")
-      .putValue("guestCount", 4);
-
-    DmnDecisionTableResult result = dmnEngine.evaluateDecisionTable(decision, variables);
-    assertEquals("Dry Aged Gourmet Steak", result.getSingleResult().getSingleEntry());
-  }
-
-  @Test
-  public void shouldServeSteakInSpringForSomeGuests() {
-    VariableMap variables = Variables
-      .putValue("season", "Spring")
-      .putValue("guestCount", 7);
-
-    DmnDecisionTableResult result = dmnEngine.evaluateDecisionTable(decision, variables);
-    assertEquals("Steak", result.getSingleResult().getSingleEntry());
-  }
-
-  @Test
-  public void shouldServeStewInSpringForMayGuests() {
-    VariableMap variables = Variables
-      .putValue("season", "Spring")
-      .putValue("guestCount", 20);
-
-    DmnDecisionTableResult result = dmnEngine.evaluateDecisionTable(decision, variables);
-    assertEquals("Stew", result.getSingleResult().getSingleEntry());
-  }
-
-}
+@Rule
+public DmnEngineRule dmnEngineRule = new DmnEngineRule();
 ```
 
-## Running the Example
+---
 
-The example expects two arguments. First, the current season of the year and second the number of expected guests.
+## Running the example
 
-To run it you can either use maven:
+### Known requirement — Java 21
 
+Maven must use JDK 21. If your default `JAVA_HOME` points to an older JDK, set it explicitly:
+
+**Linux / Git Bash:**
+```bash
+JAVA_HOME="/path/to/jdk-21" mvn clean test
 ```
+
+**PowerShell:**
+```powershell
+$env:JAVA_HOME = 'C:\Path\To\jdk-21'
+mvn clean test
+```
+
+### Run the tests
+
+```bash
+mvn clean test
+```
+
+Expected output:
+```
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0
+```
+
+### Run the main class directly
+
+```bash
 mvn compile exec:java
 ```
 
-This will compile the project and execute it with the arguments
-`Winter` for the current season and `4` for the number of expected guests.
-
-This should produce an output which contains:
+Runs with default arguments `Winter 4` and prints:
 
 ```
 Dish Decision:
-        I would recommend to serve: Roastbeef
+    I would recommend to serve: Roastbeef
 ```
 
-You can specify other arguments with maven. For example for your summer party:
+Custom arguments:
 
-```
+```bash
 mvn compile exec:java -Dexec.args="Summer 32"
 ```
 
-You can also create a executable Java jar file with:
+### Build an executable JAR
 
-```
+```bash
 mvn clean package
-```
-
-This will produce a `DishDecider.jar` file in the `target` folder. You can
-than call it like any other jar file:
-
-```
 java -jar target/DishDecider.jar Spring 6
-
-Dish Decision:
-        I would recommend to serve: Steak
 ```
 
+---
 
-[Orqueio DMN engine]: https://docs.orqueio.io/manual/7.23/user-guide/dmn-engine/
-[DMN tutorial]: https://orqueio.com/dmn/
-[Dish Decision]: src/main/resources/io/orqueio/bpm/example/dish-decision.png
-[dish-decision.dmn11.xml]: src/main/resources/io/orqueio/bpm/example/dish-decision.dmn11.xml
-[Camunda Modeler]: https://orqueio.com/products/orqueio-bpm/modeler/
-[DishDecider.java]: src/main/java/io/orqueio/bpm/example/DishDecider.java
-[User Guide]: https://docs.orqueio.io/manual/7.23/user-guide/dmn-engine/testing/
-[DishDecisionTest.java]: src/test/java/io.orqueio/bpm/example/DishDecisionTest.java
+## Test scenarios
+
+| Test | Season | Guests | Expected dish |
+|------|--------|--------|---------------|
+| `shouldServeDryAgedInSpringForFewGuests` | Spring | 4 | Dry Aged Gourmet Steak |
+| `shouldServeSteakInSpringForSomeGuests` | Spring | 7 | Steak |
+| `shouldServeStewInSpringForManyGuests` | Spring | 20 | Stew |
+
+---
+
+## UNIQUE vs COLLECT hit policy
+
+This example uses hit policy **UNIQUE**: at most one rule can match, and the result is retrieved with `getSingleResult().getSingleEntry()`.
+
+The [dmn-engine-drg](../dmn-engine-drg/) example uses hit policy **COLLECT**: multiple rules can match, and results are retrieved with `collectEntries("columnName")`.
+
+---
+
+## Source files
+
+| File | Description |
+|------|-------------|
+| [dish-decision.dmn11.xml](src/main/resources/io/orqueio/bpm/example/dish-decision.dmn11.xml) | DMN decision table: Dish |
+| [DishDecider.java](src/main/java/io/orqueio/bpm/example/DishDecider.java) | Main class: bootstraps the DMN engine and evaluates the decision |
+| [DishDecisionTest.java](src/test/java/io/orqueio/bpm/example/DishDecisionTest.java) | Unit tests using DmnEngineRule |

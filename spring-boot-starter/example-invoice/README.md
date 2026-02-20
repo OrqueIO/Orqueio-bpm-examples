@@ -1,59 +1,98 @@
-# The Orqueio Invoice example in a Spring Boot Web Application
+# OrqueIO Invoice Example — Spring Boot Edition
 
-The Invoice example is provided in all of the pre-packaged distros that Orqueio provides.
-This Orqueio example provides the Invoice application inside a Spring Boot application together with all
-the necessary adjustments needed to run it out of the box. This includes:
+This example demonstrates the classic **OrqueIO Invoice approval workflow** packaged as a Spring Boot application — providing a complete, production-ready BPM solution with webapps and REST API.
 
-* The Orqueio EE Webapps
-* The Orqueio Rest API
+---
 
-You will need:
+## What You Get
 
-* credentials to access the enterprise repo in your `settings.xml`
-* a valid orqueio-license key file in your classpath in the file `orqueio-license.txt`
+- ✅ **Invoice Approval Workflow** — Complete BPMN process with user tasks, service tasks, and DMN decisions
+- ✅ **OrqueIO Webapps** — Cockpit, Tasklist, Admin UI
+- ✅ **REST API** — Full OrqueIO REST API at `/engine-rest`
+- ✅ **Embedded HTML Forms** — Invoice creation, approval, and review forms
+- ✅ **H2 In-Memory Database** — Zero-config out-of-the-box experience
+- ✅ **Pre-configured Admin User** — `demo/demo`
 
-## Prerequisites
-* Java 17/21
+---
 
-## How is it done
+## Requirements
 
-1. To embed the Orqueio Engine with the Enterprise webapps and Rest API you must add the following maven coordinates 
-to your `pom.xml`:
+| Requirement | Version |
+|-------------|---------|
+| Java | 21+ |
+| Maven | 3.6+ |
 
-```xml
-...
-  <properties>
-    <orqueio.version>7.23.0-ee</orqueio.version>
-  </properties>
+---
 
-  <dependencyManagement>
-    <dependencies>
-      ...
-      <dependency>
-        <groupId>io.orqueio.bpm</groupId>
-        <artifactId>orqueio-bom</artifactId>
-        <version>${orqueio.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
+## Version Compatibility
 
-  <dependencies>
-    <dependency>
-      <groupId>io.orqueio.bpm.springboot</groupId>
-      <artifactId>orqueio-bpm-spring-boot-starter-webapp</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.orqueio.bpm.springboot</groupId>
-      <artifactId>orqueio-bpm-spring-boot-starter-rest</artifactId>
-    </dependency>
-    ...
-  </dependencies>
-...
+| OrqueIO Version | Spring Boot Version |
+|-----------------|---------------------|
+| **2.0.0+**      | **4.0.0+**          |
+
+**Important**: OrqueIO 2.0.0+ requires Spring Boot 4.0.0 or higher.
+
+---
+
+## Project Structure
+
+```
+example-invoice/
+├── pom.xml                                    # OrqueIO Invoice + Spring Boot
+└── src/
+    ├── main/
+    │   ├── java/.../invoice/
+    │   │   └── Application.java               # @SpringBootApplication + Invoice deployment
+    │   └── resources/
+    │       ├── META-INF/
+    │       │   └── processes.xml              # Process application descriptor
+    │       ├── static/forms/                  # Invoice HTML forms
+    │       └── application.yaml               # Admin user + datasource config
 ```
 
-2. For the example Invoice application, the following dependency needs to be added in your `pom.xml` file:
+---
+
+## The Invoice Workflow
+
+```
+[Start: Invoice Received]
+   │
+[UserTask: Assign Approver]
+   │
+[UserTask: Approve Invoice] ◄──────────────────────────────┐
+   │                                                       │
+[Gateway: Approved?]                                        │
+  ├── Yes → [UserTask: Prepare Bank Transfer]              │
+  │         → [ServiceTask: Archive Invoice]               │
+  │         → [End: Invoice Processed]                     │
+  └── No  → [UserTask: Review Invoice]                     │
+            → [Gateway: Review Successful?]                │
+              ├── Yes ──────────────────────────────────────┘ (loop)
+              └── No  → [End: Invoice Not Processed]
+```
+
+---
+
+## How It Works
+
+### 1. Add OrqueIO Spring Boot Starters
+
+The project uses two starters for complete functionality:
+
+```xml
+<dependency>
+  <groupId>io.orqueio.bpm.springboot</groupId>
+  <artifactId>orqueio-bpm-spring-boot-starter-webapp</artifactId>
+</dependency>
+<dependency>
+  <groupId>io.orqueio.bpm.springboot</groupId>
+  <artifactId>orqueio-bpm-spring-boot-starter-rest</artifactId>
+</dependency>
+```
+
+### 2. Add the Invoice Example Dependency
+
+The OrqueIO Invoice example is provided as a reusable artifact:
 
 ```xml
 <dependency>
@@ -61,23 +100,17 @@ to your `pom.xml`:
   <artifactId>orqueio-example-invoice-jakarta</artifactId>
   <version>${orqueio.version}</version>
   <classifier>classes</classifier>
-  <scope>compile</scope>
 </dependency>
 ```
 
-3. An "application" class annotated with `@SpringBootApplication` needs to be created. In order to have the Invoice 
-process application registered, add the annotation `@EnableProcessApplication` to the same class, as well as include 
-an empty `processes.xml` file to your `META-INF` folder. To ensure that all of necessary BPMN and DMN files are deployed, 
-add the following code in your "application" class:
+### 3. Deploy Invoice Processes Programmatically
+
+The main application class deploys the Invoice BPMN and DMN files at startup:
 
 ```java
 @SpringBootApplication
 @EnableProcessApplication
 public class Application {
-
-  public static void main(String... args) {
-    SpringApplication.run(Application.class, args);
-  }
 
   @Autowired
   protected ProcessEngine processEngine;
@@ -88,37 +121,212 @@ public class Application {
   public void deployInvoice() {
     ClassLoader classLoader = invoicePa.getClass().getClassLoader();
 
-    if(processEngine.getIdentityService().createUserQuery().list().isEmpty()) {
-      processEngine.getRepositoryService()
-          .createDeployment()
-          .addInputStream("invoice.v1.bpmn", classLoader.getResourceAsStream("invoice.v1.bpmn"))
-          .addInputStream("reviewInvoice.bpmn", classLoader.getResourceAsStream("reviewInvoice.bpmn"))
-          .deploy();
-    }
+    processEngine.getRepositoryService()
+        .createDeployment()
+        .addInputStream("invoice.v1.bpmn", classLoader.getResourceAsStream("invoice.v1.bpmn"))
+        .addInputStream("reviewInvoice.bpmn", classLoader.getResourceAsStream("reviewInvoice.bpmn"))
+        .deploy();
   }
 
   @EventListener
   public void onPostDeploy(PostDeployEvent event) {
     invoicePa.startFirstProcess(event.getProcessEngine());
   }
-
 }
 ```
 
-4. You can also put additional BPMN, CMMN and DMN files in your classpath, they will be automatically deployed and 
-registered within the process application. Forms HTML needs to be added in the `/resources/static/forms` directory.
+### 4. Configure Admin User
 
-5. If you want your Camunda license automatically used on Engine startup, just put the file with the name 
-`orqueio-license.txt` on your classpath. 
+In `application.yaml`:
 
-6. Adjust the `src/main/resources/application.yaml` file according to your preferences. The default setup will use an
- embedded H2 instance.
+```yaml
+camunda.bpm.admin-user:
+  id: demo
+  password: demo
+  firstName: Demo
+```
 
-## Run the application and use Orqueio Platform
+### 5. Add Invoice HTML Forms
 
-You can build the application with `mvn clean install` and then run it with the `java -jar` command.
-You can also execute the application with `mvn spring-boot:run`.
+Place form HTML files in `src/main/resources/static/forms/`:
+- `start-form.html` — Invoice creation form
+- `assign-approver.html` — Approver assignment form
+- `approve-invoice.html` — Approval decision form
+- `prepare-bank-transfer.html` — Payment details form
 
-Then you can access the Orqueio Webapps in your browser: `http://localhost:8080/` (provide login/password 
-from `application.yaml`, default: demo/demo). The Rest API can be available through `http://localhost:8080/engine-rest`.
- 
+---
+
+## Running the Application
+
+### Build and run
+
+```bash
+mvn clean install
+java -jar target/orqueio-bpm-spring-boot-starter-example-invoice-0.0.1-SNAPSHOT.jar
+```
+
+Or use Spring Boot Maven plugin:
+
+```bash
+mvn spring-boot:run
+```
+
+### Access the Application
+
+#### Webapps (Cockpit, Tasklist, Admin)
+
+Open your browser at:
+
+**http://localhost:8080**
+
+Login with:
+- **Username**: `demo`
+- **Password**: `demo`
+
+#### REST API
+
+The OrqueIO REST API is available at:
+
+**http://localhost:8080/engine-rest**
+
+---
+
+## Using the Invoice Process
+
+### 1. Start an Invoice Process
+
+Go to **Tasklist** → **Start Process** → **Invoice Approval**
+
+Fill in the invoice details:
+- **Creditor**: Supplier name
+- **Amount**: Invoice amount
+- **Invoice Number**: Unique identifier
+
+### 2. Assign Approver
+
+Complete the "Assign Approver" task by selecting a user from the dropdown.
+
+### 3. Approve or Reject
+
+The assigned approver reviews the invoice and decides:
+- **Approve** → Proceeds to payment preparation
+- **Reject** → Sends to review
+
+### 4. Review Rejected Invoices
+
+If rejected, a "Review Invoice" task is created where the invoice can be:
+- **Clarified** → Loops back to approval
+- **Cancelled** → Ends the process
+
+### 5. Prepare Bank Transfer
+
+Once approved, complete the payment details form.
+
+### 6. Archive Invoice
+
+The "Archive Invoice" service task automatically executes, logging the completion.
+
+---
+
+## REST API Examples
+
+### Get deployed processes
+
+```bash
+curl -u demo:demo http://localhost:8080/engine-rest/process-definition
+```
+
+### Start an invoice process
+
+```bash
+curl -u demo:demo \
+  -H "Content-Type: application/json" \
+  -X POST \
+  -d '{
+    "variables": {
+      "creditor": {"value":"ACME Corp","type":"String"},
+      "amount": {"value":1500,"type":"Long"},
+      "invoiceNumber": {"value":"INV-2024-001","type":"String"}
+    }
+  }' \
+  http://localhost:8080/engine-rest/process-definition/key/invoice/start
+```
+
+---
+
+## Switching to Production Database
+
+### PostgreSQL Configuration
+
+Add PostgreSQL driver to `pom.xml`:
+
+```xml
+<dependency>
+  <groupId>org.postgresql</groupId>
+  <artifactId>postgresql</artifactId>
+</dependency>
+```
+
+Update `application.yaml`:
+
+```yaml
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/orqueio
+    username: orqueio
+    password: orqueio
+    driver-class-name: org.postgresql.Driver
+```
+
+### MySQL Configuration
+
+Add MySQL driver to `pom.xml`:
+
+```xml
+<dependency>
+  <groupId>com.mysql</groupId>
+  <artifactId>mysql-connector-j</artifactId>
+</dependency>
+```
+
+Update `application.yaml`:
+
+```yaml
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/orqueio
+    username: orqueio
+    password: orqueio
+    driver-class-name: com.mysql.cj.jdbc.Driver
+```
+
+---
+
+## Use Cases
+
+- **Invoice Approval Workflows** — Automate AP processes
+- **Multi-Stage Approvals** — Configurable approval chains
+- **Process Monitoring** — Track invoice status in Cockpit
+- **REST API Integration** — Connect external systems
+- **Custom Forms** — Embedded HTML forms in Tasklist
+
+---
+
+## Next Steps
+
+- Customize the approval workflow (add budget thresholds, multi-level approval)
+- Integrate with ERP systems via REST API
+- Add email notifications on task assignment
+- Configure production database (PostgreSQL/MySQL)
+- Add DMN decision tables for automatic approval rules
+
+---
+
+## Source Files
+
+| File | Description |
+|------|-------------|
+| [Application.java](src/main/java/io/orqueio/bpm/spring/boot/example/invoice/Application.java) | Main Spring Boot application with Invoice deployment |
+| [processes.xml](src/main/resources/META-INF/processes.xml) | Process application descriptor |
+| [application.yaml](src/main/resources/application.yaml) | Spring Boot configuration |
+| [static/forms/](src/main/resources/static/forms/) | Invoice HTML forms |

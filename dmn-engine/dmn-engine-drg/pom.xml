@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.1"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.1 http://maven.apache.org/xsd/maven-4.0.1.xsd">
-  <modelVersion>4.0.1</modelVersion>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.1 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
 
   <groupId>io.orqueio.bpm.example.drg</groupId>
   <artifactId>orqueio-example-drg</artifactId>
@@ -10,7 +10,7 @@
   <packaging>jar</packaging>
 
   <properties>
-    <version.orqueio>2.0</version.orqueio>
+    <version.orqueio>2.0.2</version.orqueio>
     <version.slf4j>2.0.16</version.slf4j>
     <version.junit>4.13.2</version.junit>
     <version.assertj>3.26.3</version.assertj>

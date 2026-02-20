@@ -1,12 +1,12 @@
-<project xmlns="http://maven.apache.org/POM/4.0.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.1 https://maven.apache.org/xsd/maven-4.0.1.xsd">
-  <modelVersion>4.0.1</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.1 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
   <groupId>io.orqueio.bpm</groupId>
   <artifactId>example-orqueio-bpm-junit5-use-engine</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <properties>
-    <version.orqueio>2.0.1</version.orqueio>
+    <version.orqueio>2.0.2</version.orqueio>
     <version.junit>5.11.4</version.junit>
     <version.h2>2.3.232</version.h2>
     <version.assertj>3.26.3</version.assertj>

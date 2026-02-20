@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
+<project xmlns="http://maven.apache.org/POM/4.0.1"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.1 http://maven.apache.org/xsd/maven-4.0.1.xsd">
+  <modelVersion>4.0.1</modelVersion>
 
   <groupId>io.orqueio.bpm.example</groupId>
   <artifactId>orqueio-example-decision-engine-java-main</artifactId>
@@ -10,7 +10,7 @@
   <packaging>jar</packaging>
 
   <properties>
-    <version.orqueio>2.0.0</version.orqueio>
+    <version.orqueio>2.0.1</version.orqueio>
     <version.slf4j>2.0.16</version.slf4j>
     <version.junit>4.13.2</version.junit>
     <maven.compiler.release>21</maven.compiler.release>

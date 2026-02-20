@@ -1,7 +1,7 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
+<project xmlns="http://maven.apache.org/POM/4.0.1"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.1 http://maven.apache.org/xsd/maven-4.0.1.xsd">
+  <modelVersion>4.0.1</modelVersion>
 
   <groupId>io.orqueio.bpm.quickstart</groupId>
   <artifactId>orqueio-quickstart-rest-service</artifactId>
@@ -10,7 +10,7 @@
   <name>Service Invocation - REST</name>
 
   <properties>
-    <version.orqueio>2.0.0</version.orqueio>
+    <version.orqueio>2.0.1</version.orqueio>
     <version.graal.js>21.3.12</version.graal.js>
     <version.junit>4.13.1</version.junit>
     <version.h2>2.3.232</version.h2>

@@ -24,6 +24,16 @@ This example demonstrates how to build a **complete External Task Client applica
 
 ---
 
+## Version Compatibility
+
+| OrqueIO Version | Spring Boot Version |
+|----------------|---------------------|
+| **2.0.0+** | **4.0.0+** |
+
+**Important**: OrqueIO 2.0.0+ requires Spring Boot 4.0.0 or higher.
+
+---
+
 ## The Loan Workflow
 
 ```

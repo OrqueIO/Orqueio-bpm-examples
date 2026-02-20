@@ -26,6 +26,16 @@ This example demonstrates **BPMN process orchestration with DMN decision automat
 
 ---
 
+## Version Compatibility
+
+| OrqueIO Version | Spring Boot Version |
+|----------------|---------------------|
+| **2.0.0+** | **4.0.0+** |
+
+**Important**: OrqueIO 2.0.0+ requires Spring Boot 4.0.0 or higher.
+
+---
+
 ## Running the Application
 
 ### 1. Start MySQL

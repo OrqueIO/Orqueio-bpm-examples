@@ -25,6 +25,16 @@ This example demonstrates how to build a **BPMN-powered Twitter client** using O
 
 ---
 
+## Version Compatibility
+
+| OrqueIO Version | Spring Boot Version |
+|----------------|---------------------|
+| **2.0.0+** | **4.0.0+** |
+
+**Important**: OrqueIO 2.0.0+ requires Spring Boot 4.0.0 or higher.
+
+---
+
 ## Project Structure
 
 ```
@@ -73,7 +83,7 @@ example-twitter/
 <dependency>
   <groupId>io.orqueio.bpm.springboot</groupId>
   <artifactId>orqueio-bpm-spring-boot-starter-webapp</artifactId>
-  <version>1.0.3</version>
+  <version>2.0.0</version>
 </dependency>
 ```
 

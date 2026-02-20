@@ -23,6 +23,16 @@ This example demonstrates how to build a **Spring Boot application with embedded
 
 ---
 
+## Version Compatibility
+
+| OrqueIO Version | Spring Boot Version |
+|----------------|---------------------|
+| **2.0.0+** | **4.0.0+** |
+
+**Important**: OrqueIO 2.0.0+ requires Spring Boot 4.0.0 or higher.
+
+---
+
 ## Project Structure
 
 ```
@@ -55,7 +65,7 @@ The `orqueio-bpm-spring-boot-starter-webapp` includes the embedded engine + all 
 <dependency>
   <groupId>io.orqueio.bpm.springboot</groupId>
   <artifactId>orqueio-bpm-spring-boot-starter-webapp</artifactId>
-  <version>1.0.3</version>
+  <version>2.0.0</version>
 </dependency>
 ```
 

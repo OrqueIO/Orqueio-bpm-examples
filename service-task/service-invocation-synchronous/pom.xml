@@ -8,7 +8,7 @@
   <name>Service Invocation - Synchronous</name>
   
   <properties>
-    <version.orqueio>1.0.3</version.orqueio>
+    <version.orqueio>2.0.0</version.orqueio>
     <version.junit>4.13.2</version.junit>
     <version.h2>2.3.232</version.h2>
     <version.slf4j>1.7.36</version.slf4j>

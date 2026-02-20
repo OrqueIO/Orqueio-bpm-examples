@@ -56,7 +56,7 @@ The `orqueio-bpm-spring-boot-starter-rest` provides the embedded engine + full R
 <dependency>
   <groupId>io.orqueio.bpm.springboot</groupId>
   <artifactId>orqueio-bpm-spring-boot-starter-rest</artifactId>
-  <version>1.0.4</version>
+  <version>1.0.5</version>
 </dependency>
 ```
 

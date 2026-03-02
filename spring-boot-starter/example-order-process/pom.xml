@@ -9,7 +9,7 @@
 
 
   <properties>
-    <orqueio.version>1.0.7</orqueio.version>
+    <orqueio.version>1.0.8</orqueio.version>
     <maven.compiler.release>21</maven.compiler.release>
     <spring-boot.version>3.5.9</spring-boot.version>
   </properties>

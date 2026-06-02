@@ -17,7 +17,6 @@
     <maven.compiler.release>25</maven.compiler.release>
     <maven.compiler.plugin.version>3.11.0</maven.compiler.plugin.version>
 
-    <graaljs.version>21.3.12</graaljs.version>
     <jaxb.version>4.0.5</jaxb.version>
   </properties>
 
@@ -92,17 +91,6 @@
       <artifactId>h2</artifactId>
     </dependency>
 
-    <dependency>
-      <groupId>org.graalvm.js</groupId>
-      <artifactId>js</artifactId>
-      <version>${graaljs.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.graalvm.js</groupId>
-      <artifactId>js-scriptengine</artifactId>
-      <version>${graaljs.version}</version>
-    </dependency>
 
     <dependency>
       <groupId>com.sun.xml.bind</groupId>

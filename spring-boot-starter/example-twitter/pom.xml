@@ -8,8 +8,8 @@
 
   <properties>
     <!-- spring -->
-    <spring.boot.version>3.5.11</spring.boot.version>
-    <orqueio.spring.boot.starter.version>1.0.9-SNAPSHOT</orqueio.spring.boot.starter.version>
+    <spring.boot.version>4.0.2</spring.boot.version>
+    <orqueio.spring.boot.starter.version>2.0.3</orqueio.spring.boot.starter.version>
 
     <twitter4j.version>4.0.7</twitter4j.version>
     <!-- maven -->

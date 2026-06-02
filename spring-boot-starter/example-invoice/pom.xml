@@ -9,9 +9,9 @@
   <properties>
     <!-- spring -->
     <orqueio.version>2.0.0</orqueio.version>
-    <spring.boot.version>4.0.0</spring.boot.version>
+    <spring.boot.version>4.0.6</spring.boot.version>
     <!-- maven -->
-    <maven.compiler.release>21</maven.compiler.release>
+    <maven.compiler.release>25</maven.compiler.release>
     <maven.compiler.plugin.version>3.11.0</maven.compiler.plugin.version>
 
     <graaljs.version>21.3.12</graaljs.version>
@@ -59,6 +59,12 @@
       <groupId>org.graalvm.js</groupId>
       <artifactId>js-scriptengine</artifactId>
       <version>${graaljs.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-actuator</artifactId>
+      <optional>true</optional>
     </dependency>
 
     <dependency>

@@ -19,7 +19,6 @@
         <module>dmn-engine/dmn-engine-java-main-method</module>
         <module>spring-boot-starter/example-invoice</module>
         <module>spring-boot-starter/example-twitter</module>
-        <module>spring-boot-starter/example-web</module>
         <module>spring-boot-starter/example-webapp</module>
         <module>spring-boot-starter/external-task-client/loan-granting-spring-boot-webapp</module>
         <module>testing/assert/job-announcement-publication-process</module>

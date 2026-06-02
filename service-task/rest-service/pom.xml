@@ -11,7 +11,7 @@
 
   <properties>
     <version.orqueio>2.0.0</version.orqueio>
-    <version.graal.js>21.3.12</version.graal.js>
+    <version.graal.js>25.0.2</version.graal.js>
     <version.junit>4.13.1</version.junit>
     <version.h2>2.3.232</version.h2>
     <version.slf4j>1.7.36</version.slf4j>
@@ -81,6 +81,7 @@
       <groupId>org.graalvm.js</groupId>
       <artifactId>js</artifactId>
       <version>${version.graal.js}</version>
+      <type>pom</type>
       <scope>test</scope>
     </dependency>
 
@@ -110,6 +111,16 @@
         </plugin>
       </plugins>
     </pluginManagement>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>3.2.5</version>
+        <configuration>
+          <argLine>-Dnet.bytebuddy.experimental=true</argLine>
+        </configuration>
+      </plugin>
+    </plugins>
   </build>
 
   <repositories>

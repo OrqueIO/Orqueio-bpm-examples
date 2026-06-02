@@ -8,13 +8,13 @@
 
   <properties>
     <!-- spring -->
-    <orqueio.version>2.0.1</orqueio.version>
-    <spring.boot.version>4.0.1</spring.boot.version>
+    <orqueio.version>2.0.4-SNAPSHOT</orqueio.version>
+    <spring.boot.version>4.0.2</spring.boot.version>
     <!-- maven -->
-    <maven.compiler.release>21</maven.compiler.release>
+    <maven.compiler.release>25</maven.compiler.release>
     <maven.compiler.plugin.version>3.11.0</maven.compiler.plugin.version>
 
-    <graaljs.version>21.3.12</graaljs.version>
+    <graaljs.version>22.3.3</graaljs.version>
   </properties>
 
   <dependencyManagement>
@@ -50,20 +50,34 @@
       <version>${orqueio.version}</version>
     </dependency>
 
+    <!-- GraalJS dependencies commented out due to Java 25 incompatibility -->
+    <!-- Using Rhino instead for JavaScript support with Java 25 -->
+    <!--
     <dependency>
       <groupId>org.graalvm.js</groupId>
       <artifactId>js</artifactId>
       <version>${graaljs.version}</version>
-    </dependency>  
+    </dependency>
     <dependency>
       <groupId>org.graalvm.js</groupId>
       <artifactId>js-scriptengine</artifactId>
       <version>${graaljs.version}</version>
     </dependency>
+    -->
+    <dependency>
+      <groupId>org.mozilla</groupId>
+      <artifactId>rhino-engine</artifactId>
+      <version>1.7.15</version>
+    </dependency>
 
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-jdbc</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-actuator</artifactId>
     </dependency>
 
     <!-- JDBC DRIVERS -->
@@ -119,6 +133,13 @@
         <version>${spring.boot.version}</version>
         <configuration>
           <layout>ZIP</layout>
+          <jvmArguments>
+            --add-opens=java.base/java.lang=ALL-UNNAMED
+            --add-opens=java.base/java.util=ALL-UNNAMED
+            --add-opens=java.base/java.lang.invoke=ALL-UNNAMED
+            --add-opens=java.base/java.lang.reflect=ALL-UNNAMED
+            --add-opens=java.base/sun.security.action=ALL-UNNAMED
+          </jvmArguments>
         </configuration>
         <executions>
           <execution>

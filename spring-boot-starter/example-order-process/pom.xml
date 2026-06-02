@@ -9,9 +9,9 @@
 
 
   <properties>
-    <orqueio.version>2.0.2</orqueio.version>
-    <maven.compiler.release>21</maven.compiler.release>
-    <spring-boot.version>4.0.1</spring-boot.version>
+    <orqueio.version>2.0.4-SNAPSHOT</orqueio.version>
+    <maven.compiler.release>25</maven.compiler.release>
+    <spring-boot.version>4.0.2</spring-boot.version>
   </properties>
 
 
@@ -53,16 +53,30 @@
       <optional>true</optional>
     </dependency>
 
+    <!-- MySQL dependency commented out, using H2 instead -->
+    <!--
     <dependency>
       <groupId>mysql</groupId>
       <artifactId>mysql-connector-java</artifactId>
       <version>8.0.33</version>
+    </dependency>
+    -->
+
+    <dependency>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
     </dependency>
 
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-data-jpa</artifactId>
     </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+
     <dependency>
       <groupId>jakarta.platform</groupId>
       <artifactId>jakarta.jakartaee-api</artifactId>
@@ -80,6 +94,13 @@
         <version>${spring-boot.version}</version>
         <configuration>
           <layout>ZIP</layout>
+          <jvmArguments>
+            --add-opens=java.base/java.lang=ALL-UNNAMED
+            --add-opens=java.base/java.util=ALL-UNNAMED
+            --add-opens=java.base/java.lang.invoke=ALL-UNNAMED
+            --add-opens=java.base/java.lang.reflect=ALL-UNNAMED
+            --add-opens=java.base/sun.security.action=ALL-UNNAMED
+          </jvmArguments>
         </configuration>
         <executions>
           <execution>
@@ -105,6 +126,14 @@
       <snapshots>
         <enabled>true</enabled>
       </snapshots>
+    </repository>
+    <repository>
+      <id>maven-central</id>
+      <name>Maven Central</name>
+      <url>https://repo1.maven.org/maven2</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
     </repository>
   </repositories>
 </project>

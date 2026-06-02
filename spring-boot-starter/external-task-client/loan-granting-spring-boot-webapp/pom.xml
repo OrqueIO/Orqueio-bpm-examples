@@ -14,10 +14,9 @@
     <orqueio.platform.version>2.0.1</orqueio.platform.version>
     <spring.boot.version>4.0.1</spring.boot.version>
     <!-- maven -->
-    <maven.compiler.release>21</maven.compiler.release>
+    <maven.compiler.release>25</maven.compiler.release>
     <maven.compiler.plugin.version>3.11.0</maven.compiler.plugin.version>
 
-    <graaljs.version>21.3.12</graaljs.version>
     <jaxb.version>4.0.5</jaxb.version>
   </properties>
 
@@ -87,21 +86,15 @@
     </dependency>
 
     <dependency>
-      <groupId>org.graalvm.js</groupId>
-      <artifactId>js</artifactId>
-      <version>${graaljs.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.graalvm.js</groupId>
-      <artifactId>js-scriptengine</artifactId>
-      <version>${graaljs.version}</version>
-    </dependency>
-
-    <dependency>
       <groupId>com.sun.xml.bind</groupId>
       <artifactId>jaxb-impl</artifactId>
       <version>${jaxb.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-actuator</artifactId>
+      <optional>true</optional>
     </dependency>
   </dependencies>
 

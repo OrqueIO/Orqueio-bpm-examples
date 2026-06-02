@@ -8,12 +8,12 @@
 
   <properties>
     <!-- spring -->
-    <spring.boot.version>4.0.1</spring.boot.version>
+    <spring.boot.version>4.0.6</spring.boot.version>
     <orqueio.spring.boot.starter.version>2.0.1</orqueio.spring.boot.starter.version>
 
     <twitter4j.version>4.0.7</twitter4j.version>
     <!-- maven -->
-    <maven.compiler.release>21</maven.compiler.release>
+    <maven.compiler.release>25</maven.compiler.release>
     <maven.compiler.plugin.version>3.11.0</maven.compiler.plugin.version>
   </properties>
 
@@ -55,6 +55,12 @@
       <groupId>org.twitter4j</groupId>
       <artifactId>twitter4j-core</artifactId>
       <version>${twitter4j.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-actuator</artifactId>
+      <optional>true</optional>
     </dependency>
 
     <dependency>

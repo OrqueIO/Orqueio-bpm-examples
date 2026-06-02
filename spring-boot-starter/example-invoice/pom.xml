@@ -8,13 +8,13 @@
 
   <properties>
     <!-- spring -->
-    <orqueio.version>2.0.2</orqueio.version>
-    <spring.boot.version>4.0.1</spring.boot.version>
+    <orqueio.version>2.0.1</orqueio.version>
+    <spring.boot.version>4.0.6</spring.boot.version>
     <!-- maven -->
     <maven.compiler.release>21</maven.compiler.release>
     <maven.compiler.plugin.version>3.11.0</maven.compiler.plugin.version>
 
-    <graaljs.version>21.3.12</graaljs.version>
+    <graaljs.version>22.3.3</graaljs.version>
   </properties>
 
   <dependencyManagement>
@@ -51,14 +51,27 @@
     </dependency>
 
     <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-actuator</artifactId>
+      <optional>true</optional>
+    </dependency>
+
+    <dependency>
       <groupId>org.graalvm.js</groupId>
       <artifactId>js</artifactId>
       <version>${graaljs.version}</version>
-    </dependency>  
+    </dependency>
+
     <dependency>
       <groupId>org.graalvm.js</groupId>
       <artifactId>js-scriptengine</artifactId>
       <version>${graaljs.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.mozilla</groupId>
+      <artifactId>rhino-engine</artifactId>
+      <version>1.7.15</version>
     </dependency>
 
     <dependency>

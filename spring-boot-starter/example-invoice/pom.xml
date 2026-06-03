@@ -2,63 +2,50 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.1 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
+  <parent>
+    <groupId>io.orqueio.bpm.example</groupId>
+    <artifactId>orqueio-bpm-examples-reactor</artifactId>
+    <version>1.0.0</version>
+    <relativePath>../../pom.xml</relativePath>
+  </parent>
+
   <groupId>io.orqueio.bpm.springboot.example</groupId>
   <artifactId>orqueio-bpm-spring-boot-starter-example-invoice</artifactId>
   <version>0.0.1-SNAPSHOT</version>
 
   <properties>
-    <!-- spring -->
-    <orqueio.version>2.0.1</orqueio.version>
-    <spring.boot.version>4.0.1</spring.boot.version>
-    <!-- maven -->
-    <maven.compiler.release>21</maven.compiler.release>
-    <maven.compiler.plugin.version>3.11.0</maven.compiler.plugin.version>
-
-    <graaljs.version>21.3.12</graaljs.version>
+    <!-- Use older GraalJS version for this specific example -->
+    <version.graaljs>21.3.12</version.graaljs>
   </properties>
-
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-dependencies</artifactId>
-        <version>${spring.boot.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-
-      <dependency>
-        <groupId>io.orqueio.bpm</groupId>
-        <artifactId>orqueio-bom</artifactId>
-        <version>${orqueio.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
 
   <dependencies>
     <dependency>
       <groupId>io.orqueio.bpm.springboot</groupId>
       <artifactId>orqueio-bpm-spring-boot-starter-webapp</artifactId>
-      <version>${orqueio.version}</version>
+      <version>${version.orqueio}</version>
     </dependency>
 
     <dependency>
       <groupId>io.orqueio.bpm.springboot</groupId>
       <artifactId>orqueio-bpm-spring-boot-starter-rest</artifactId>
-      <version>${orqueio.version}</version>
+      <version>${version.orqueio}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-actuator</artifactId>
+      <optional>true</optional>
     </dependency>
 
     <dependency>
       <groupId>org.graalvm.js</groupId>
       <artifactId>js</artifactId>
-      <version>${graaljs.version}</version>
-    </dependency>  
+      <version>${version.graaljs}</version>
+    </dependency>
     <dependency>
       <groupId>org.graalvm.js</groupId>
       <artifactId>js-scriptengine</artifactId>
-      <version>${graaljs.version}</version>
+      <version>${version.graaljs}</version>
     </dependency>
 
     <dependency>
@@ -105,7 +92,7 @@
     <dependency>
       <groupId>io.orqueio.bpm.example</groupId>
       <artifactId>orqueio-example-invoice-jakarta</artifactId>
-      <version>${orqueio.version}</version>
+      <version>${version.orqueio}</version>
       <classifier>classes</classifier>
       <scope>compile</scope>
     </dependency>
@@ -116,7 +103,6 @@
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
-        <version>${spring.boot.version}</version>
         <configuration>
           <layout>ZIP</layout>
         </configuration>
@@ -131,27 +117,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>${maven.compiler.plugin.version}</version>
       </plugin>
     </plugins>
   </build>
-
-  <repositories>
-    <repository>
-      <id>central-portal-snapshots</id>
-      <name>Central Portal Snapshots</name>
-      <url>https://central.sonatype.com/repository/maven-snapshots/</url>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </repository>
-    <repository>
-      <id>maven-central</id>
-      <name>Maven Central</name>
-      <url>https://repo1.maven.org/maven2</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-    </repository>
-  </repositories>
 </project>

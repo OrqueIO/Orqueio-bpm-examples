@@ -49,8 +49,8 @@ public class HandlerConfiguration {
   public ExternalTaskHandler creditScoreChecker() {
     return (externalTask, externalTaskService) -> {
 
-      // retrieve a variable from the Process Engine
-      int defaultScore = externalTask.getVariable("defaultScore");
+      // use a default score value
+      int defaultScore = 5;
 
       List<Integer> creditScores = new ArrayList<>(Arrays.asList(defaultScore, 9, 1, 4, 10));
 

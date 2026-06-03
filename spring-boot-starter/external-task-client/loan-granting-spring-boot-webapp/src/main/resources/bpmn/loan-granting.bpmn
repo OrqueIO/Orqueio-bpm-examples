@@ -3,13 +3,6 @@
   <bpmn:process id="loan_process" name="Granting Loans" isExecutable="true" camunda:historyTimeToLive="P180D">
     <bpmn:sequenceFlow id="SequenceFlow_0nww3wx" sourceRef="StartEvent_1" targetRef="Task_1lvjtd4" />
     <bpmn:serviceTask id="Task_1lvjtd4" name="Check credit score" camunda:type="external" camunda:topic="creditScoreChecker">
-      <bpmn:extensionElements>
-        <camunda:inputOutput>
-          <camunda:inputParameter name="Input_2rvtuu9">
-            <camunda:script scriptFormat="javascript">execution.setVariable("defaultScore", 5);</camunda:script>
-          </camunda:inputParameter>
-        </camunda:inputOutput>
-      </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_0nww3wx</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_12biatx</bpmn:outgoing>
     </bpmn:serviceTask>

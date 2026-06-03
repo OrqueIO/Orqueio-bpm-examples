@@ -1,103 +1,57 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>io.orqueio.bpm.assert</groupId>
-  <artifactId>orqueio-bpm-assert-examples</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <packaging>jar</packaging>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-  <properties>
-    <version.orqueio>1.0.6</version.orqueio>
-    <version.assertj>3.26.3</version.assertj>
-    <version.junit>4.13.2</version.junit>
-    <version.h2>2.3.232</version.h2>
-    <version.mockito>5.10.0</version.mockito>
-    <version.slf4j>1.7.36</version.slf4j>
+    <parent>
+        <groupId>io.orqueio.bpm.example</groupId>
+        <artifactId>orqueio-bpm-examples-reactor</artifactId>
+        <version>1.0.0</version>
+        <relativePath>../../../pom.xml</relativePath>
+    </parent>
 
-    <maven.compiler.release>21</maven.compiler.release>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <groupId>io.orqueio.bpm.assert</groupId>
+    <artifactId>orqueio-bpm-assert-examples</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    <name>Orqueio Platform Assert Test</name>
+    <description>A minimal project to run Orqueio Platform Assert tests</description>
 
-    <version.plugin.maven-compiler>3.11.0</version.plugin.maven-compiler>
-  </properties>
-
-  <name>Orqueio Platform Assert Test</name>
-  <description>A minimal project to run Orqueio Platform Assert tests</description>
-
-  <dependencyManagement>
     <dependencies>
-      <dependency>
-        <groupId>io.orqueio.bpm</groupId>
-        <artifactId>orqueio-bom</artifactId>
-        <version>${version.orqueio}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
+        <dependency>
+            <groupId>io.orqueio.bpm</groupId>
+            <artifactId>orqueio-engine</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.orqueio.bpm</groupId>
+            <artifactId>orqueio-bpm-assert</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>${version.slf4j}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
-  </dependencyManagement>
 
-  <dependencies>
-    <dependency>
-      <groupId>io.orqueio.bpm</groupId>
-      <artifactId>orqueio-engine</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>io.orqueio.bpm</groupId>
-      <artifactId>orqueio-bpm-assert</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>${version.junit}</version>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.assertj</groupId>
-      <artifactId>assertj-core</artifactId>
-      <version>${version.assertj}</version>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>com.h2database</groupId>
-      <artifactId>h2</artifactId>
-      <version>${version.h2}</version>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.mockito</groupId>
-      <artifactId>mockito-core</artifactId>
-      <version>${version.mockito}</version>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-simple</artifactId>
-      <version>${version.slf4j}</version>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
-
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>${version.plugin.maven-compiler}</version>
-      </plugin>
-    </plugins>
-  </build>
-  <repositories>
-    <repository>
-      <id>central-portal-snapshots</id>
-      <name>Central Portal Snapshots</name>
-      <url>https://central.sonatype.com/repository/maven-snapshots/</url>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </repository>
-  </repositories>
 </project>

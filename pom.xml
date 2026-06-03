@@ -1,38 +1,204 @@
 <?xml version="1.0"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.    apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>io.orqueio.bpm.example</groupId>
-  <artifactId>orqueio-bpm-examples-reactor</artifactId>
-  <packaging>pom</packaging>
-  <version>1.0.0</version>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>io.orqueio.bpm.example</groupId>
+    <artifactId>orqueio-bpm-examples-reactor</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0.0</version>
 
-  <profiles>
-    <profile>
-      <id>default</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-      <modules>
-        <module>bpmn-model-api/generate-process-fluent-api</module>
-        <module>bpmn-model-api/parse-bpmn</module>
-        <module>dmn-engine/dmn-engine-drg</module>
-        <module>dmn-engine/dmn-engine-java-main-method</module>
-        <module>spring-boot-starter/example-invoice</module>
-        <module>spring-boot-starter/example-twitter</module>
-        <module>spring-boot-starter/example-web</module>
-        <module>spring-boot-starter/example-webapp</module>
-        <module>spring-boot-starter/external-task-client/loan-granting-spring-boot-webapp</module>
-        <module>testing/assert/job-announcement-publication-process</module>
-        <module>testing/junit5/orqueio-bpm-junit-assert</module>
-        <module>testing/junit5/orqueio-bpm-junit-use-engine</module>
-      </modules>
-    </profile>
-    <profile>
-      <id>bump-versions</id>
-      <modules>
-      </modules>
-    </profile>
-  </profiles>
+    <properties>
+        <!-- OrqueIO versions -->
+        <version.orqueio>1.0.6</version.orqueio>
+
+        <!-- Spring Boot version -->
+        <version.spring-boot>3.5.11</version.spring-boot>
+
+        <!-- Database drivers -->
+        <version.h2>2.3.232</version.h2>
+
+        <!-- Logging -->
+        <version.slf4j>2.0.16</version.slf4j>
+
+        <!-- Script engines -->
+        <version.graaljs>25.0.3</version.graaljs>
+
+        <!-- Testing -->
+        <version.junit>4.13.2</version.junit>
+        <version.assertj>3.26.3</version.assertj>
+
+        <!-- Maven plugins -->
+        <version.maven-compiler-plugin>3.13.0</version.maven-compiler-plugin>
+        <version.maven-jar-plugin>3.4.2</version.maven-jar-plugin>
+        <version.maven-war-plugin>3.4.0</version.maven-war-plugin>
+        <version.maven-dependency-plugin>3.8.0</version.maven-dependency-plugin>
+        <version.exec-maven-plugin>3.4.1</version.exec-maven-plugin>
+
+        <!-- Java version -->
+        <maven.compiler.release>21</maven.compiler.release>
+
+        <!-- Project encoding -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <failOnMissingWebXml>false</failOnMissingWebXml>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- OrqueIO BOM -->
+            <dependency>
+                <groupId>io.orqueio.bpm</groupId>
+                <artifactId>orqueio-bom</artifactId>
+                <version>${version.orqueio}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- OrqueIO DMN BOM -->
+            <dependency>
+                <groupId>io.orqueio.bpm.dmn</groupId>
+                <artifactId>orqueio-engine-dmn-bom</artifactId>
+                <version>${version.orqueio}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- Spring Boot BOM -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${version.spring-boot}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- Database drivers -->
+            <dependency>
+                <groupId>com.h2database</groupId>
+                <artifactId>h2</artifactId>
+                <version>${version.h2}</version>
+            </dependency>
+
+            <!-- Logging -->
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-jdk14</artifactId>
+                <version>${version.slf4j}</version>
+            </dependency>
+
+            <!-- Script engines -->
+            <dependency>
+                <groupId>org.graalvm.polyglot</groupId>
+                <artifactId>polyglot</artifactId>
+                <version>${version.graaljs}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.graalvm.polyglot</groupId>
+                <artifactId>js-community</artifactId>
+                <version>${version.graaljs}</version>
+                <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>org.graalvm.js</groupId>
+                <artifactId>js</artifactId>
+                <version>${version.graaljs}</version>
+                <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>org.graalvm.js</groupId>
+                <artifactId>js-scriptengine</artifactId>
+                <version>${version.graaljs}</version>
+            </dependency>
+
+            <!-- Testing -->
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${version.junit}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.assertj</groupId>
+                <artifactId>assertj-core</artifactId>
+                <version>${version.assertj}</version>
+                <scope>test</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${version.maven-compiler-plugin}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>${version.maven-jar-plugin}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <version>${version.maven-war-plugin}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <version>${version.maven-dependency-plugin}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>exec-maven-plugin</artifactId>
+                    <version>${version.exec-maven-plugin}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>${version.spring-boot}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+    <repositories>
+        <repository>
+            <id>central-portal-snapshots</id>
+            <name>Central Portal Snapshots</name>
+            <url>https://central.sonatype.com/repository/maven-snapshots/</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+    <profiles>
+        <profile>
+            <id>default</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <modules>
+                <module>bpmn-model-api/generate-process-fluent-api</module>
+                <module>bpmn-model-api/parse-bpmn</module>
+                <module>dmn-engine/dmn-engine-drg</module>
+                <module>dmn-engine/dmn-engine-java-main-method</module>
+                <module>spring-boot-starter/example-invoice</module>
+                <module>spring-boot-starter/example-twitter</module>
+                <module>spring-boot-starter/example-webapp</module>
+                <module>spring-boot-starter/external-task-client/loan-granting-spring-boot-webapp</module>
+                <module>testing/assert/job-announcement-publication-process</module>
+                <module>testing/junit5/orqueio-bpm-junit-assert</module>
+                <module>testing/junit5/orqueio-bpm-junit-use-engine</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>bump-versions</id>
+            <modules>
+            </modules>
+        </profile>
+    </profiles>
 
 
 </project>

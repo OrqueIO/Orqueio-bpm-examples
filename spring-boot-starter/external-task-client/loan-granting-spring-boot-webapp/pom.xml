@@ -2,148 +2,90 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
-  <groupId>io.orqueio.bpm.example</groupId>
-  <artifactId>loan-granting-spring-boot-webapp</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+    <parent>
+        <groupId>io.orqueio.bpm.example</groupId>
+        <artifactId>orqueio-bpm-examples-reactor</artifactId>
+        <version>1.0.0</version>
+        <relativePath>../../../pom.xml</relativePath>
+    </parent>
 
-  <packaging>jar</packaging>
+    <groupId>io.orqueio.bpm.example</groupId>
+    <artifactId>loan-granting-spring-boot-webapp</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>jar</packaging>
 
-  <properties>
-    <orqueio.platform.version>1.0.9-SNAPSHOT</orqueio.platform.version>
-    <spring.boot.version>3.5.11</spring.boot.version>
-    <!-- maven -->
-    <maven.compiler.release>25</maven.compiler.release>
-    <maven.compiler.plugin.version>3.11.0</maven.compiler.plugin.version>
+    <properties>
+        <jaxb.version>4.0.5</jaxb.version>
+    </properties>
 
-    <jaxb.version>4.0.5</jaxb.version>
-  </properties>
-
-  <dependencyManagement>
     <dependencies>
-      <dependency>
-        <groupId>io.orqueio.bpm</groupId>
-        <artifactId>orqueio-bom</artifactId>
-        <version>${orqueio.platform.version}</version>
-        <scope>import</scope>
-        <type>pom</type>
-      </dependency>
+        <dependency>
+            <groupId>io.orqueio.bpm.springboot</groupId>
+            <artifactId>orqueio-bpm-spring-boot-starter-external-task-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.orqueio.bpm.springboot</groupId>
+            <artifactId>orqueio-bpm-spring-boot-starter-rest</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.orqueio.bpm.springboot</groupId>
+            <artifactId>orqueio-bpm-spring-boot-starter-webapp</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.orqueio.bpm</groupId>
+            <artifactId>orqueio-engine-plugin-spin</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.orqueio.spin</groupId>
+            <artifactId>orqueio-spin-dataformat-all</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.orqueio.spin</groupId>
+            <artifactId>orqueio-spin-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.orqueio.spin</groupId>
+            <artifactId>orqueio-spin-dataformat-json-jackson</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.graalvm.polyglot</groupId>
+            <artifactId>polyglot</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.graalvm.polyglot</groupId>
+            <artifactId>js-community</artifactId>
+            <type>pom</type>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-impl</artifactId>
+            <version>${jaxb.version}</version>
+        </dependency>
 
-      <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-dependencies</artifactId>
-        <version>${spring.boot.version}</version>
-        <scope>import</scope>
-        <type>pom</type>
-      </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+            <optional>true</optional>
+        </dependency>
     </dependencies>
-  </dependencyManagement>
 
-  <dependencies>
-    <dependency>
-      <groupId>io.orqueio.bpm.springboot</groupId>
-      <artifactId>orqueio-bpm-spring-boot-starter-external-task-client</artifactId>
-    </dependency>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 
-    <dependency>
-      <groupId>io.orqueio.bpm.springboot</groupId>
-      <artifactId>orqueio-bpm-spring-boot-starter-rest</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>io.orqueio.bpm.springboot</groupId>
-      <artifactId>orqueio-bpm-spring-boot-starter-webapp</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>io.orqueio.bpm</groupId>
-      <artifactId>orqueio-engine-plugin-spin</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>io.orqueio.spin</groupId>
-      <artifactId>orqueio-spin-dataformat-all</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>io.orqueio.spin</groupId>
-      <artifactId>orqueio-spin-core</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.orqueio.spin</groupId>
-      <artifactId>orqueio-spin-dataformat-json-jackson</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-jdbc</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-actuator</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>com.h2database</groupId>
-      <artifactId>h2</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>com.sun.xml.bind</groupId>
-      <artifactId>jaxb-impl</artifactId>
-      <version>${jaxb.version}</version>
-    </dependency>
-  </dependencies>
-
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-maven-plugin</artifactId>
-        <version>${spring.boot.version}</version>
-        <configuration>
-          <layout>ZIP</layout>
-          <jvmArguments>
-            --add-opens=java.base/java.lang=ALL-UNNAMED
-            --add-opens=java.base/java.util=ALL-UNNAMED
-            --add-opens=java.base/java.lang.invoke=ALL-UNNAMED
-            --add-opens=java.base/java.lang.reflect=ALL-UNNAMED
-            --add-opens=java.base/sun.security.action=ALL-UNNAMED
-          </jvmArguments>
-        </configuration>
-        <executions>
-          <execution>
-            <goals>
-              <goal>repackage</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>${maven.compiler.plugin.version}</version>
-      </plugin>
-    </plugins>
-  </build>
-  <repositories>
-    <repository>
-      <id>central-portal-snapshots</id>
-      <name>Central Portal Snapshots</name>
-      <url>https://central.sonatype.com/repository/maven-snapshots/</url>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </repository>
-    <repository>
-      <id>maven-central</id>
-      <name>Maven Central</name>
-      <url>https://repo1.maven.org/maven2</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-    </repository>
-  </repositories>
 </project>

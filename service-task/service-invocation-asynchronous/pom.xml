@@ -1,73 +1,54 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.1 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>io.orqueio.bpm.quickstart</groupId>
-  <artifactId>orqueio-quickstart-service-invocation-asynchronous</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <packaging>jar</packaging>
-  <name>Service Invocation - Asynchronous</name>
+    <modelVersion>4.0.0</modelVersion>
 
-  <properties>
-    <version.orqueio>2.0.4-SNAPSHOT</version.orqueio>
-    <version.slf4j>1.7.36</version.slf4j>
-    <version.junit>4.13.2</version.junit>
-    <version.h2>2.3.232</version.h2>
-    <maven.compiler.release>25</maven.compiler.release>
-    <maven.compiler.version>3.11.0</maven.compiler.version>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
+    <parent>
+        <groupId>io.orqueio.bpm.example</groupId>
+        <artifactId>orqueio-bpm-examples-reactor</artifactId>
+        <version>1.0.0</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
 
-  <dependencies>
+    <groupId>io.orqueio.bpm.quickstart</groupId>
+    <artifactId>orqueio-quickstart-service-invocation-asynchronous</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    <name>Service Invocation - Asynchronous</name>
 
-    <dependency>
-      <groupId>io.orqueio.bpm</groupId>
-      <artifactId>orqueio-engine</artifactId>
-      <version>${version.orqueio}</version>
-    </dependency>
+    <dependencies>
 
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>${version.junit}</version>
-      <scope>test</scope>
-    </dependency>
+        <dependency>
+            <groupId>io.orqueio.bpm</groupId>
+            <artifactId>orqueio-engine</artifactId>
+            <version>${version.orqueio}</version>
+        </dependency>
 
-    <dependency>
-      <groupId>com.h2database</groupId>
-      <artifactId>h2</artifactId>
-      <version>${version.h2}</version>
-      <scope>test</scope>
-    </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
 
-    <!-- redirect slf4j logging to jdk logging -->
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-jdk14</artifactId>
-      <version>${version.slf4j}</version>
-    </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>test</scope>
+        </dependency>
 
-  </dependencies>
+        <!-- redirect slf4j logging to jdk logging -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-jdk14</artifactId>
+        </dependency>
 
-  <build>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-compiler-plugin</artifactId>
-          <version>${maven.compiler.version}</version>
-        </plugin>
-      </plugins>
-    </pluginManagement>
-  </build>
+    </dependencies>
 
-  <repositories>
-    <repository>
-      <id>central-portal-snapshots</id>
-      <name>Central Portal Snapshots</name>
-      <url>https://central.sonatype.com/repository/maven-snapshots/</url>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </repository>
-  </repositories>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 </project>

@@ -1,178 +1,122 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.1 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
-  <groupId>io.orqueio.bpm.springboot.example</groupId>
-  <artifactId>orqueio-bpm-spring-boot-starter-example-invoice</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+    <parent>
+        <groupId>io.orqueio.bpm.example</groupId>
+        <artifactId>orqueio-bpm-examples-reactor</artifactId>
+        <version>1.0.0</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
 
-  <properties>
-    <!-- spring -->
-    <orqueio.version>2.0.4-SNAPSHOT</orqueio.version>
-    <spring.boot.version>4.0.2</spring.boot.version>
-    <!-- maven -->
-    <maven.compiler.release>25</maven.compiler.release>
-    <maven.compiler.plugin.version>3.11.0</maven.compiler.plugin.version>
+    <groupId>io.orqueio.bpm.springboot.example</groupId>
+    <artifactId>orqueio-bpm-spring-boot-starter-example-invoice</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
 
-    <graaljs.version>22.3.3</graaljs.version>
-  </properties>
-
-  <dependencyManagement>
     <dependencies>
-      <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-dependencies</artifactId>
-        <version>${spring.boot.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
+        <dependency>
+            <groupId>io.orqueio.bpm.springboot</groupId>
+            <artifactId>orqueio-bpm-spring-boot-starter-webapp</artifactId>
+            <version>${version.orqueio}</version>
+        </dependency>
 
-      <dependency>
-        <groupId>io.orqueio.bpm</groupId>
-        <artifactId>orqueio-bom</artifactId>
-        <version>${orqueio.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
+        <dependency>
+            <groupId>io.orqueio.bpm.springboot</groupId>
+            <artifactId>orqueio-bpm-spring-boot-starter-rest</artifactId>
+            <version>${version.orqueio}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>org.graalvm.polyglot</groupId>
+            <artifactId>polyglot</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.graalvm.polyglot</groupId>
+            <artifactId>js</artifactId>
+            <type>pom</type>
+        </dependency>
+        <dependency>
+            <groupId>org.graalvm.js</groupId>
+            <artifactId>js-scriptengine</artifactId>
+            <version>${version.graaljs}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+        </dependency>
+
+        <!-- JDBC DRIVERS -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+        </dependency>
+        <!--    <dependency>-->
+        <!--      <groupId>org.postgresql</groupId>-->
+        <!--      <artifactId>postgresql</artifactId>-->
+        <!--    </dependency>-->
+        <!--    <dependency>-->
+        <!--      <groupId>com.oracle.ojdbc</groupId>-->
+        <!--      <artifactId>ojdbc8</artifactId>-->
+        <!--    </dependency>-->
+        <!--    <dependency>-->
+        <!--      <groupId>com.ibm.db2.jcc</groupId>-->
+        <!--      <artifactId>db2-spring-boot-starter</artifactId>-->
+        <!--      <version>0.0.1</version>-->
+        <!--    </dependency>-->
+        <!--    <dependency>-->
+        <!--      <groupId>com.mysql</groupId>-->
+        <!--      <artifactId>mysql-connector-j</artifactId>-->
+        <!--    </dependency>-->
+        <!--    <dependency>-->
+        <!--      <groupId>org.mariadb.jdbc</groupId>-->
+        <!--      <artifactId>mariadb-java-client</artifactId>-->
+        <!--    </dependency>-->
+        <!--    <dependency>-->
+        <!--      <groupId>com.microsoft.sqlserver</groupId>-->
+        <!--      <artifactId>mssql-jdbc</artifactId>-->
+        <!--    </dependency>-->
+
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.orqueio.bpm.example</groupId>
+            <artifactId>orqueio-example-invoice-jakarta</artifactId>
+            <version>${version.orqueio}</version>
+            <classifier>classes</classifier>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
-  </dependencyManagement>
 
-  <dependencies>
-    <dependency>
-      <groupId>io.orqueio.bpm.springboot</groupId>
-      <artifactId>orqueio-bpm-spring-boot-starter-webapp</artifactId>
-      <version>${orqueio.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>io.orqueio.bpm.springboot</groupId>
-      <artifactId>orqueio-bpm-spring-boot-starter-rest</artifactId>
-      <version>${orqueio.version}</version>
-    </dependency>
-
-    <!-- GraalJS dependencies commented out due to Java 25 incompatibility -->
-    <!-- Using Rhino instead for JavaScript support with Java 25 -->
-    <!--
-    <dependency>
-      <groupId>org.graalvm.js</groupId>
-      <artifactId>js</artifactId>
-      <version>${graaljs.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.graalvm.js</groupId>
-      <artifactId>js-scriptengine</artifactId>
-      <version>${graaljs.version}</version>
-    </dependency>
-    -->
-    <dependency>
-      <groupId>org.mozilla</groupId>
-      <artifactId>rhino-engine</artifactId>
-      <version>1.7.15</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-jdbc</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-actuator</artifactId>
-    </dependency>
-
-    <!-- JDBC DRIVERS -->
-    <dependency>
-      <groupId>com.h2database</groupId>
-      <artifactId>h2</artifactId>
-    </dependency>
-<!--    <dependency>-->
-<!--      <groupId>org.postgresql</groupId>-->
-<!--      <artifactId>postgresql</artifactId>-->
-<!--    </dependency>-->
-<!--    <dependency>-->
-<!--      <groupId>com.oracle.ojdbc</groupId>-->
-<!--      <artifactId>ojdbc8</artifactId>-->
-<!--    </dependency>-->
-<!--    <dependency>-->
-<!--      <groupId>com.ibm.db2.jcc</groupId>-->
-<!--      <artifactId>db2-spring-boot-starter</artifactId>-->
-<!--      <version>0.0.1</version>-->
-<!--    </dependency>-->
-<!--    <dependency>-->
-<!--      <groupId>com.mysql</groupId>-->
-<!--      <artifactId>mysql-connector-j</artifactId>-->
-<!--    </dependency>-->
-<!--    <dependency>-->
-<!--      <groupId>org.mariadb.jdbc</groupId>-->
-<!--      <artifactId>mariadb-java-client</artifactId>-->
-<!--    </dependency>-->
-<!--    <dependency>-->
-<!--      <groupId>com.microsoft.sqlserver</groupId>-->
-<!--      <artifactId>mssql-jdbc</artifactId>-->
-<!--    </dependency>-->
-
-    <dependency>
-      <groupId>org.glassfish.jaxb</groupId>
-      <artifactId>jaxb-runtime</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>io.orqueio.bpm.example</groupId>
-      <artifactId>orqueio-example-invoice-jakarta</artifactId>
-      <version>${orqueio.version}</version>
-      <classifier>classes</classifier>
-      <scope>compile</scope>
-    </dependency>
-  </dependencies>
-
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-maven-plugin</artifactId>
-        <version>${spring.boot.version}</version>
-        <configuration>
-          <layout>ZIP</layout>
-          <jvmArguments>
-            --add-opens=java.base/java.lang=ALL-UNNAMED
-            --add-opens=java.base/java.util=ALL-UNNAMED
-            --add-opens=java.base/java.lang.invoke=ALL-UNNAMED
-            --add-opens=java.base/java.lang.reflect=ALL-UNNAMED
-            --add-opens=java.base/sun.security.action=ALL-UNNAMED
-          </jvmArguments>
-        </configuration>
-        <executions>
-          <execution>
-            <goals>
-              <goal>repackage</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>${maven.compiler.plugin.version}</version>
-      </plugin>
-    </plugins>
-  </build>
-
-  <repositories>
-    <repository>
-      <id>central-portal-snapshots</id>
-      <name>Central Portal Snapshots</name>
-      <url>https://central.sonatype.com/repository/maven-snapshots/</url>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </repository>
-    <repository>
-      <id>maven-central</id>
-      <name>Maven Central</name>
-      <url>https://repo1.maven.org/maven2</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-    </repository>
-  </repositories>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <layout>ZIP</layout>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 </project>

@@ -1,98 +1,63 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>io.orqueio.bpm.quickstart</groupId>
-  <artifactId>orqueio-quickstart-create-invoice-process</artifactId>
-  <packaging>war</packaging>
-  <name>Create Invoice Process</name>
-  <version>1.0-SNAPSHOT</version>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.1 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-  <properties>
-    <version.orqueio>1.0.4</version.orqueio>
-    <version.junit>4.13.2</version.junit>
-    <version.h2>2.3.232</version.h2>
-    <version.slf4j>1.7.26</version.slf4j>
+    <parent>
+        <groupId>io.orqueio.bpm.example</groupId>
+        <artifactId>orqueio-bpm-examples-reactor</artifactId>
+        <version>1.0.0</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
 
-    <!-- maven -->
-    <maven.compiler.release>21</maven.compiler.release>
-    <maven.compiler.plugin.version>3.13.0</maven.compiler.plugin.version>
-    <maven.war.plugin.version>3.4.0</maven.war.plugin.version>
+    <groupId>io.orqueio.bpm.quickstart</groupId>
+    <artifactId>orqueio-quickstart-create-invoice-process</artifactId>
+    <packaging>war</packaging>
+    <name>Create Invoice Process</name>
+    <version>1.0-SNAPSHOT</version>
 
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <failOnMissingWebXml>false</failOnMissingWebXml>
-  </properties>
-
-
-  <dependencyManagement>
     <dependencies>
-      <dependency>
-        <groupId>io.orqueio.bpm</groupId>
-        <artifactId>orqueio-bom</artifactId>
-        <version>${version.orqueio}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
+
+        <dependency>
+            <groupId>io.orqueio.bpm</groupId>
+            <artifactId>orqueio-engine</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.orqueio.bpm.model</groupId>
+            <artifactId>orqueio-bpmn-model</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- redirect slf4j logging to jdk logging -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-jdk14</artifactId>
+        </dependency>
+
     </dependencies>
-  </dependencyManagement>
 
-  <dependencies>
-
-    <dependency>
-      <groupId>io.orqueio.bpm</groupId>
-      <artifactId>orqueio-engine</artifactId>
-      <scope>provided</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>io.orqueio.bpm.model</groupId>
-      <artifactId>orqueio-bpmn-model</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>${version.junit}</version>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>com.h2database</groupId>
-      <artifactId>h2</artifactId>
-      <version>${version.h2}</version>
-      <scope>test</scope>
-    </dependency>
-
-    <!-- redirect slf4j logging to jdk logging -->
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-jdk14</artifactId>
-      <version>${version.slf4j}</version>
-    </dependency>
-
-  </dependencies>
-
-  <build>
-    <plugins>
-      <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>${maven.compiler.plugin.version}</version>
-      </plugin>
-	    <plugin>
-        <artifactId>maven-war-plugin</artifactId>
-        <version>${maven.war.plugin.version}</version>
-		    <configuration>
-          <failOnMissingWebXml>false</failOnMissingWebXml>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
-  <repositories>
-    <repository>
-      <id>central-portal-snapshots</id>
-      <name>Central Portal Snapshots</name>
-      <url>https://central.sonatype.com/repository/maven-snapshots/</url>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </repository>
-  </repositories>
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

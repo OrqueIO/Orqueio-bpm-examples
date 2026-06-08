@@ -21,8 +21,15 @@ public class CheckStockDelegate implements JavaDelegate {
 
         boolean inStock = checkStockAvailability(orderId);
         execution.setVariable("inStock", inStock);
-        Order order = new Order();
-        order.setOrderId(orderId);
+
+        // Check if order already exists
+        Order order = orderService.getOrderByOrderId(orderId)
+                .orElseGet(() -> {
+                    Order newOrder = new Order();
+                    newOrder.setOrderId(orderId);
+                    return newOrder;
+                });
+
         order.setPremium(premium);
         order.setStatus(status);
         order.setInStock(inStock);

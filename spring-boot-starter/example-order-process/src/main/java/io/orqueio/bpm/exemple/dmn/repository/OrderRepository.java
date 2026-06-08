@@ -7,5 +7,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
-    Order findByOrderId(String orderId);
+    // Use findFirst to handle existing duplicates, ordered by ID descending to get the most recent
+    Order findFirstByOrderIdOrderByIdDesc(String orderId);
 }

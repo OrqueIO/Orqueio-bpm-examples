@@ -8,7 +8,7 @@
 
     <properties>
         <!-- OrqueIO versions -->
-        <version.orqueio>1.0.9</version.orqueio>
+        <version.orqueio>1.0.10-SNAPSHOT</version.orqueio>
 
         <!-- Spring Boot version -->
         <version.spring-boot>3.5.11</version.spring-boot>

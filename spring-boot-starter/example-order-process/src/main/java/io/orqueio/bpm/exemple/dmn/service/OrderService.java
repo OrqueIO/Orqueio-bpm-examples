@@ -18,7 +18,7 @@ public class OrderService {
     }
 
     public Optional<Order> getOrderByOrderId(String orderId) {
-        return Optional.ofNullable(orderRepository.findByOrderId(orderId));
+        return Optional.ofNullable(orderRepository.findFirstByOrderIdOrderByIdDesc(orderId));
     }
 
     public void updateOrder(Order order) {

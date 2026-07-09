@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>io.orqueio.bpm.example</groupId>
+    <artifactId>orqueio-bpm-examples-reactor</artifactId>
+    <version>1.0.0</version>
+    <relativePath>../../pom.xml</relativePath>
+  </parent>
+
+  <groupId>io.orqueio.bpm.quarkus.example</groupId>
+  <artifactId>orqueio-bpm-quarkus-example-spin-plugin</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+
+  <properties>
+    <maven.compiler.parameters>true</maven.compiler.parameters>
+  </properties>
+
+  <dependencies>
+
+    <!-- ORQUEIO -->
+
+    <dependency>
+      <groupId>io.orqueio.bpm.quarkus</groupId>
+      <artifactId>orqueio-bpm-quarkus-engine</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>io.orqueio.bpm</groupId>
+      <artifactId>orqueio-engine-plugin-spin</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>io.orqueio.spin</groupId>
+      <artifactId>orqueio-spin-dataformat-json-jackson</artifactId>
+    </dependency>
+
+    <!-- QUARKUS -->
+
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-arc</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-jdbc-h2</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-resteasy</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-resteasy-jackson</artifactId>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>io.quarkus</groupId>
+        <artifactId>quarkus-maven-plugin</artifactId>
+        <extensions>true</extensions>
+        <executions>
+          <execution>
+            <goals>
+              <goal>build</goal>
+              <goal>generate-code</goal>
+              <goal>generate-code-tests</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

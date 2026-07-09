@@ -8,7 +8,7 @@
 
     <properties>
         <!-- OrqueIO versions -->
-        <version.orqueio>2.0.5-SNAPSHOT</version.orqueio>
+        <version.orqueio>2.0.6-SNAPSHOT</version.orqueio>
 
         <!-- Spring Boot version -->
         <version.spring-boot>4.0.6</version.spring-boot>
@@ -27,12 +27,16 @@
         <version.junit-vintage>6.0.3</version.junit-vintage>
         <version.assertj>3.26.3</version.assertj>
 
+        <!-- Quarkus -->
+        <version.quarkus>3.32.0</version.quarkus>
+
         <!-- Maven plugins -->
         <version.maven-compiler-plugin>3.13.0</version.maven-compiler-plugin>
         <version.maven-jar-plugin>3.4.2</version.maven-jar-plugin>
         <version.maven-war-plugin>3.4.0</version.maven-war-plugin>
         <version.maven-dependency-plugin>3.8.0</version.maven-dependency-plugin>
         <version.exec-maven-plugin>3.4.1</version.exec-maven-plugin>
+        <version.surefire-plugin>3.5.3</version.surefire-plugin>
 
         <!-- Java version -->
         <maven.compiler.release>25</maven.compiler.release>
@@ -103,6 +107,22 @@
                 <version>${version.graaljs}</version>
             </dependency>
 
+            <!-- Quarkus BOM -->
+            <dependency>
+                <groupId>io.quarkus</groupId>
+                <artifactId>quarkus-bom</artifactId>
+                <version>${version.quarkus}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- OrqueIO Quarkus Engine -->
+            <dependency>
+                <groupId>io.orqueio.bpm.quarkus</groupId>
+                <artifactId>orqueio-bpm-quarkus-engine</artifactId>
+                <version>${version.orqueio}</version>
+            </dependency>
+
             <!-- Testing -->
             <dependency>
                 <groupId>junit</groupId>
@@ -159,6 +179,21 @@
                     <artifactId>spring-boot-maven-plugin</artifactId>
                     <version>${version.spring-boot}</version>
                 </plugin>
+                <plugin>
+                    <groupId>io.quarkus</groupId>
+                    <artifactId>quarkus-maven-plugin</artifactId>
+                    <version>${version.quarkus}</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${version.surefire-plugin}</version>
+                    <configuration>
+                        <systemPropertyVariables>
+                            <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
+                            <maven.home>${maven.home}</maven.home>
+                        </systemPropertyVariables>
+                    </configuration>
+                </plugin>
             </plugins>
         </pluginManagement>
     </build>
@@ -192,6 +227,9 @@
                 <module>testing/assert/job-announcement-publication-process</module>
                 <module>testing/junit5/orqueio-bpm-junit-assert</module>
                 <module>testing/junit5/orqueio-bpm-junit-use-engine</module>
+                <module>quarkus-extension/datasource-example</module>
+                <module>quarkus-extension/spin-plugin-example</module>
+                <module>quarkus-extension/hello-world-example</module>
             </modules>
         </profile>
         <profile>

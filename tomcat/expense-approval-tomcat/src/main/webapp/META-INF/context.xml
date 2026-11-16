@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context>
+    <!--
+        Configure classloader to delegate OrqueIO classes to the parent (Tomcat shared) classloader.
+        This allows the WAR to access the shared ProcessEngine while keeping its own classes isolated.
+
+        delegate="true" means the parent classloader is searched FIRST before the WAR's classloader.
+    -->
+    <Loader delegate="true"/>
+</Context>

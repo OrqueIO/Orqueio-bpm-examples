@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+                  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+                  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+                  xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  id="Definitions_ExpenseApproval"
+                  targetNamespace="http://bpmn.io/schema/bpmn"
+                  xmlns:modeler="http://camunda.org/schema/modeler/1.0">
+
+    <bpmn:process id="expense-approval-process" name="Expense Approval Process" isExecutable="true" camunda:historyTimeToLive="P90D" camunda:versionTag="2.0">
+
+        <!-- Start Event without Form - Add variables manually -->
+        <bpmn:startEvent id="StartEvent_ExpenseSubmitted" name="Expense&#10;Request&#10;Submitted">
+            <bpmn:outgoing>Flow_ToValidate</bpmn:outgoing>
+        </bpmn:startEvent>
+
+        <bpmn:sequenceFlow id="Flow_ToValidate" sourceRef="StartEvent_ExpenseSubmitted" targetRef="Task_ValidateExpense"/>
+
+        <!-- Validation Task with Error Boundary Event -->
+        <bpmn:serviceTask id="Task_ValidateExpense" name="Validate&#10;Expense Data"
+                          camunda:class="io.orqueio.bpm.example.tomcat11.ValidateExpenseDelegate">
+            <bpmn:incoming>Flow_ToValidate</bpmn:incoming>
+            <bpmn:outgoing>Flow_ToGateway</bpmn:outgoing>
+        </bpmn:serviceTask>
+
+        <!-- Error Boundary Event for Validation Failures -->
+        <bpmn:boundaryEvent id="BoundaryEvent_ValidationError" name="Validation&#10;Failed" attachedToRef="Task_ValidateExpense">
+            <bpmn:outgoing>Flow_ValidationError</bpmn:outgoing>
+            <bpmn:errorEventDefinition errorRef="Error_ValidationError"/>
+        </bpmn:boundaryEvent>
+
+        <bpmn:sequenceFlow id="Flow_ValidationError" sourceRef="BoundaryEvent_ValidationError" targetRef="Task_NotifyValidationError"/>
+
+        <bpmn:serviceTask id="Task_NotifyValidationError" name="Notify&#10;Validation&#10;Error"
+                          camunda:class="io.orqueio.bpm.example.tomcat11.SendNotificationDelegate">
+            <bpmn:incoming>Flow_ValidationError</bpmn:incoming>
+            <bpmn:outgoing>Flow_ToValidationFailed</bpmn:outgoing>
+        </bpmn:serviceTask>
+
+        <bpmn:sequenceFlow id="Flow_ToValidationFailed" sourceRef="Task_NotifyValidationError" targetRef="EndEvent_ValidationFailed"/>
+
+        <bpmn:endEvent id="EndEvent_ValidationFailed" name="Validation&#10;Failed">
+            <bpmn:incoming>Flow_ToValidationFailed</bpmn:incoming>
+        </bpmn:endEvent>
+
+        <bpmn:sequenceFlow id="Flow_ToGateway" sourceRef="Task_ValidateExpense" targetRef="Gateway_CheckAmount"/>
+
+        <!-- Amount Gateway -->
+        <bpmn:exclusiveGateway id="Gateway_CheckAmount" name="Check&#10;Amount" default="Flow_NormalAmount">
+            <bpmn:incoming>Flow_ToGateway</bpmn:incoming>
+            <bpmn:outgoing>Flow_HighAmount</bpmn:outgoing>
+            <bpmn:outgoing>Flow_NormalAmount</bpmn:outgoing>
+        </bpmn:exclusiveGateway>
+
+        <bpmn:sequenceFlow id="Flow_HighAmount" name="&gt; $1000" sourceRef="Gateway_CheckAmount" targetRef="Task_CFOApproval">
+            <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${amount &gt; 1000}</bpmn:conditionExpression>
+        </bpmn:sequenceFlow>
+
+        <bpmn:sequenceFlow id="Flow_NormalAmount" name="≤ $1000" sourceRef="Gateway_CheckAmount" targetRef="Task_ManagerApproval"/>
+
+        <!-- User Tasks without Forms - Variables to set manually -->
+        <bpmn:userTask id="Task_ManagerApproval" name="Manager Approval"
+                       camunda:assignee="${requesterManager}"
+                       camunda:dueDate="${now()}">
+            <bpmn:incoming>Flow_NormalAmount</bpmn:incoming>
+            <bpmn:outgoing>Flow_FromManager</bpmn:outgoing>
+        </bpmn:userTask>
+
+        <bpmn:userTask id="Task_CFOApproval" name="CFO Approval"
+                       camunda:candidateGroups="finance-department"
+                       camunda:dueDate="${now()}">
+            <bpmn:incoming>Flow_HighAmount</bpmn:incoming>
+            <bpmn:outgoing>Flow_FromCFO</bpmn:outgoing>
+        </bpmn:userTask>
+
+        <bpmn:sequenceFlow id="Flow_FromManager" sourceRef="Task_ManagerApproval" targetRef="Gateway_ApprovalDecision"/>
+
+        <bpmn:sequenceFlow id="Flow_FromCFO" sourceRef="Task_CFOApproval" targetRef="Gateway_ApprovalDecision"/>
+
+        <!-- Approval Decision Gateway -->
+        <bpmn:exclusiveGateway id="Gateway_ApprovalDecision" name="Approved?" default="Flow_ToPayment">
+            <bpmn:incoming>Flow_FromManager</bpmn:incoming>
+            <bpmn:incoming>Flow_FromCFO</bpmn:incoming>
+            <bpmn:outgoing>Flow_ToPayment</bpmn:outgoing>
+            <bpmn:outgoing>Flow_Rejected</bpmn:outgoing>
+        </bpmn:exclusiveGateway>
+
+        <bpmn:sequenceFlow id="Flow_ToPayment" name="Yes" sourceRef="Gateway_ApprovalDecision" targetRef="Task_ProcessPayment"/>
+
+        <bpmn:sequenceFlow id="Flow_Rejected" name="No" sourceRef="Gateway_ApprovalDecision" targetRef="Task_NotifyRejection">
+            <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${not empty approvalDecision and approvalDecision == 'rejected'}</bpmn:conditionExpression>
+        </bpmn:sequenceFlow>
+
+        <!-- Rejection Path -->
+        <bpmn:serviceTask id="Task_NotifyRejection" name="Notify&#10;Rejection"
+                          camunda:class="io.orqueio.bpm.example.tomcat11.SendNotificationDelegate">
+            <bpmn:incoming>Flow_Rejected</bpmn:incoming>
+            <bpmn:outgoing>Flow_ToRejectedEnd</bpmn:outgoing>
+        </bpmn:serviceTask>
+
+        <bpmn:sequenceFlow id="Flow_ToRejectedEnd" sourceRef="Task_NotifyRejection" targetRef="EndEvent_ExpenseRejected"/>
+
+        <bpmn:endEvent id="EndEvent_ExpenseRejected" name="Expense&#10;Rejected">
+            <bpmn:incoming>Flow_ToRejectedEnd</bpmn:incoming>
+        </bpmn:endEvent>
+
+        <!-- Approval Path -->
+        <bpmn:serviceTask id="Task_ProcessPayment" name="Process&#10;Reimbursement"
+                          camunda:class="io.orqueio.bpm.example.tomcat11.ProcessPaymentDelegate">
+            <bpmn:incoming>Flow_ToPayment</bpmn:incoming>
+            <bpmn:outgoing>Flow_ToNotification</bpmn:outgoing>
+        </bpmn:serviceTask>
+
+        <bpmn:sequenceFlow id="Flow_ToNotification" sourceRef="Task_ProcessPayment" targetRef="Task_SendConfirmation"/>
+
+        <bpmn:serviceTask id="Task_SendConfirmation" name="Send&#10;Confirmation&#10;Email"
+                          camunda:class="io.orqueio.bpm.example.tomcat11.SendNotificationDelegate">
+            <bpmn:incoming>Flow_ToNotification</bpmn:incoming>
+            <bpmn:outgoing>Flow_ToEnd</bpmn:outgoing>
+        </bpmn:serviceTask>
+
+        <bpmn:sequenceFlow id="Flow_ToEnd" sourceRef="Task_SendConfirmation" targetRef="EndEvent_ExpenseApproved"/>
+
+        <bpmn:endEvent id="EndEvent_ExpenseApproved" name="Expense&#10;Approved&#10;&amp; Paid">
+            <bpmn:incoming>Flow_ToEnd</bpmn:incoming>
+        </bpmn:endEvent>
+
+    </bpmn:process>
+
+    <!-- Error Definitions -->
+    <bpmn:error id="Error_ValidationError" name="ValidationError" errorCode="VALIDATION_ERROR"/>
+
+    <bpmndi:BPMNDiagram id="BPMNDiagram_ExpenseApproval">
+        <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="expense-approval-process">
+
+            <!-- Start Event -->
+            <bpmndi:BPMNShape id="StartEvent_ExpenseSubmitted_di" bpmnElement="StartEvent_ExpenseSubmitted">
+                <dc:Bounds x="152" y="232" width="36" height="36"/>
+                <bpmndi:BPMNLabel>
+                    <dc:Bounds x="134" y="275" width="72" height="40"/>
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNShape>
+
+            <!-- Validation Task -->
+            <bpmndi:BPMNShape id="Task_ValidateExpense_di" bpmnElement="Task_ValidateExpense">
+                <dc:Bounds x="250" y="210" width="100" height="80"/>
+            </bpmndi:BPMNShape>
+
+            <!-- Error Boundary Event -->
+            <bpmndi:BPMNShape id="BoundaryEvent_ValidationError_di" bpmnElement="BoundaryEvent_ValidationError">
+                <dc:Bounds x="282" y="272" width="36" height="36"/>
+                <bpmndi:BPMNLabel>
+                    <dc:Bounds x="263" y="315" width="74" height="27"/>
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNShape>
+
+            <!-- Validation Error Notification -->
+            <bpmndi:BPMNShape id="Task_NotifyValidationError_di" bpmnElement="Task_NotifyValidationError">
+                <dc:Bounds x="250" y="360" width="100" height="80"/>
+            </bpmndi:BPMNShape>
+
+            <!-- Validation Failed End Event -->
+            <bpmndi:BPMNShape id="EndEvent_ValidationFailed_di" bpmnElement="EndEvent_ValidationFailed">
+                <dc:Bounds x="282" y="490" width="36" height="36"/>
+                <bpmndi:BPMNLabel>
+                    <dc:Bounds x="270" y="533" width="60" height="27"/>
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNShape>
+
+            <!-- Amount Gateway -->
+            <bpmndi:BPMNShape id="Gateway_CheckAmount_di" bpmnElement="Gateway_CheckAmount" isMarkerVisible="true">
+                <dc:Bounds x="410" y="225" width="50" height="50"/>
+                <bpmndi:BPMNLabel>
+                    <dc:Bounds x="410" y="195" width="50" height="27"/>
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNShape>
+
+            <!-- Manager Approval -->
+            <bpmndi:BPMNShape id="Task_ManagerApproval_di" bpmnElement="Task_ManagerApproval">
+                <dc:Bounds x="520" y="140" width="100" height="80"/>
+            </bpmndi:BPMNShape>
+
+            <!-- CFO Approval -->
+            <bpmndi:BPMNShape id="Task_CFOApproval_di" bpmnElement="Task_CFOApproval">
+                <dc:Bounds x="520" y="280" width="100" height="80"/>
+            </bpmndi:BPMNShape>
+
+            <!-- Approval Decision Gateway -->
+            <bpmndi:BPMNShape id="Gateway_ApprovalDecision_di" bpmnElement="Gateway_ApprovalDecision" isMarkerVisible="true">
+                <dc:Bounds x="680" y="225" width="50" height="50"/>
+                <bpmndi:BPMNLabel>
+                    <dc:Bounds x="676" y="195" width="58" height="14"/>
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNShape>
+
+            <!-- Rejection Notification -->
+            <bpmndi:BPMNShape id="Task_NotifyRejection_di" bpmnElement="Task_NotifyRejection">
+                <dc:Bounds x="655" y="380" width="100" height="80"/>
+            </bpmndi:BPMNShape>
+
+            <!-- Rejected End Event -->
+            <bpmndi:BPMNShape id="EndEvent_ExpenseRejected_di" bpmnElement="EndEvent_ExpenseRejected">
+                <dc:Bounds x="687" y="510" width="36" height="36"/>
+                <bpmndi:BPMNLabel>
+                    <dc:Bounds x="676" y="553" width="58" height="27"/>
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNShape>
+
+            <!-- Process Payment -->
+            <bpmndi:BPMNShape id="Task_ProcessPayment_di" bpmnElement="Task_ProcessPayment">
+                <dc:Bounds x="790" y="210" width="100" height="80"/>
+            </bpmndi:BPMNShape>
+
+            <!-- Send Confirmation -->
+            <bpmndi:BPMNShape id="Task_SendConfirmation_di" bpmnElement="Task_SendConfirmation">
+                <dc:Bounds x="950" y="210" width="100" height="80"/>
+            </bpmndi:BPMNShape>
+
+            <!-- Approved End Event -->
+            <bpmndi:BPMNShape id="EndEvent_ExpenseApproved_di" bpmnElement="EndEvent_ExpenseApproved">
+                <dc:Bounds x="1112" y="232" width="36" height="36"/>
+                <bpmndi:BPMNLabel>
+                    <dc:Bounds x="1101" y="275" width="58" height="40"/>
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNShape>
+
+            <!-- Sequence Flows -->
+            <bpmndi:BPMNEdge id="Flow_ToValidate_di" bpmnElement="Flow_ToValidate">
+                <di:waypoint x="188" y="250"/>
+                <di:waypoint x="250" y="250"/>
+            </bpmndi:BPMNEdge>
+
+            <bpmndi:BPMNEdge id="Flow_ValidationError_di" bpmnElement="Flow_ValidationError">
+                <di:waypoint x="300" y="308"/>
+                <di:waypoint x="300" y="360"/>
+            </bpmndi:BPMNEdge>
+
+            <bpmndi:BPMNEdge id="Flow_ToValidationFailed_di" bpmnElement="Flow_ToValidationFailed">
+                <di:waypoint x="300" y="440"/>
+                <di:waypoint x="300" y="490"/>
+            </bpmndi:BPMNEdge>
+
+            <bpmndi:BPMNEdge id="Flow_ToGateway_di" bpmnElement="Flow_ToGateway">
+                <di:waypoint x="350" y="250"/>
+                <di:waypoint x="410" y="250"/>
+            </bpmndi:BPMNEdge>
+
+            <bpmndi:BPMNEdge id="Flow_NormalAmount_di" bpmnElement="Flow_NormalAmount">
+                <di:waypoint x="435" y="225"/>
+                <di:waypoint x="435" y="180"/>
+                <di:waypoint x="520" y="180"/>
+                <bpmndi:BPMNLabel>
+                    <dc:Bounds x="445" y="163" width="46" height="14"/>
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNEdge>
+
+            <bpmndi:BPMNEdge id="Flow_HighAmount_di" bpmnElement="Flow_HighAmount">
+                <di:waypoint x="435" y="275"/>
+                <di:waypoint x="435" y="320"/>
+                <di:waypoint x="520" y="320"/>
+                <bpmndi:BPMNLabel>
+                    <dc:Bounds x="445" y="303" width="43" height="14"/>
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNEdge>
+
+            <bpmndi:BPMNEdge id="Flow_FromManager_di" bpmnElement="Flow_FromManager">
+                <di:waypoint x="620" y="180"/>
+                <di:waypoint x="705" y="180"/>
+                <di:waypoint x="705" y="225"/>
+            </bpmndi:BPMNEdge>
+
+            <bpmndi:BPMNEdge id="Flow_FromCFO_di" bpmnElement="Flow_FromCFO">
+                <di:waypoint x="620" y="320"/>
+                <di:waypoint x="705" y="320"/>
+                <di:waypoint x="705" y="275"/>
+            </bpmndi:BPMNEdge>
+
+            <bpmndi:BPMNEdge id="Flow_ToPayment_di" bpmnElement="Flow_ToPayment">
+                <di:waypoint x="730" y="250"/>
+                <di:waypoint x="790" y="250"/>
+                <bpmndi:BPMNLabel>
+                    <dc:Bounds x="750" y="232" width="20" height="14"/>
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNEdge>
+
+            <bpmndi:BPMNEdge id="Flow_Rejected_di" bpmnElement="Flow_Rejected">
+                <di:waypoint x="705" y="275"/>
+                <di:waypoint x="705" y="380"/>
+                <bpmndi:BPMNLabel>
+                    <dc:Bounds x="713" y="325" width="15" height="14"/>
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNEdge>
+
+            <bpmndi:BPMNEdge id="Flow_ToRejectedEnd_di" bpmnElement="Flow_ToRejectedEnd">
+                <di:waypoint x="705" y="460"/>
+                <di:waypoint x="705" y="510"/>
+            </bpmndi:BPMNEdge>
+
+            <bpmndi:BPMNEdge id="Flow_ToNotification_di" bpmnElement="Flow_ToNotification">
+                <di:waypoint x="890" y="250"/>
+                <di:waypoint x="950" y="250"/>
+            </bpmndi:BPMNEdge>
+
+            <bpmndi:BPMNEdge id="Flow_ToEnd_di" bpmnElement="Flow_ToEnd">
+                <di:waypoint x="1050" y="250"/>
+                <di:waypoint x="1112" y="250"/>
+            </bpmndi:BPMNEdge>
+
+        </bpmndi:BPMNPlane>
+    </bpmndi:BPMNDiagram>
+
+</bpmn:definitions>

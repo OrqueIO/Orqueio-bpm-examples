@@ -8,7 +8,7 @@
 
     <properties>
         <!-- OrqueIO versions -->
-        <version.orqueio>2.1.0</version.orqueio>
+        <version.orqueio>2.1.1</version.orqueio>
 
         <!-- Spring Boot version -->
         <version.spring-boot>4.1.0</version.spring-boot>
@@ -35,7 +35,7 @@
         <version.exec-maven-plugin>3.4.1</version.exec-maven-plugin>
 
         <!-- Java version -->
-        <maven.compiler.release>25</maven.compiler.release>
+        <maven.compiler.release>21</maven.compiler.release>
 
         <!-- Project encoding -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -192,6 +192,7 @@
                 <module>testing/assert/job-announcement-publication-process</module>
                 <module>testing/junit5/orqueio-bpm-junit-assert</module>
                 <module>testing/junit5/orqueio-bpm-junit-use-engine</module>
+                <module>tomcat/expense-approval-tomcat</module>
             </modules>
         </profile>
         <profile>
